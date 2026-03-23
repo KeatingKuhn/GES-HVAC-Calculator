@@ -133,20 +133,25 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .glow-pulse{animation:gpulse 2.5s ease-in-out infinite}
 @keyframes gpulse{0%,100%{opacity:.5}50%{opacity:1}}
 
-/* ── LANDSCAPE: mobile attic rotated sideways ── */
-.main--landscape{flex-direction:row!important;height:calc(100dvh - 46px)!important;min-height:unset!important;overflow:hidden!important}
-.main--landscape .canvas-wrap{flex:1;min-height:unset;height:100%;overflow:hidden;padding:8px}
-.main--landscape .sidebar{width:250px!important;flex:none;border-top:none!important;border-left:1px solid var(--border);overflow-y:auto;height:100%;display:flex;flex-direction:column}
-.main--landscape .opts{overflow-y:auto;flex:1;min-height:0;gap:5px;padding:8px 10px}
-.main--landscape .step-q{font-size:13px}
-.main--landscape .opt-label{font-size:12px}
-.main--landscape .opt-desc{font-size:10.5px}
-.main--landscape .opt-inner{padding:9px 10px 9px 13px}
-.main--landscape .step-hdr{padding:10px 12px 8px}
-.main--landscape .nav-row{padding:8px 10px;flex-shrink:0;position:relative;bottom:unset}
+/* ── LANDSCAPE: mobile attic rotated sideways — true no-scroll ── */
+.main--landscape{flex-direction:row!important;height:calc(100dvh - 50px)!important;max-height:calc(100dvh - 50px)!important;min-height:unset!important;overflow:hidden!important;flex:none!important}
+.main--landscape .canvas-wrap{flex:1!important;height:100%!important;min-height:unset!important;overflow:hidden!important;padding:5px!important}
+.main--landscape .sidebar{width:235px!important;flex:none!important;height:100%!important;max-height:100%!important;border-top:none!important;border-left:1px solid var(--border)!important;overflow:hidden!important;display:flex!important;flex-direction:column!important}
+.main--landscape .opts{flex:1!important;min-height:0!important;overflow-y:auto!important;padding:5px 8px!important;gap:4px!important}
+.main--landscape .step-q{font-size:12.5px!important;margin-bottom:2px}
+.main--landscape .step-hint{font-size:10px!important}
+.main--landscape .step-eyebrow{font-size:7px!important}
+.main--landscape .opt-label{font-size:11.5px!important}
+.main--landscape .opt-desc{font-size:10px!important}
+.main--landscape .opt-inner{padding:7px 9px 7px 12px!important}
+.main--landscape .opt-check{width:16px!important;height:16px!important;font-size:8px!important}
+.main--landscape .step-hdr{padding:7px 10px 5px!important;flex-shrink:0}
+.main--landscape .nav-row{padding:6px 8px!important;flex-shrink:0!important;position:relative!important;bottom:unset!important}
+.main--landscape .btn-next{padding:9px 10px!important;font-size:12px!important;min-height:36px!important}
+.main--landscape .btn-back{padding:9px 12px!important;font-size:12px!important}
 .step-hdr{padding:14px 16px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel);z-index:10}
 .step-eyebrow{font-family:var(--fm);font-size:8px;color:var(--gm);letter-spacing:.2em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.step-eyebrow::after{content:'';flex:1;height:1px;background:rgba(215,183,64,.15)}
+.step-eyebrow-line{flex:1;height:1px;background:rgba(215,183,64,.15)}
 .step-q{font-family:var(--ft);font-size:17px;font-weight:600;color:var(--wh);line-height:1.3;margin-bottom:4px}
 .step-hint{font-size:12px;color:var(--mut);line-height:1.5}
 
@@ -170,7 +175,12 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .opt-check{width:20px;height:20px;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;margin-top:1px;transition:all .15s;border-radius:2px}
 .opt.sel .opt-check{border-color:var(--gl);background:var(--gm);color:var(--bk)}
 
-/* INFO CARD */
+/* INFO BUTTON + EXPAND PANEL */
+.info-btn{background:none;border:1px solid rgba(215,183,64,.3);color:rgba(215,183,64,.7);width:22px;height:22px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,color .15s;padding:0;outline:none;font-family:var(--fm);line-height:1}
+.info-btn:hover,.info-btn:active{background:rgba(215,183,64,.12);color:var(--gl)}
+.info-expand{background:rgba(215,183,64,.06);border-bottom:1px solid rgba(215,183,64,.14);animation:fadein .2s ease both}
+.info-expand-body{padding:11px 16px;font-size:12px;color:rgba(255,255,255,.55);line-height:1.65}
+
 .info-card{margin:0 12px 8px;padding:10px 12px;background:rgba(215,183,64,.05);border:1px solid rgba(215,183,64,.15);font-size:11.5px;color:rgba(255,255,255,.45);line-height:1.55}
 .info-card strong{color:rgba(255,255,255,.7)}
 
@@ -184,11 +194,12 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .btn-skip{background:transparent;border:none;color:rgba(255,255,255,.22);font-family:var(--fb);font-size:12px;cursor:pointer;text-decoration:underline;outline:none;padding:0 4px;white-space:nowrap;min-height:48px}
 
 /* DONE */
-.done-wrap{padding:28px 20px;text-align:center;animation:snap .35s ease both;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.done-icon{width:60px;height:60px;background:var(--gh);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;color:var(--bk);font-weight:700}
-.done-title{font-family:var(--ft);font-size:22px;font-weight:700;color:var(--wh);margin-bottom:10px}
-.done-sub{font-size:13px;color:var(--mut);max-width:300px;margin:0 auto 24px;line-height:1.7}
-.done-cta{display:block;width:100%;background:var(--gh);border:none;color:var(--bk);padding:16px;font-family:var(--ft);font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.04em;margin-bottom:12px;text-decoration:none;text-align:center;border-radius:2px}
+.done-wrap{padding:24px 18px;text-align:center;animation:snap .35s ease both;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto}
+.done-icon{width:56px;height:56px;background:var(--gh);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:22px;color:var(--bk);font-weight:700;flex-shrink:0}
+.done-title{font-family:var(--ft);font-size:21px;font-weight:700;color:var(--wh);margin-bottom:8px}
+.done-sub{font-size:12.5px;color:var(--mut);max-width:290px;margin:0 auto 18px;line-height:1.65}
+.done-cta{display:block;width:100%;background:var(--gh);border:none;color:var(--bk);padding:15px;font-family:var(--ft);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.04em;margin-bottom:10px;text-decoration:none;text-align:center;border-radius:2px}
+.done-discount{background:rgba(215,183,64,.07);border:1px solid rgba(215,183,64,.2);padding:10px 14px;font-size:12px;color:rgba(215,183,64,.75);line-height:1.55;border-radius:2px;margin-bottom:14px;text-align:left;width:100%}
 .done-restart{background:transparent;border:none;color:rgba(255,255,255,.22);font-family:var(--fb);font-size:12px;cursor:pointer;text-decoration:underline;outline:none}
 </style>
 </head>
@@ -209,8 +220,8 @@ const STEPS=[
   {id:'insulation',  q:'What type of attic insulation do you have?',
     hint:'Fiberglass = 80% furnace. Spray foam = 90% furnace with PVC flue.', optional:false,
     showIf:a=>a.indoor_type==='furnace'},
-  {id:'plenum',      q:'Does the supply plenum need replacing?',
-    hint:'The plenum connects your indoor unit to your duct system.', optional:false},
+  {id:'plenum',      q:'What about the supply plenum?',
+    hint:'The plenum is the box that distributes conditioned air from your unit into all your ducts.', optional:false},
   {id:'thermostat',  q:'Which thermostat?',
     hint:'Smart thermostats save 10–15% on energy bills.',            optional:false},
   {id:'purif',       q:'Air purification add-ons?',
@@ -247,9 +258,9 @@ function getOpts(stepId, answers){
       {v:'spray',     label:'Spray foam',               desc:'Sealed attic — 90% AFUE furnace required, PVC condensing flue through roof deck'},
     ];
     case 'plenum':return[
-      {v:'ductboard',label:'Ductboard plenum',  desc:'Standard — fits most attic horizontal installs'},
-      {v:'metal',    label:'Sheet metal plenum',desc:'More durable — preferred for longevity'},
-      {v:'none',     label:'Not needed',        desc:'Existing plenum is in good shape — no replacement required'},
+      {v:'ductboard',label:'Replace — Ductboard',  desc:'New ductboard plenum — lightweight, well-insulated, standard for most attic installs'},
+      {v:'metal',    label:'Replace — Sheet Metal', desc:'New metal plenum — more durable and longer-lasting, preferred for high-performance builds'},
+      {v:'none',     label:'Keep existing',         desc:'Existing plenum is in good condition — no replacement needed'},
     ];
     case 'thermostat':return[
       {v:'basic',label:'Basic',         desc:'Reliable programmable thermostat — simple, accurate, no subscription'},
@@ -261,16 +272,16 @@ function getOpts(stepId, answers){
       {v:'ionizer',  label:'Ionizer / Plasma',   desc:'Reduces airborne particles, odors, and VOCs throughout the home'},
     ];
     case 'system_for':return[
-      {v:'hp', label:'Heat pump + furnace', desc:'Heat pump handles cooling and mild-weather heating — gas furnace kicks in on the coldest days'},
+      {v:'hp', label:'Heat pump + furnace (Dual Fuel)', desc:'Heat pump handles cooling and mild-weather heating — gas furnace kicks in on the coldest days'},
       {v:'sc', label:'Straight cool',       desc:'AC only — the gas furnace handles all heating, no heat pump involved'},
     ];
     case 'cond_tier':{
       const isAH=answers.indoor_type==='ah';
       const isHP=isAH||(answers.system_for==='hp');
       return[
-        {v:'fedmin',   label:'Federal Minimum',desc:'Meets current energy code — solid, reliable, lowest upfront cost'},
-        {v:'mid_ge15', label:'Mid Efficiency',  desc:'Best overall value — GE Connect, meaningfully lower energy bills'},
-        {v:'high_ge18',label:'High Efficiency', desc:'GE Connect inverter-driven — eligible for Austin Energy rebate, best humidity control',
+        {v:'fedmin',   label:'Federal Minimum', desc:'Meets current energy code — solid, reliable, lowest upfront cost'},
+        {v:'mid_ge15', label:'Mid Efficiency',   desc:'Best overall value — variable speed, meaningfully lower energy bills and better humidity control'},
+        {v:'high_ge18',label:'High Efficiency',  desc:'Inverter-driven — eligible for Austin Energy rebate, best humidity performance and lowest operating cost',
           disabled:!isHP,
           disabledNote:!isHP?'Heat pump required for this tier':''},
       ];
@@ -341,11 +352,17 @@ function Canvas({a}){
         x2={cx+r*0.88*Math.cos(ang+0.22)} y2={cy+r*0.88*Math.sin(ang+0.22)}
         stroke={active?(G+'.7)'):(G+'.2)')} strokeWidth="1.9" strokeLinecap="round"/>;
     });
+    // transform-box:fill-box fixes transform-origin on SVG elements in mobile browsers
+    const spinStyle={
+      transformOrigin:'50% 50%',
+      transformBox:'fill-box',
+      animation:`spin ${(1.0/spd).toFixed(2)}s linear infinite`,
+    };
     return <g>
       <circle cx={cx} cy={cy} r={r+4} fill="rgba(0,0,0,.5)" stroke={G+'.15)'} strokeWidth="0.8"/>
       <circle cx={cx} cy={cy} r={r} fill="#050505" stroke={G+'.3)'} strokeWidth="0.9"/>
       {active
-        ?<g className="spin" style={{transformOrigin:cx+'px '+cy+'px',animationDuration:(1.0/spd)+'s'}}>{blades}</g>
+        ?<g style={spinStyle}>{blades}</g>
         :<g>{blades}</g>}
       <circle cx={cx} cy={cy} r={r*0.27} fill="#090909" stroke={G+'.34)'} strokeWidth="0.9"/>
       <circle cx={cx} cy={cy} r={r*0.1} fill="#111" stroke={G+'.42)'} strokeWidth="0.6"/>
@@ -632,47 +649,82 @@ function Canvas({a}){
             <rect key={i} x={x+3} y={y+fanSectionH+2+i*6} width={w-6} height={3} rx="0.5"
               fill={active?(cc+'14'):'rgba(10,10,20,.8)'} stroke={active?cc:(G+'.12)')} strokeWidth="0.5"/>
           ))}
-          {/* Inverter + GE badge */}
+          {/* Inverter badge */}
           <rect x={x+4} y={y+h-18} width={w-8} height={13} rx="2"
             fill="rgba(35,137,224,.2)" stroke={B+'.45)'} strokeWidth="0.8"/>
           <text x={x+w/2} y={y+h-9} textAnchor="middle"
-            fill="#5ba8f5" fontSize="6" fontFamily="monospace">GE CONNECT · INVERTER</text>
+            fill="#5ba8f5" fontSize="6" fontFamily="monospace">VARIABLE SPEED · INVERTER</text>
         </>
-        /* ── STANDARD CONDENSER (fed min / high / premium) ── */
+        /* ── STANDARD CONDENSER ── fedmin looks older/basic, big looks premium ── */
         :<>
-          {/* TOP: Fan section — takes most of unit height */}
-          <rect x={x+3} y={y+3} width={w-6} height={fanSectionH-3} rx="3"
-            fill="rgba(0,0,0,.35)" stroke={G+'.08)'} strokeWidth="0.5"/>
-          {/* Fan grille ring */}
-          <circle cx={fanCX} cy={fanCY} r={fanR+5}
-            fill="none" stroke={G+'.18)'} strokeWidth="1.2"/>
-          <circle cx={fanCX} cy={fanCY} r={fanR+3}
-            fill="none" stroke={G+'.1)'} strokeWidth="0.6"/>
-          <BlowerWheel cx={fanCX} cy={fanCY} r={fanR} spd={active?1.0:0.3} active={active}/>
+          {/* TOP: Fan section */}
+          {tierKey==='fedmin'
+            ?<>
+              {/* Fed min: flat painted grille, no fancy rings, basic look */}
+              <rect x={x+2} y={y+2} width={w-4} height={fanSectionH-2} rx="1"
+                fill="rgba(0,0,0,.3)" stroke="rgba(60,60,60,.4)" strokeWidth="0.8"/>
+              {/* Simple flat grille bars — old school look */}
+              {Array.from({length:5},(_,i)=>(
+                <rect key={i} x={x+4} y={y+6+i*((fanSectionH-10)/5)} width={w-8} height={2} rx="0"
+                  fill="rgba(45,45,45,.9)" stroke="rgba(55,55,55,.5)" strokeWidth="0.4"/>
+              ))}
+              {/* Fan visible through grille — slower, less refined */}
+              <BlowerWheel cx={fanCX} cy={fanCY} r={fanR*0.85} spd={active?0.7:0.2} active={active}/>
+              {/* Rust/age corner marks */}
+              <rect x={x+1} y={y+1} width={6} height={6}
+                fill="rgba(90,45,10,.15)" stroke="rgba(100,55,15,.2)" strokeWidth="0.5"/>
+              <rect x={x+w-7} y={y+1} width={6} height={6}
+                fill="rgba(90,45,10,.15)" stroke="rgba(100,55,15,.2)" strokeWidth="0.5"/>
+            </>
+            :<>
+              {/* Big units: clean grille with concentric rings */}
+              <rect x={x+3} y={y+3} width={w-6} height={fanSectionH-3} rx="3"
+                fill="rgba(0,0,0,.35)" stroke={G+'.08)'} strokeWidth="0.5"/>
+              <circle cx={fanCX} cy={fanCY} r={fanR+5}
+                fill="none" stroke={G+'.18)'} strokeWidth="1.2"/>
+              <circle cx={fanCX} cy={fanCY} r={fanR+3}
+                fill="none" stroke={G+'.1)'} strokeWidth="0.6"/>
+              <BlowerWheel cx={fanCX} cy={fanCY} r={fanR} spd={active?1.0:0.3} active={active}/>
+            </>
+          }
 
           {/* BOTTOM: Coil tubes section */}
           {Array.from({length:Math.floor((coilSectionH-6)/6)},(_,i)=>{
             const n=Math.floor((coilSectionH-6)/6);
             if(i>=n) return null;
+            // Fed min coils look flatter/cheaper — less glow, more muted
+            const isFed=tierKey==='fedmin';
             return <g key={i}>
-              <rect x={x+3} y={y+fanSectionH+2+i*6} width={w-6} height={3.5} rx="0.5"
-                fill={active?(cc+'16'):'rgba(10,10,22,.8)'}
-                stroke={active?cc:(G+'.14)')} strokeWidth="0.6"/>
-              {active&&i%2===0&&<circle cx={x+w*0.35} cy={y+fanSectionH+3.5+i*6} r={1.8}
+              <rect x={x+3} y={y+fanSectionH+2+i*6} width={w-6} height={isFed?2.5:3.5} rx="0"
+                fill={active?(isFed?'rgba(180,30,30,.08)':(cc+'16')):'rgba(10,10,22,.8)'}
+                stroke={active?(isFed?'rgba(150,50,50,.25)':cc):(isFed?'rgba(50,50,55,.35)':(G+'.14)'))}
+                strokeWidth={isFed?"0.4":"0.6"}/>
+              {active&&!isFed&&i%2===0&&<circle cx={x+w*0.35} cy={y+fanSectionH+3.5+i*6} r={1.8}
                 fill={cc} opacity="0.45" className="glow-pulse"
                 style={{animationDelay:i*0.08+'s'}}/>}
             </g>;
           })}
 
-          {/* Compressor dome — bottom right corner */}
-          <circle cx={x+w-14} cy={y+h-14} r={isBig?14:10}
-            fill="#070707" stroke={active?cc:(G+'.32)')} strokeWidth="1.2"/>
-          <circle cx={x+w-14} cy={y+h-14} r={isBig?9:6}
-            fill="#040404" stroke={G+'.18)'} strokeWidth="0.7"/>
-          {active&&<circle cx={x+w-14} cy={y+h-14} r={isBig?4:3}
-            fill={cc+'66'} className="glow-pulse"/>}
-          <text x={x+w-14} y={y+h-1} textAnchor="middle"
-            fill={active?cc:(G+'.24)')} fontSize="5" fontFamily="monospace">COMP</text>
+          {/* Compressor dome */}
+          {tierKey==='fedmin'
+            ?<>
+              {/* Fed min: smaller, boxy compressor — no inner glow details */}
+              <rect x={x+w-22} y={y+h-20} width={18} height={14} rx="2"
+                fill="#060606" stroke={active?'rgba(180,80,80,.5)':(G+'.2)')} strokeWidth="1"/>
+              <text x={x+w-13} y={y+h-1} textAnchor="middle"
+                fill={active?'rgba(180,80,80,.5)':(G+'.2)')} fontSize="4.5" fontFamily="monospace">COMP</text>
+            </>
+            :<>
+              <circle cx={x+w-14} cy={y+h-14} r={isBig?14:10}
+                fill="#070707" stroke={active?cc:(G+'.32)')} strokeWidth="1.2"/>
+              <circle cx={x+w-14} cy={y+h-14} r={isBig?9:6}
+                fill="#040404" stroke={G+'.18)'} strokeWidth="0.7"/>
+              {active&&<circle cx={x+w-14} cy={y+h-14} r={isBig?4:3}
+                fill={cc+'66'} className="glow-pulse"/>}
+              <text x={x+w-14} y={y+h-1} textAnchor="middle"
+                fill={active?cc:(G+'.24)')} fontSize="5" fontFamily="monospace">COMP</text>
+            </>
+          }
         </>
       }
 
@@ -1151,15 +1203,13 @@ function Canvas({a}){
                 </text>
                 {!isExisting&&<text x={SUP_X+SUP_PLEN_W/2} y={SUP_PLEN_Y+SUP_PLEN_H/2+14} textAnchor="middle"
                   fill={G+'.32)'} fontSize="5.5" fontFamily="monospace">4–6 FT SUPPLY</text>}
-                {/* Ionizer — perfectly centered between the two supply ducts */}
+                {/* Ionizer — bulb at top of plenum interior, rod extends down */}
                 {hasIonizer&&!isExisting&&(()=>{
-                  // Duct positions from the ductwork section: left duct at pCX-DW*1.8, right at pCX+DW*0.8
-                  // Center of gap between them = pCX (the plenum center)
-                  const iX=SUP_X+SUP_PLEN_W/2; // exactly centered in plenum
-                  return <Ionizer
-                    bulbX={iX}
-                    bulbY={SUP_PLEN_Y-16}
-                    rodLen={Math.round(SUP_PLEN_H*0.55)}/>;
+                  const iX=SUP_X+SUP_PLEN_W/2;
+                  // Bulb sits just inside the top of the plenum, rod goes down
+                  const bulbY=SUP_PLEN_Y+18;
+                  const rodLen=Math.round(SUP_PLEN_H*0.6);
+                  return <Ionizer bulbX={iX} bulbY={bulbY} rodLen={rodLen}/>;
                 })()}
               </>;
             })()}
@@ -1280,35 +1330,65 @@ function Canvas({a}){
             })()}
           </g>}
 
-          {/* Dehu — hangs from roofline */}
-          {/* Dehu + ERV — small boxes side by side, above the furnace/AH */}
+          {/* Dehu + ERV — compact boxes above furnace/AH, dehu fixed left of flue, ERV left of dehu */}
           {(hasDehu||Array.isArray(a.extras)&&a.extras.includes('erv'))&&<g>
             {(()=>{
               const sysX=hasFurnace?FURN_X:AH_X;
               const sysW=hasFurnace?FURN_W:AH_W;
-              const BW=80, BH=48; // box size — compact
-              const GAP=8;
-              const both=hasDehu&&Array.isArray(a.extras)&&a.extras.includes('erv');
-              const totalW=both?(BW*2+GAP):BW;
-              const startX=sysX+Math.round((sysW-totalW)/2);
+              const BW=80, BH=48;
+              const GAP=10;
               const BY=UNIT_Y-BH-14;
               const roofY=EAVE_Y+14;
+              const hasERV=Array.isArray(a.extras)&&a.extras.includes('erv');
 
-              const boxes=[];
-              if(Array.isArray(a.extras)&&a.extras.includes('erv')) boxes.push('erv');
-              if(hasDehu) boxes.push('dehu');
+              // Dehu: anchored at left side of system, shifted slightly left of center
+              // so it sits clear of the flue pipe (which exits right of furnace HX)
+              const dehuX=sysX+Math.round(sysW*0.08);
+              // ERV: always to the left of dehu, never shifts dehu
+              const ervX=dehuX-BW-GAP;
 
-              return boxes.map((type,i)=>{
-                const BX=startX+i*(BW+GAP);
-                const r1X=BX+BW*0.28, r2X=BX+BW*0.72;
+              const items=[];
+              if(hasERV) items.push({type:'erv',BX:ervX});
+              if(hasDehu) items.push({type:'dehu',BX:dehuX});
+
+              return items.map(({type,BX})=>{
                 const isDehu=type==='dehu';
+                const r1X=BX+BW*0.28, r2X=BX+BW*0.72;
+                // ERV uses blue (IN) and orange (OUT) pipes through roof
+                const pipe1X=BX+BW*0.28;
+                const pipe2X=BX+BW*0.68;
                 return <g key={type}>
-                  <line x1={r1X} y1={roofY} x2={r1X} y2={BY} stroke={isDehu?"#22c55e":(G+'.45)')} strokeWidth="1" strokeDasharray="4 2" opacity="0.6"/>
-                  <line x1={r2X} y1={roofY} x2={r2X} y2={BY} stroke={isDehu?"#22c55e":(G+'.45)')} strokeWidth="1" strokeDasharray="4 2" opacity="0.6"/>
-                  <rect x={r1X-3} y={roofY-4} width="7" height="5" rx="1"
-                    fill={isDehu?"rgba(34,197,94,.3)":(G+'.2)')} stroke={isDehu?"#22c55e":(G+'.42)')} strokeWidth="0.7"/>
-                  <rect x={r2X-3} y={roofY-4} width="7" height="5" rx="1"
-                    fill={isDehu?"rgba(34,197,94,.3)":(G+'.2)')} stroke={isDehu?"#22c55e":(G+'.42)')} strokeWidth="0.7"/>
+                  {isDehu
+                    ?<>
+                      {/* Hanging rods */}
+                      <line x1={r1X} y1={roofY} x2={r1X} y2={BY} stroke="#22c55e" strokeWidth="1" strokeDasharray="4 2" opacity="0.6"/>
+                      <line x1={r2X} y1={roofY} x2={r2X} y2={BY} stroke="#22c55e" strokeWidth="1" strokeDasharray="4 2" opacity="0.6"/>
+                      <rect x={r1X-3} y={roofY-4} width="7" height="5" rx="1" fill="rgba(34,197,94,.3)" stroke="#22c55e" strokeWidth="0.7"/>
+                      <rect x={r2X-3} y={roofY-4} width="7" height="5" rx="1" fill="rgba(34,197,94,.3)" stroke="#22c55e" strokeWidth="0.7"/>
+                    </>
+                    :<>
+                      {/* ERV fresh air IN pipe — blue, through roof */}
+                      <rect x={pipe1X-2} y={4} width={5} height={BY-4} rx="1"
+                        fill={B+'.35)'} stroke={B+'.55)'} strokeWidth="0.8"/>
+                      <rect x={pipe1X-5} y={1} width={11} height={5} rx="1"
+                        fill={B+'.4)'} stroke={B+'.6)'} strokeWidth="0.8"/>
+                      <text x={pipe1X} y={-1} textAnchor="middle"
+                        fill={B+'.55)'} fontSize="5" fontFamily="monospace">IN</text>
+                      {/* ERV stale air OUT pipe — orange, through roof */}
+                      <rect x={pipe2X-2} y={4} width={5} height={BY-4} rx="1"
+                        fill="rgba(249,115,22,.35)" stroke="rgba(249,115,22,.55)" strokeWidth="0.8"/>
+                      <path d={`M${pipe2X-4} ${2} L${pipe2X} ${-4} L${pipe2X+4} ${2}`}
+                        fill="rgba(249,115,22,.4)"/>
+                      <text x={pipe2X} y={-1} textAnchor="middle"
+                        fill="rgba(249,115,22,.55)" fontSize="5" fontFamily="monospace">OUT</text>
+                      {/* Hanging rods */}
+                      <line x1={r1X} y1={roofY} x2={r1X} y2={BY} stroke={G+'.45)'} strokeWidth="1" strokeDasharray="4 2" opacity="0.6"/>
+                      <line x1={r2X} y1={roofY} x2={r2X} y2={BY} stroke={G+'.45)'} strokeWidth="1" strokeDasharray="4 2" opacity="0.6"/>
+                      <rect x={r1X-3} y={roofY-4} width="7" height="5" rx="1" fill={G+'.2)'} stroke={G+'.42)'} strokeWidth="0.7"/>
+                      <rect x={r2X-3} y={roofY-4} width="7" height="5" rx="1" fill={G+'.2)'} stroke={G+'.42)'} strokeWidth="0.7"/>
+                    </>
+                  }
+                  {/* Box */}
                   <rect x={BX} y={BY} width={BW} height={BH} rx="4"
                     fill={isDehu?"#05120a":"#0a0a06"}
                     stroke={isDehu?"#22c55e":(G+'.55)')} strokeWidth="1.4"/>
@@ -1323,11 +1403,6 @@ function Canvas({a}){
                       <path d={`M${BX+10} ${BY+BH*0.44} L${BX+BW*0.52} ${BY+BH*0.44}`} fill="none" stroke={B+'.65)'} strokeWidth="1.8" markerEnd="url(#arr)"/>
                       <path d={`M${BX+BW-10} ${BY+BH*0.64} L${BX+BW*0.48} ${BY+BH*0.64}`} fill="none" stroke="rgba(249,115,22,.65)" strokeWidth="1.8" markerEnd="url(#arr)"/>
                       <text x={BX+BW/2} y={BY+BH*0.3} textAnchor="middle" fill={G+'.78)'} fontSize="9" fontFamily="monospace">ERV</text>
-                      {/* ERV pipe through roof */}
-                      <rect x={BX+BW/2-2} y={roofY-30} width={5} height={roofY-BY} rx="1"
-                        fill={G+'.35)'} stroke={G+'.5)'} strokeWidth="0.7"/>
-                      <rect x={BX+BW/2-5} y={roofY-32} width={11} height={4} rx="1"
-                        fill={G+'.3)'} stroke={G+'.45)'} strokeWidth="0.7"/>
                     </>
                   }
                 </g>;
@@ -1995,16 +2070,15 @@ function App(){
   const [answers,setAnswers]=useState({});
   const [stepIdx,setStepIdx]=useState(0);
   const [done,setDone]=useState(false);
-  const [isLandscape,setIsLandscape]=useState(()=>window.innerWidth>window.innerHeight);
+  const [orient,setOrient]=useState(()=>window.innerWidth>window.innerHeight?'land':'port');
   const topRef=useRef(null);
-  const scrollTop=useCallback(()=>setTimeout(()=>topRef.current?.scrollIntoView({behavior:'smooth',block:'start'}),50),[]);
+  const mainRef=useRef(null);
 
-  // Track orientation changes
   React.useEffect(()=>{
-    const check=()=>setIsLandscape(window.innerWidth>window.innerHeight);
+    const check=()=>setOrient(window.innerWidth>window.innerHeight?'land':'port');
     window.addEventListener('resize',check);
-    window.addEventListener('orientationchange',check);
-    return()=>{window.removeEventListener('resize',check);window.removeEventListener('orientationchange',check);};
+    window.addEventListener('orientationchange',()=>setTimeout(check,120));
+    return()=>{window.removeEventListener('resize',check);};
   },[]);
 
   const activeSteps=useMemo(()=>STEPS.filter(s=>!s.showIf||s.showIf(answers)),[answers]);
@@ -2026,55 +2100,76 @@ function App(){
     return!!answers[cur.id];
   },[cur,answers]);
 
-  const goNext=()=>{if(stepIdx<activeSteps.length-1){setStepIdx(s=>s+1);scrollTop();}else{setDone(true);scrollTop();}};
+  const goNext=()=>{if(stepIdx<activeSteps.length-1){setStepIdx(s=>s+1);}else{setDone(true);}};
   const goBack=()=>{
     if(stepIdx>0){
       const curId=cur?.id;
       if(curId){setAnswers(p=>{const n={...p};delete n[curId];return n;});}
       setStepIdx(s=>s-1);
-      scrollTop();
     }
   };
   const skip=()=>{if(cur.multi)setA(cur.id,[]);goNext();};
   const restart=()=>{setAnswers({});setStepIdx(0);setDone(false);};
-
   const opts=useMemo(()=>cur?getOpts(cur.id,answers):[], [cur,answers]);
 
-  // Attic = wide horizontal system → best in landscape
-  // Upflow = tall vertical stack → best in portrait
   const isAttic=!answers.location||answers.location==='attic';
-  const isMobile=window.innerWidth<768||(window.innerWidth<1100&&'ontouchstart' in window);
+  const isMobile=window.innerWidth<1100&&'ontouchstart' in window;
+  const isLandscape=orient==='land';
+  // Landscape attic on mobile → side-by-side locked layout
+  const useLandscape=isAttic&&isLandscape&&isMobile;
+  // Show nudge only in portrait mobile after attic selected
+  const showNudge=isAttic&&!isLandscape&&isMobile&&answers.location;
 
-  // Show rotate nudge for attic on portrait mobile
-  const showRotateNudge=isAttic&&isMobile&&!isLandscape&&answers.location;
+  const [showInfo,setShowInfo]=useState(false);
+  // Reset info panel when step changes
+  React.useEffect(()=>setShowInfo(false),[stepIdx]);
 
-  // Landscape attic: side-by-side layout; everything else: stacked
-  const mainClass=isAttic&&isLandscape&&isMobile?'main main--landscape':'main';
+  // Per-step extended explanations
+  const INFO_TEXT={
+    location:"Your indoor unit location determines the system layout. Attic installs are the most common in Austin — the unit lies on its side horizontally above the living space. Closet installs are upflow — the unit stands vertically in a utility closet, usually in a hallway. Both work great; closet installs are slightly more accessible for maintenance.",
+    indoor_type:"A furnace uses natural gas to heat your home and pairs with an AC system for cooling. Most Austin homes have gas lines already. An air handler is all-electric — it works exclusively with a heat pump for both heating and cooling. Great if you don't have a gas line or want to go fully electric.",
+    insulation:"Your attic insulation type determines which furnace efficiency you can install. Fiberglass batts or blown insulation means your attic is vented — standard 80% AFUE furnace with a metal B-vent flue works fine. Spray foam means your attic is sealed (conditioned) — this requires a 90% AFUE condensing furnace that uses a PVC pipe through the roof deck instead of a B-vent.",
+    plenum:"The supply plenum is the large box that connects your indoor unit to all the ductwork in your home. Think of it as the distribution hub — conditioned air flows from your unit into the plenum, then out through the ducts to every room. If your existing plenum is damaged, leaking, or over 15 years old, replacing it significantly improves efficiency and airflow balance.",
+    thermostat:"A basic programmable thermostat is reliable, accurate, and straightforward — set your schedule and forget it. A Wi-Fi smart thermostat connects to your phone, learns your habits, and can cut 10–15% off your energy bill through smarter scheduling. Both work with any system we install.",
+    purif:"Air purification add-ons are installed inside your indoor unit and treat the air every time your system runs. The Aprilaire 5\" filter captures physical particles like dust and pollen. A UV light kills biological growth — mold and bacteria that can form on the evaporator coil. An ionizer/plasma unit neutralizes airborne particles, odors, and VOCs throughout the home.",
+    system_for:"With a gas furnace you have two options. Dual fuel (heat pump + furnace) means the heat pump handles cooling in summer and heating in mild weather — the gas furnace only fires when it's genuinely cold (below ~35°F). This is the most efficient combo and qualifies for rebates. Straight cool means your AC only cools — the furnace handles all heating year-round.",
+    cond_tier:"The condenser is the outdoor unit. Federal Minimum meets current energy code — solid and reliable, gets the job done. Mid Efficiency is our best-value tier — variable speed operation, noticeably lower monthly bills, and better humidity control than a standard unit. High Efficiency is our top tier — inverter-driven, eligible for Austin Energy rebates, and the best humidity performance available.",
+    dehu:"Austin humidity makes your home feel significantly warmer than the thermostat reads. A whole-home dehumidifier connects directly to your HVAC system and runs automatically — no buckets, no maintenance, just consistently comfortable air. Recommended for any home that feels muggy even when the AC is running.",
+    extras:"A surge protector mounts on the disconnect box outside and shields your condenser from voltage spikes — one lightning strike can destroy a compressor. A condensate pump is required when gravity drainage isn't available. An ERV (Energy Recovery Ventilator) brings fresh filtered outdoor air into your home while recovering the energy from the outgoing stale air.",
+  };
+  const infoText=cur?.id&&INFO_TEXT[cur.id];
 
   const sidebar=(
     <div className="sidebar">
       {!done?(
         <>
           <div className="step-hdr">
-            <div className="step-eyebrow">Step {stepIdx+1} of {activeSteps.length}</div>
+            <div className="step-eyebrow" style={{justifyContent:'space-between'}}>
+              <span>Step {stepIdx+1} of {activeSteps.length}</span>
+              <span className="step-eyebrow-line"/>
+              {infoText&&<button className="info-btn" onClick={()=>setShowInfo(v=>!v)}
+                title="Learn more about this step">
+                {showInfo?'✕':'ⓘ'}
+              </button>}
+            </div>
             <div className="step-q">{cur?.q}</div>
             {cur?.hint&&<div className="step-hint">{cur.hint}</div>}
           </div>
+          {showInfo&&infoText&&(
+            <div className="info-expand">
+              <div className="info-expand-body">{infoText}</div>
+            </div>
+          )}
 
           <div className="opts">
             {opts.map(opt=>{
               const isMulti=cur?.multi;
               const isOn=isMulti?msel(cur.id).includes(opt.v):sel(cur?.id)===opt.v;
               const isDisabled=!!opt.disabled;
-              const click=isDisabled?null:isMulti?()=>toggle(cur.id,opt.v):()=>{
-                setA(cur.id,opt.v);
-                if(!isMulti){
-                  setTimeout(()=>{
-                    if(stepIdx<activeSteps.length-1){setStepIdx(s=>s+1);scrollTop();}
-                    else{setDone(true);scrollTop();}
-                  },320);
-                }
-              };
+              // No auto-advance — just set the value, wait for Next button
+              const click=isDisabled?null:isMulti
+                ?()=>toggle(cur.id,opt.v)
+                :()=>setA(cur.id,opt.v);
               return(
                 <button key={opt.v} className={`opt${isOn?' sel':''}${isDisabled?' disabled':''}`} onClick={click}>
                   <div className="opt-inner">
@@ -2107,36 +2202,36 @@ function App(){
         <div className="done-wrap">
           <div className="done-icon">✓</div>
           <div className="done-title">Your System is Built</div>
-          <div className="done-sub">Every component you selected is visualized to the left. A Gold Eagle tech will walk you through the full install — free, about 30 minutes on-site.</div>
-          <a href="tel:5124894653" className="done-cta">📞 Schedule Your Free Visit — 512-489-4653</a>
+          <div className="done-sub">Every component is visualized on the left. A Gold Eagle tech will walk you through it — free, about 30 minutes on-site.</div>
+          <a href="tel:5124894653" className="done-cta">📞 Call Today — 512-489-4653</a>
+          <div className="done-discount">💰 Ask about current manufacturer discounts — they change monthly and can save you hundreds.</div>
           <button className="done-restart" onClick={restart}>Start over</button>
         </div>
       )}
     </div>
   );
 
+  const mainClass=useLandscape?'main main--landscape':'main';
+
   return(
     <div ref={topRef} style={{display:'flex',flexDirection:'column',height:'100%',minHeight:0}}>
       <header className="hdr">
         <div className="hdr-logo">GOLD EAGLE SERVICES™</div>
-        <div className="hdr-step">{cur?`${cur.id.replace(/_/g,' ').toUpperCase()}`:done?'COMPLETE':''}</div>
-        <div style={{fontFamily:'var(--fm)',fontSize:'9px',color:'rgba(215,183,64,.4)',letterSpacing:'.15em',whiteSpace:'nowrap'}}>BUILD YOUR SYSTEM</div>
+        <div className="hdr-step">BUILD YOUR SYSTEM</div>
+        <div style={{fontFamily:'var(--fm)',fontSize:'9px',color:'rgba(215,183,64,.4)',letterSpacing:'.15em',whiteSpace:'nowrap'}}>{done?'COMPLETE':`${stepIdx+1} / ${activeSteps.length}`}</div>
       </header>
       <div className="prog"><div className="prog-fill" style={{width:done?'100%':`${pct}%`}}/></div>
 
-      {/* Rotate nudge — attic in portrait mobile */}
-      {showRotateNudge&&(
-        <div style={{
-          background:'rgba(215,183,64,.08)',borderBottom:'1px solid rgba(215,183,64,.18)',
-          padding:'8px 16px',display:'flex',alignItems:'center',gap:'10px',
-          fontFamily:'var(--fb)',fontSize:'12px',color:'rgba(215,183,64,.8)',
-        }}>
-          <span style={{fontSize:'18px'}}>↺</span>
-          <span>Rotate your phone sideways for the best attic view</span>
+      {showNudge&&(
+        <div style={{background:'rgba(215,183,64,.08)',borderBottom:'1px solid rgba(215,183,64,.18)',
+          padding:'7px 14px',display:'flex',alignItems:'center',gap:'10px',
+          fontFamily:'var(--fb)',fontSize:'12px',color:'rgba(215,183,64,.82)',flexShrink:0}}>
+          <span style={{fontSize:'16px'}}>↺</span>
+          <span>Rotate sideways for the best attic view</span>
         </div>
       )}
 
-      <div className={mainClass}>
+      <div className={mainClass} ref={mainRef}>
         <div className="canvas-wrap">
           <div className="canvas-grid"/>
           <div className="canvas-tag">Live System Preview</div>
