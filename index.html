@@ -240,7 +240,7 @@ function getOpts(stepId, answers){
   }
 }
 // ─── CANVAS ─────────────────────────────────────────────────────
-function Canvas({a}){
+function Canvas({a, stepIdx, activeSteps}){
   const [heatMode,setHeatMode]=React.useState(false);
   const G='rgba(215,183,64,';
   const B='rgba(35,137,224,';
@@ -253,7 +253,8 @@ function Canvas({a}){
   const isFD=loc==='furdown';
   const hasFurnace=a.indoor_type==='furnace';
   const hasCoil=!!a.indoor_type;
-  const hasCond=!!a.cond_tier||(a.purif!==undefined);
+  const _purifIdx=activeSteps?activeSteps.findIndex(s=>s.id==='purif'):-1;
+  const hasCond=!!a.cond_tier||(_purifIdx>=0&&stepIdx>_purifIdx);
   const hasPlenum=!!a.plenum;  // true for ductboard, metal, AND none (existing)
   const hasTstat=a.thermostat&&a.thermostat!=='none';
   const hasUV=Array.isArray(a.purif)&&a.purif.includes('uv');
@@ -494,11 +495,24 @@ function Canvas({a}){
         </g>;
       })}
       <text x={mid+w*0.25} y={y+h-4} textAnchor="middle" fill={active?'rgba(249,115,22,.44)':(G+'.28)')} fontSize="5.5" fontFamily="monospace">HEAT EXCH.</text>
-      <rect x={mid+w*0.17} y={y-12} width={is90?5:7} height={13}
-        fill={is90?"#bfdbfe":"#c0c0c0"} stroke={is90?"#93c5fd":"#999"} strokeWidth="0.7"/>
-      {!is90&&<path d={`M${mid+w*0.15} ${y-11} L${mid+w*0.2} ${y-18} L${mid+w*0.25} ${y-11}`} fill="#bbb"/>}
-      <text x={mid+w*0.2} y={y-20} textAnchor="middle"
-        fill={is90?"rgba(147,197,253,.46)":"rgba(146,146,146,.4)"} fontSize="5" fontFamily="monospace">{is90?'PVC':'B-VENT'}</text>
+      {(()=>{
+        const pW=is90?5:7;
+        const pC=is90?"#bfdbfe":"#c0c0c0";
+        const pS=is90?"#93c5fd":"#999";
+        const fX=mid+Math.round(w*0.2); // flue exit X — right half of furnace
+        return <>
+          {/* Flue pipe — from top of furnace straight up through roof */}
+          <rect x={fX-pW/2} y={-999} width={pW} height={y+999} rx="1"
+            fill={pC} stroke={pS} strokeWidth="0.7"/>
+          {/* Cap at top (visible above roofline) */}
+          {is90
+            ?<rect x={fX-pW-1} y={-4} width={pW*2+2} height={5} rx="1" fill={pC} stroke={pS} strokeWidth="0.7"/>
+            :<path d={'M'+(fX-pW-2)+' -1 L'+fX+' -9 L'+(fX+pW+2)+' -1'} fill={pC} stroke={pS} strokeWidth="0.5"/>
+          }
+          <text x={fX+6} y={y-8} textAnchor="start"
+            fill={is90?"rgba(147,197,253,.5)":"rgba(148,148,148,.44)"} fontSize="5" fontFamily="monospace">{is90?'PVC':'B-VENT'}</text>
+        </>;
+      })()}
       <rect x={x+4} y={y+11} width={isComm?62:is2?52:44} height="8" rx="2" fill={isComm?"url(#blue)":(G+'.1)')}/>
       <text x={x+7} y={y+18} fill={isComm?"#fff":(G+'.78)')} fontSize="5.5" fontFamily="monospace">{isComm?'COMMUNICATING':is2?'2-STAGE':'1-STAGE'}</text>
       <rect x={mid+4} y={y+11} width={36} height="8" rx="2" fill={is90?"rgba(35,137,224,.13)":(G+'.07)')} stroke={is90?(B+'.24)'):(G+'.16)')} strokeWidth="0.5"/>
@@ -878,10 +892,10 @@ function Canvas({a}){
         fill="none" stroke="rgba(30,30,50,.65)" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round"/>
       {/* Liquid line — full bold red/blue */}
       <path d={`M${sidingX+wallThick} ${lineY1} L${condX+condW*0.35} ${lineY1} L${condX+condW*0.35} ${condY+condH}`}
-        fill="none" stroke={line1C} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="line-pulse draw"/>
+        fill="none" stroke={line1C} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="line-pulse"/>
       {/* Suction line — full bold, offset */}
       <path d={`M${sidingX+wallThick} ${lineY2} L${condX+condW*0.42} ${lineY2} L${condX+condW*0.42} ${condY+condH}`}
-        fill="none" stroke={line2C} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="line-pulse draw" style={{animationDelay:'.15s'}}/>
+        fill="none" stroke={line2C} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="line-pulse" style={{animationDelay:'.15s'}}/>
       {/* Animated flow dots -- both pipes */}
       {active&&Array.from({length:6},(_,i)=>{
         const isLine1=i<3;
@@ -900,7 +914,7 @@ function Canvas({a}){
       {/* ── DISCONNECT BOX — prominent, on outside wall face ── */}
       {(()=>{
         const DX=sidingX+wallThick+4;
-        const DY=groundY-160; // fixed position on wall regardless of condenser size
+        const DY=Math.round(groundY*0.28); // upper portion of wall, stays fixed
         const DW=44, DH=68;
         return <>
           {/* Box body */}
@@ -1014,7 +1028,7 @@ function Canvas({a}){
   // Condenser: true side-wall view, lineset exits wall at condenser bottom.
   // ══════════════════════════════════════════════════════════
   if(isAttic){
-    const VW=1200, VH=700;
+    const VW=960, VH=580;
 
     // 2/3 house when condenser selected, full width otherwise
     const HOUSE_W=hasCond ? Math.round(VW*(2/3)) : VW-12;
@@ -1076,7 +1090,9 @@ function Canvas({a}){
     const WALL_THICK=18;
     const DISC_ZONE=52;  // space for disconnect on wall face
     const COND_X=EXT_WALL_X+WALL_THICK+DISC_ZONE+8;
-    const COND_Y=DECK_Y-COND_H-8;
+    // Condenser sits at ground level in the outside zone
+    // OutsideZone groundY = VH-28 = 552. padY = 542. condY = 542-COND_H.
+    const COND_Y=VH-28-10-COND_H;
     // Lineset exits wall at bottom 1/3 of condenser — enters condenser bottom
     const LS_Y1=COND_Y+Math.round(COND_H*0.72);
     const LS_Y2=COND_Y+Math.round(COND_H*0.82);
@@ -1285,10 +1301,28 @@ function Canvas({a}){
                 {!isExisting&&<text x={SUP_X+SUP_PLEN_W/2} y={SUP_PLEN_Y+SUP_PLEN_H/2+14} textAnchor="middle"
                   fill={G+'.32)'} fontSize="5.5" fontFamily="monospace">4–6 FT SUPPLY</text>}
                 {/* Ionizer -- enters from bottom of plenum */}
-                {hasIonizer&&!isExisting&&<Ionizer
-                  bulbX={SUP_X+SUP_PLEN_W*0.5}
-                  bulbY={SUP_PLEN_Y+SUP_PLEN_H+16}
-                  rodLen={-(Math.round(SUP_PLEN_H*0.55))}/>}
+                {hasIonizer&&(()=>{
+                  // Ionizer: bulb at bottom of coil housing, rod goes UP into airstream
+                  const coilX=hasFurnace?ACOIL_X:AH_X;
+                  const coilW=hasFurnace?ACOIL_W:AH_W;
+                  const bulbX=coilX+Math.round(coilW*0.45);
+                  const bulbY=UNIT_Y+UNIT_H+14; // just below coil bottom
+                  const rodLen=Math.round(UNIT_H*0.55); // rod goes up into airstream
+                  return <g className="fadein">
+                    <circle cx={bulbX} cy={bulbY} r={12} fill="rgba(253,224,71,.07)" stroke="rgba(253,224,71,.18)" strokeWidth="0.5" filter="url(#glow-uv)"/>
+                    <ellipse cx={bulbX} cy={bulbY} rx={8} ry={10} fill="rgba(251,191,36,.18)" stroke="rgba(253,224,71,.75)" strokeWidth="1.4"/>
+                    <ellipse cx={bulbX} cy={bulbY} rx={5} ry={6.5} fill="rgba(253,224,71,.32)" stroke="none" className="glow-pulse"/>
+                    <line x1={bulbX-2} y1={bulbY-4} x2={bulbX+2} y2={bulbY+4} stroke="rgba(253,224,71,.9)" strokeWidth="1.2" strokeLinecap="round"/>
+                    <line x1={bulbX+2} y1={bulbY-4} x2={bulbX-2} y2={bulbY+4} stroke="rgba(253,224,71,.9)" strokeWidth="1.2" strokeLinecap="round"/>
+                    {/* Entry collar at coil bottom */}
+                    <rect x={bulbX-6} y={UNIT_Y+UNIT_H-2} width={12} height={8} rx="2" fill="rgba(180,130,20,.45)" stroke="rgba(253,224,71,.5)" strokeWidth="0.8"/>
+                    {/* Rod goes UP into coil */}
+                    <line x1={bulbX} y1={UNIT_Y+UNIT_H} x2={bulbX} y2={UNIT_Y+UNIT_H-rodLen} stroke="rgba(253,224,71,.22)" strokeWidth={6} strokeLinecap="round" filter="url(#glow-uv)"/>
+                    <line x1={bulbX} y1={UNIT_Y+UNIT_H} x2={bulbX} y2={UNIT_Y+UNIT_H-rodLen} stroke="rgba(253,224,71,.8)" strokeWidth={2} strokeLinecap="round"/>
+                    <circle cx={bulbX} cy={UNIT_Y+UNIT_H-rodLen} r={2.5} fill="rgba(253,224,71,.9)" className="glow-pulse"/>
+                    <text x={bulbX+14} y={bulbY+4} textAnchor="start" fill="rgba(253,224,71,.45)" fontSize="5" fontFamily="monospace">IONIZER</text>
+                  </g>;
+                })()}
               </>;
             })()}
           </g>}
@@ -1348,10 +1382,10 @@ function Canvas({a}){
                   fill="none" stroke="rgba(20,20,36,.6)" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
                 {/* Line 1 -- always bold red/blue */}
                 <path d={`M${RL_START_X} ${ry1} L${RL_START_X} ${RL_ROOF_Y} L${wallX} ${RL_ROOF_Y}`}
-                  fill="none" stroke={line1C} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="line-pulse draw"/>
+                  fill="none" stroke={line1C} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="line-pulse"/>
                 {/* Line 2 -- always bold, opposite color */}
                 <path d={`M${RL_START_X+5} ${ry2} L${RL_START_X+5} ${RL_ROOF_Y+9} L${wallX} ${RL_ROOF_Y+9}`}
-                  fill="none" stroke={line2C} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="line-pulse draw" style={{animationDelay:'.15s'}}/>
+                  fill="none" stroke={line2C} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="line-pulse" style={{animationDelay:'.15s'}}/>
                 {/* Flow dots -- both pipes */}
                 {active&&Array.from({length:6},(_,i)=>{
                   const isLine1=i<3;
@@ -1904,26 +1938,30 @@ function Canvas({a}){
               fill="rgba(138,98,42,.62)" fontSize="6" fontFamily="monospace">2×4 RETURN AIR CHASE</text>
           </g>}
 
-          {/* Condensate drain — below coil/furnace */}
+          {/* Condensate drain — exits right face of coil, runs right past furnace into 2x4 chase */}
           {hasCoil&&(()=>{
             const hasPump=Array.isArray(a.extras)&&a.extras.includes('condensate');
-            const coilCX=UNIT_X+UNIT_W*0.5;
-            const startY=hasFurnace?FURN_Y+FURN_H+4:ACOIL_Y+ACOIL_H+4;
-            if(hasPump){
-              return <>
-                <line x1={coilCX} y1={startY} x2={coilCX} y2={startY+4}
-                  stroke={B+'.4)'} strokeWidth="1.5" strokeDasharray="3 2"/>
-                <rect x={coilCX-29} y={startY+4} width={58} height={20} rx="3"
-                  fill="rgba(35,137,224,.1)" stroke={B+'.5)'} strokeWidth="1.1"/>
-                <text x={coilCX} y={startY+13} textAnchor="middle"
-                  fill={B+'.75)'} fontSize="6.5" fontFamily="monospace">COND. PUMP</text>
-                <text x={coilCX} y={startY+21} textAnchor="middle"
-                  fill={B+'.45)'} fontSize="5" fontFamily="monospace">condensate</text>
-              </>;
-            } else {
-              return <line x1={coilCX} y1={startY} x2={coilCX} y2={Math.min(startY+50,CHASE_Y+CHASE_H)}
-                stroke={B+'.3)'} strokeWidth="1.5" strokeDasharray="4 3" strokeLinecap="round"/>;
-            }
+            const drainExitX=UNIT_X+UNIT_W+2; // right face of unit
+            const drainExitY=ACOIL_Y+Math.round(ACOIL_H*0.7); // lower portion of coil
+            const chaseRightX=UNIT_X+UNIT_W+28; // right wall of 2x4 chase
+            const pumpInsideY=CHASE_Y+Math.round(CHASE_H*0.22);
+            return <>
+              {/* Short stub right then down to drain level */}
+              <path d={'M'+drainExitX+' '+drainExitY+' L'+chaseRightX+' '+drainExitY+' L'+chaseRightX+' '+(CHASE_Y+CHASE_H*0.35)}
+                fill="none" stroke={B+'.42)'} strokeWidth="1.8" strokeDasharray="4 3" strokeLinecap="round"/>
+              {/* DRAIN label */}
+              {!hasPump&&<text x={drainExitX+6} y={drainExitY-4} textAnchor="start"
+                fill={B+'.4)'} fontSize="5" fontFamily="monospace">DRAIN</text>}
+              {hasPump&&<>
+                {/* Condensate pump box inside the 2x4 return chase */}
+                <rect x={chaseRightX-42} y={pumpInsideY} width={40} height={20} rx="3"
+                  fill="rgba(35,137,224,.18)" stroke={B+'.6)'} strokeWidth="1.2"/>
+                <text x={chaseRightX-22} y={pumpInsideY+8} textAnchor="middle"
+                  fill={B+'.85)'} fontSize="5.5" fontFamily="monospace">COND.</text>
+                <text x={chaseRightX-22} y={pumpInsideY+16} textAnchor="middle"
+                  fill={B+'.85)'} fontSize="5.5" fontFamily="monospace">PUMP</text>
+              </>}
+            </>;
           })()}
 
           {/* ── REFRIGERANT LINE STUBS — exit right face of A-coil, run to wall ── */}
@@ -1935,10 +1973,10 @@ function Canvas({a}){
               fill="none" stroke="rgba(22,22,42,.45)" strokeWidth="11" strokeLinecap="round"/>
             {/* Liquid line — always bold */}
             <path d={`M${UNIT_X+UNIT_W} ${LS_Y1} L${EXT_WALL_X} ${LS_Y1}`}
-              fill="none" stroke={line1C} strokeWidth="4.5" strokeLinecap="round" className="line-pulse draw"/>
+              fill="none" stroke={line1C} strokeWidth="4.5" strokeLinecap="round" className="line-pulse"/>
             {/* Suction line — always bold */}
             <path d={`M${UNIT_X+UNIT_W} ${LS_Y2} L${EXT_WALL_X} ${LS_Y2}`}
-              fill="none" stroke={line2C} strokeWidth="4.5" strokeLinecap="round" className="line-pulse draw" style={{animationDelay:'.15s'}}/>
+              fill="none" stroke={line2C} strokeWidth="4.5" strokeLinecap="round" className="line-pulse" style={{animationDelay:'.15s'}}/>
             {/* Flow dots -- both pipes */}
             {Array.from({length:6},(_,i)=>{
               const isLine1=i<3;
@@ -2001,21 +2039,18 @@ function Canvas({a}){
             const rW=hasCond?HOUSE_W:VW-8;
             const rRise=Math.round(Math.min(rW/2*(3/12),60));
             const rEave=rRise+12; // eave Y — bottom of roofline
-            const BW=68, BH=48, GAP=10;
+            const BW=82, BH=56, GAP=10;
             const hasERV=Array.isArray(a.extras)&&a.extras.includes('erv');
-            // Hang boxes from eave: top of box just below eave
             const BY=rEave+10;
-            const roofY=rEave+4; // rod anchors here
-            // Position: ERV left-center, dehu right-center of attic
-            const centerX=Math.round(rW/2);
-            const both=hasDehu&&hasERV;
-            const totalW=both?BW*2+GAP:BW;
-            const startX=centerX-Math.round(totalW/2);
+            const roofY=rEave+4;
+            // Dehu always anchored at right of attic, ERV slots in to its left
+            const dehuX=rW-BW-14;
+            const ervX=dehuX-BW-GAP;
             const boxes=[];
             if(hasERV) boxes.push('erv');
             if(hasDehu) boxes.push('dehu');
             return <g key="dehu-erv-closet">{boxes.map((type,i)=>{
-              const BX=startX+i*(BW+GAP);
+              const BX=type==='dehu'?dehuX:ervX;
               const r1X=BX+BW*0.28, r2X=BX+BW*0.72;
               const isDehu=type==='dehu';
               const pipe1X=BX+Math.round(BW*0.28), pipe2X=BX+Math.round(BW*0.68);
@@ -2138,7 +2173,7 @@ function App(){
         <div className="canvas-wrap">
           <div className="canvas-grid"/>
           <div className="canvas-tag">Live System Preview</div>
-          <Canvas a={answers}/>
+          <Canvas a={answers} stepIdx={stepIdx} activeSteps={activeSteps}/>
         </div>
 
         <div className="sidebar">
