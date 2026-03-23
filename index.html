@@ -20,106 +20,28 @@ body{background:var(--bk);color:var(--wh);font-family:var(--fb);min-height:100vh
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025) 0px,rgba(0,0,0,.025) 1px,transparent 1px,transparent 2px);pointer-events:none;z-index:9999}
 
 /* HEADER */
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--panel);position:sticky;top:0;z-index:100;gap:8px}
-.hdr-logo{font-family:var(--ft);font-weight:700;font-size:13px;background:var(--gh);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.04em;white-space:nowrap}
-.hdr-step{font-family:var(--fm);font-size:8px;color:rgba(215,183,64,.5);letter-spacing:.16em;text-transform:uppercase;text-align:center;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hdr-total-wrap{text-align:right;display:none}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--panel);position:sticky;top:0;z-index:100}
+.hdr-logo{font-family:var(--ft);font-weight:700;font-size:14px;background:var(--gh);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.04em}
+.hdr-step{font-family:var(--fm);font-size:9px;color:rgba(215,183,64,.5);letter-spacing:.18em;text-transform:uppercase;text-align:center}
+.hdr-total-wrap{text-align:right}
+.hdr-total-label{font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);display:block;margin-bottom:1px}
+.hdr-total{font-family:var(--fm);font-size:17px;color:var(--gl);letter-spacing:.04em;transition:all .3s}
 
 /* PROGRESS */
-.prog{height:3px;background:rgba(215,183,64,.1);flex-shrink:0}
+.prog{height:2px;background:rgba(215,183,64,.08)}
 .prog-fill{height:100%;background:var(--gh);transition:width .55s cubic-bezier(.4,0,.2,1)}
 
-/* ── BASE (mobile-first) ── */
-.main{display:flex;flex-direction:column}
+/* LAYOUT */
+.main{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 45px)}
+@media(max-width:860px){.main{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
 
 /* CANVAS */
-.canvas-wrap{position:relative;background:var(--bk);display:flex;align-items:center;justify-content:center;padding:12px;overflow:hidden;min-height:260px;flex-shrink:0}
-@media(min-width:700px){.canvas-wrap{min-height:360px}}
+.canvas-wrap{position:relative;background:var(--bk);display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;min-height:440px}
 .canvas-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(215,183,64,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(215,183,64,.03) 1px,transparent 1px);background-size:36px 36px;pointer-events:none}
-.canvas-tag{position:absolute;top:8px;left:12px;font-family:var(--fm);font-size:8px;color:rgba(215,183,64,.28);letter-spacing:.14em;text-transform:uppercase}
-.canvas-svg{width:100%;max-width:960px;display:block}
+.canvas-tag{position:absolute;top:12px;left:16px;font-family:var(--fm);font-size:9px;color:rgba(215,183,64,.3);letter-spacing:.15em;text-transform:uppercase}
+.canvas-svg{width:100%;max-width:620px}
 
-/* SIDEBAR mobile */
-.sidebar{background:var(--panel);border-top:1px solid var(--border);display:flex;flex-direction:column}
-
-/* OPTIONS mobile */
-.opts{padding:10px 12px;display:flex;flex-direction:column;gap:8px}
-
-/* ── DESKTOP: everything locked to viewport, zero page scroll ── */
-@media(min-width:1100px){
-  /* Lock the whole page */
-  html{height:100%;overflow:hidden}
-  body{height:100%;overflow:hidden;min-height:unset}
-
-  /* Header + progress bar are a fixed-height top strip */
-  .hdr{position:relative;flex-shrink:0}
-  .prog{flex-shrink:0}
-
-  /* Root div fills remaining height */
-  #root{display:flex;flex-direction:column;height:100%}
-  #root>div{display:flex;flex-direction:column;height:100%;min-height:0}
-
-  /* Main fills all remaining space after header+progress */
-  .main{
-    flex-direction:row;
-    flex:1;
-    min-height:0;   /* critical — lets flex child shrink below content size */
-    overflow:hidden;
-  }
-
-  /* Canvas: fills all leftover width, no scroll */
-  .canvas-wrap{
-    flex:1;
-    min-height:unset;
-    height:100%;
-    overflow:hidden;
-    align-items:center;
-    padding:16px;
-  }
-  .canvas-svg{
-    width:100%;
-    height:100%;
-    max-width:none;
-    max-height:100%;
-  }
-
-  /* Sidebar: fixed width column, scrolls internally */
-  .sidebar{
-    width:340px;
-    flex:none;
-    border-top:none;
-    border-left:1px solid var(--border);
-    height:100%;
-    min-height:0;
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;  /* sidebar itself does NOT scroll */
-  }
-
-  /* Step header sticks to top of sidebar */
-  .step-hdr{flex-shrink:0}
-
-  /* Opts list fills remaining sidebar height and scrolls if needed */
-  .opts{
-    flex:1;
-    min-height:0;
-    overflow-y:auto;
-    overflow-x:hidden;
-    padding:10px 12px;
-    gap:7px;
-  }
-
-  /* Nav row sticks to bottom of sidebar */
-  .nav-row{flex-shrink:0;position:relative;bottom:unset}
-
-  /* Tighten option cards slightly on desktop */
-  .opt-inner{padding:10px 12px 10px 15px}
-  .opt-label{font-size:14px}
-  .opt-desc{font-size:11.5px}
-  .step-q{font-size:16px}
-}
-
-/* ── ANIMATIONS ── */
+/* ANIMATIONS */
 .snap{animation:snap .45s cubic-bezier(.34,1.46,.64,1) both}
 @keyframes snap{from{opacity:0;transform:translateY(-14px) scale(.93)}to{opacity:1;transform:translateY(0) scale(1)}}
 .fadein{animation:fadein .3s ease both}
@@ -133,74 +55,75 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .glow-pulse{animation:gpulse 2.5s ease-in-out infinite}
 @keyframes gpulse{0%,100%{opacity:.5}50%{opacity:1}}
 
-/* ── LANDSCAPE: mobile attic rotated sideways — true no-scroll ── */
-.main--landscape{flex-direction:row!important;height:calc(100dvh - 50px)!important;max-height:calc(100dvh - 50px)!important;min-height:unset!important;overflow:hidden!important;flex:none!important}
-.main--landscape .canvas-wrap{flex:1!important;height:100%!important;min-height:unset!important;overflow:hidden!important;padding:5px!important}
-.main--landscape .sidebar{width:235px!important;flex:none!important;height:100%!important;max-height:100%!important;border-top:none!important;border-left:1px solid var(--border)!important;overflow:hidden!important;display:flex!important;flex-direction:column!important}
-.main--landscape .opts{flex:1!important;min-height:0!important;overflow-y:auto!important;padding:5px 8px!important;gap:4px!important}
-.main--landscape .step-q{font-size:12.5px!important;margin-bottom:2px}
-.main--landscape .step-hint{font-size:10px!important}
-.main--landscape .step-eyebrow{font-size:7px!important}
-.main--landscape .opt-label{font-size:11.5px!important}
-.main--landscape .opt-desc{font-size:10px!important}
-.main--landscape .opt-inner{padding:7px 9px 7px 12px!important}
-.main--landscape .opt-check{width:16px!important;height:16px!important;font-size:8px!important}
-.main--landscape .step-hdr{padding:7px 10px 5px!important;flex-shrink:0}
-.main--landscape .nav-row{padding:6px 8px!important;flex-shrink:0!important;position:relative!important;bottom:unset!important}
-.main--landscape .btn-next{padding:9px 10px!important;font-size:12px!important;min-height:36px!important}
-.main--landscape .btn-back{padding:9px 12px!important;font-size:12px!important}
-.step-hdr{padding:14px 16px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel);z-index:10}
-.step-eyebrow{font-family:var(--fm);font-size:8px;color:var(--gm);letter-spacing:.2em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.step-eyebrow-line{flex:1;height:1px;background:rgba(215,183,64,.15)}
-.step-q{font-family:var(--ft);font-size:17px;font-weight:600;color:var(--wh);line-height:1.3;margin-bottom:4px}
-.step-hint{font-size:12px;color:var(--mut);line-height:1.5}
+/* SIDEBAR */
+.sidebar{background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;max-height:calc(100vh - 45px)}
+@media(max-width:860px){.sidebar{border-left:none;border-top:1px solid var(--border);max-height:none}}
 
-/* OPTIONS — bigger touch targets */
-.opts{padding:10px 12px;display:flex;flex-direction:column;gap:8px;flex:1}
-.opt{background:var(--surf);border:1px solid var(--border);cursor:pointer;text-align:left;outline:none;-webkit-appearance:none;transition:border-color .15s,background .15s;position:relative;overflow:hidden;border-radius:2px}
-.opt:active{background:#1c1c1c}
+/* STEP HEADER */
+.step-hdr{padding:16px 18px 12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel);z-index:10}
+.step-eyebrow{font-family:var(--fm);font-size:8.5px;color:var(--gm);letter-spacing:.2em;text-transform:uppercase;margin-bottom:3px;display:flex;align-items:center;gap:8px}
+.step-eyebrow::after{content:'';flex:1;height:1px;background:rgba(215,183,64,.15)}
+.step-q{font-family:var(--ft);font-size:15.5px;font-weight:600;color:var(--wh);line-height:1.3;margin-bottom:3px}
+.step-hint{font-size:11px;color:var(--mut);line-height:1.5}
+
+/* OPTIONS */
+.opts{padding:12px 14px;display:flex;flex-direction:column;gap:7px;flex:1}
+.opt{background:var(--surf);border:1px solid var(--border);cursor:pointer;text-align:left;outline:none;-webkit-appearance:none;transition:border-color .15s,background .15s;position:relative;overflow:hidden}
+.opt:hover{border-color:rgba(215,183,64,.35);background:#1a1a1a}
 .opt.sel{border-color:var(--gl);background:rgba(240,214,78,.05)}
 .opt.sel::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gh)}
 .opt.disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
-.opt-inner{display:flex;align-items:flex-start;gap:10px;padding:13px 14px 13px 17px}
+.opt-inner{display:flex;align-items:flex-start;gap:10px;padding:11px 13px 11px 16px}
+.opt-vis{width:52px;height:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(215,183,64,.05);border:1px solid rgba(215,183,64,.1)}
 .opt-body{flex:1;min-width:0}
-.opt-label{font-family:var(--ft);font-size:15px;font-weight:600;color:var(--wh);display:block;margin-bottom:3px;line-height:1.3}
+.opt-label{font-family:var(--ft);font-size:13px;font-weight:600;color:var(--wh);display:block;margin-bottom:2px;line-height:1.3}
 .opt.sel .opt-label{color:var(--gl)}
-.opt-desc{font-size:12.5px;color:var(--dim);line-height:1.5;display:block}
+.opt-desc{font-size:12px;color:var(--dim);line-height:1.5;display:block}
 .opt.sel .opt-desc{color:rgba(240,214,78,.6)}
 .opt-price{font-family:var(--fm);font-size:11px;color:rgba(215,183,64,.65);display:block;margin-top:2px}
 .opt.sel .opt-price{color:var(--gl)}
 .opt-badge{display:inline-block;background:var(--gh);color:var(--bk);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:1px 6px;margin-left:6px;vertical-align:middle}
-.opt-note{font-size:10.5px;color:rgba(240,214,78,.45);margin-top:3px;display:block;font-style:italic}
-.opt-check{width:20px;height:20px;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;margin-top:1px;transition:all .15s;border-radius:2px}
+.opt-badge-blue{background:linear-gradient(90deg,#1a6cb5,#2389e0);color:#fff}
+.opt-note{font-size:10px;color:rgba(240,214,78,.45);margin-top:2px;display:block;font-style:italic}
+.opt-check{width:17px;height:17px;border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;margin-top:2px;transition:all .15s}
 .opt.sel .opt-check{border-color:var(--gl);background:var(--gm);color:var(--bk)}
 
-/* INFO BUTTON + EXPAND PANEL */
-.info-btn{background:none;border:1px solid rgba(215,183,64,.3);color:rgba(215,183,64,.7);width:22px;height:22px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,color .15s;padding:0;outline:none;font-family:var(--fm);line-height:1}
-.info-btn:hover,.info-btn:active{background:rgba(215,183,64,.12);color:var(--gl)}
-.info-expand{background:rgba(215,183,64,.06);border-bottom:1px solid rgba(215,183,64,.14);animation:fadein .2s ease both}
-.info-expand-body{padding:11px 16px;font-size:12px;color:rgba(255,255,255,.55);line-height:1.65}
-
-.info-card{margin:0 12px 8px;padding:10px 12px;background:rgba(215,183,64,.05);border:1px solid rgba(215,183,64,.15);font-size:11.5px;color:rgba(255,255,255,.45);line-height:1.55}
+/* INFO CARD */
+.info-card{margin:0 14px 10px;padding:10px 12px;background:rgba(215,183,64,.05);border:1px solid rgba(215,183,64,.15);font-size:11px;color:rgba(255,255,255,.45);line-height:1.55}
 .info-card strong{color:rgba(255,255,255,.7)}
 
+/* BUILD LOG */
+.build-log{border-top:1px solid var(--border);padding:12px 14px;background:#0a0a0a}
+.log-title{font-family:var(--fm);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(215,183,64,.35);margin-bottom:8px}
+.log-item{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03);gap:8px}
+.log-item:last-child{border-bottom:none}
+.log-name{font-size:10.5px;color:var(--dim);display:flex;align-items:center;gap:5px;flex:1;min-width:0}
+.log-dot{width:4px;height:4px;background:var(--gm);flex-shrink:0;border-radius:50%}
+.log-price{font-family:var(--fm);font-size:10.5px;color:var(--gm);white-space:nowrap}
+.log-divider{height:1px;background:rgba(215,183,64,.15);margin:8px 0}
+.log-total-row{display:flex;justify-content:space-between;align-items:center}
+.log-total-label{font-size:10px;color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.log-total-val{font-family:var(--fm);font-size:15px;color:var(--gl)}
+
 /* NAV */
-.nav-row{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--panel);position:sticky;bottom:0}
-.btn-back{flex:0 0 auto;background:transparent;border:1px solid var(--border);color:var(--mut);padding:12px 18px;font-family:var(--fb);font-size:13px;cursor:pointer;transition:border-color .2s,color .2s;outline:none;min-width:60px}
-.btn-back:active{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.7)}
-.btn-next{flex:1;background:var(--gh);border:none;color:var(--bk);padding:13px 16px;font-family:var(--ft);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:opacity .2s;outline:none;min-height:48px}
-.btn-next:active:not(:disabled){opacity:.8}
-.btn-next:disabled{opacity:.22;cursor:not-allowed}
-.btn-skip{background:transparent;border:none;color:rgba(255,255,255,.22);font-family:var(--fb);font-size:12px;cursor:pointer;text-decoration:underline;outline:none;padding:0 4px;white-space:nowrap;min-height:48px}
+.nav-row{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--panel);position:sticky;bottom:0}
+.btn-back{flex:0 0 auto;background:transparent;border:1px solid var(--border);color:var(--mut);padding:9px 16px;font-family:var(--fb);font-size:12px;cursor:pointer;transition:border-color .2s,color .2s;outline:none}
+.btn-back:hover{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.55)}
+.btn-next{flex:1;background:var(--gh);border:none;color:var(--bk);padding:10px 16px;font-family:var(--ft);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:opacity .2s,transform .12s;outline:none}
+.btn-next:hover:not(:disabled){opacity:.85;transform:translateY(-1px)}
+.btn-next:disabled{opacity:.22;cursor:not-allowed;transform:none}
+.btn-skip{background:transparent;border:none;color:rgba(255,255,255,.2);font-family:var(--fb);font-size:11px;cursor:pointer;text-decoration:underline;outline:none;padding:0 4px;white-space:nowrap}
+.btn-skip:hover{color:rgba(255,255,255,.45)}
 
 /* DONE */
-.done-wrap{padding:24px 18px;text-align:center;animation:snap .35s ease both;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto}
-.done-icon{width:56px;height:56px;background:var(--gh);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:22px;color:var(--bk);font-weight:700;flex-shrink:0}
-.done-title{font-family:var(--ft);font-size:21px;font-weight:700;color:var(--wh);margin-bottom:8px}
-.done-sub{font-size:12.5px;color:var(--mut);max-width:290px;margin:0 auto 18px;line-height:1.65}
-.done-cta{display:block;width:100%;background:var(--gh);border:none;color:var(--bk);padding:15px;font-family:var(--ft);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.04em;margin-bottom:10px;text-decoration:none;text-align:center;border-radius:2px}
-.done-discount{background:rgba(215,183,64,.07);border:1px solid rgba(215,183,64,.2);padding:10px 14px;font-size:12px;color:rgba(215,183,64,.75);line-height:1.55;border-radius:2px;margin-bottom:14px;text-align:left;width:100%}
-.done-restart{background:transparent;border:none;color:rgba(255,255,255,.22);font-family:var(--fb);font-size:12px;cursor:pointer;text-decoration:underline;outline:none}
+.done-wrap{padding:24px 18px;text-align:center;animation:snap .35s ease both;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.done-icon{width:54px;height:54px;background:var(--gh);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px;color:var(--bk);font-weight:700}
+.done-title{font-family:var(--ft);font-size:19px;font-weight:700;color:var(--wh);margin-bottom:6px}
+.done-sub{font-size:11.5px;color:var(--mut);max-width:270px;margin:0 auto 18px;line-height:1.65}
+.done-price{font-family:var(--fm);font-size:30px;background:var(--gd2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:3px}
+.done-note{font-size:10px;color:rgba(255,255,255,.25);margin-bottom:22px}
+.done-cta{display:block;width:100%;background:var(--gh);border:none;color:var(--bk);padding:13px;font-family:var(--ft);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.04em;margin-bottom:8px;text-decoration:none;text-align:center}
+.done-restart{background:transparent;border:none;color:rgba(255,255,255,.2);font-family:var(--fb);font-size:11px;cursor:pointer;text-decoration:underline;outline:none}
 </style>
 </head>
 <body>
@@ -226,11 +149,11 @@ const STEPS=[
     hint:'Smart thermostats save 10–15% on energy bills.',            optional:false},
   {id:'purif',       q:'Air purification add-ons?',
     hint:'Select any combination — installed inside the air handler.',optional:true, multi:true},
+  {id:'cond_tier',   q:'Choose your efficiency level.',
+    hint:'Higher efficiency = lower monthly bills and better humidity control.', optional:false},
   {id:'system_for',  q:'Heat pump or straight cool?',
     hint:'Heat pump both heats and cools. Straight cool = AC only, furnace does all heating.', optional:false,
     showIf:a=>a.indoor_type==='furnace'},
-  {id:'cond_tier',   q:'Choose your efficiency level.',
-    hint:'Higher efficiency = lower monthly bills and better humidity control.', optional:false},
   {id:'dehu',        q:'Add a whole-home dehumidifier?',
     hint:"Austin's humidity makes your home feel 7°F warmer. Runs automatically with your system.", optional:false},
   {id:'extras',      q:'Any final add-ons?',
@@ -258,9 +181,9 @@ function getOpts(stepId, answers){
       {v:'spray',     label:'Spray foam',               desc:'Sealed attic — 90% AFUE furnace required, PVC condensing flue through roof deck'},
     ];
     case 'plenum':return[
-      {v:'ductboard',label:'Replace — Ductboard',  desc:'New ductboard plenum — lightweight, well-insulated, standard for most attic installs'},
-      {v:'metal',    label:'Replace — Sheet Metal', desc:'New metal plenum — more durable and longer-lasting, preferred for high-performance builds'},
-      {v:'none',     label:'Keep existing',         desc:'Existing plenum is in good condition — no replacement needed'},
+      {v:'ductboard',label:'Ductboard plenum',  desc:'Standard — fits most attic horizontal installs'},
+      {v:'metal',    label:'Sheet metal plenum',desc:'More durable — preferred for longevity'},
+      {v:'none',     label:'Not needed',        desc:'Existing plenum is in good shape — no replacement required'},
     ];
     case 'thermostat':return[
       {v:'basic',label:'Basic',         desc:'Reliable programmable thermostat — simple, accurate, no subscription'},
@@ -279,11 +202,9 @@ function getOpts(stepId, answers){
       const isAH=answers.indoor_type==='ah';
       const isHP=isAH||(answers.system_for==='hp');
       return[
-        {v:'fedmin',   label:'Federal Minimum', desc:'Meets current energy code — solid, reliable, lowest upfront cost'},
-        {v:'mid_ge15', label:'Mid Efficiency',   desc:'Best overall value — variable speed, meaningfully lower energy bills and better humidity control'},
-        {v:'high_ge18',label:'High Efficiency',  desc:'Inverter-driven — eligible for Austin Energy rebate, best humidity performance and lowest operating cost',
-          disabled:!isHP,
-          disabledNote:!isHP?'Heat pump required for this tier':''},
+        {v:'fedmin',   label:'Federal Minimum',desc:'Meets current energy code — solid, reliable, lowest upfront cost'},
+        {v:'mid_ge15', label:'Mid Efficiency',  desc:'Best overall value — GE Connect, meaningfully lower energy bills'},
+        {v:'high_ge18',label:'High Efficiency', desc:'Inverter-driven -- eligible for Austin Energy rebate, best humidity performance'},
       ];
     }
     case 'dehu':return[
@@ -335,10 +256,13 @@ function Canvas({a}){
   // Refrigerant colors — physically correct
   const evapC  = refReversed ? '#ef4444' : '#2389e0'; // evap: red=HP heat, blue=cool
   const evapC2 = refReversed ? '#fca5a5' : '#7dd3fc';
-  const condC  = (!heatMode||hasFurnace) ? '#ef4444' : '#2389e0'; // cond: red=cool, blue=HP heat
+  const condC  = (!heatMode||hasFurnace) ? '#ef4444' : '#2389e0';
   const condC2 = (!heatMode||hasFurnace) ? '#fca5a5' : '#7dd3fc';
+  const line1C = refReversed ? '#2389e0' : '#ef4444';
+  const line2C = refReversed ? '#ef4444' : '#2389e0';
 
-  const TL={fedmin:'14 SEER2',mid_ge15:'18 SEER2',high_ge18:'21 SEER2',premium:'21 SEER2'}[a.cond_tier]||'';
+  const TL={fedmin:'14 SEER2',mid_ge15:'18 SEER2',high_ge18:'21 SEER2',premium:'22+ SEER2'}[a.cond_tier]||'';
+  const BL={fedmin:'AMERISTAR',mid_ge15:'GE CONNECT',high_ge18:'GE CONNECT',premium:'AM.STD'}[a.cond_tier]||'';
 
   // ── SUB-COMPONENTS ──────────────────────────────────────────
 
@@ -351,17 +275,11 @@ function Canvas({a}){
         x2={cx+r*0.88*Math.cos(ang+0.22)} y2={cy+r*0.88*Math.sin(ang+0.22)}
         stroke={active?(G+'.7)'):(G+'.2)')} strokeWidth="1.9" strokeLinecap="round"/>;
     });
-    // transform-box:fill-box fixes transform-origin on SVG elements in mobile browsers
-    const spinStyle={
-      transformOrigin:'50% 50%',
-      transformBox:'fill-box',
-      animation:`spin ${(1.0/spd).toFixed(2)}s linear infinite`,
-    };
     return <g>
       <circle cx={cx} cy={cy} r={r+4} fill="rgba(0,0,0,.5)" stroke={G+'.15)'} strokeWidth="0.8"/>
       <circle cx={cx} cy={cy} r={r} fill="#050505" stroke={G+'.3)'} strokeWidth="0.9"/>
       {active
-        ?<g style={spinStyle}>{blades}</g>
+        ?<g className="spin" style={{transformOrigin:cx+'px '+cy+'px',animationDuration:(1.0/spd)+'s'}}>{blades}</g>
         :<g>{blades}</g>}
       <circle cx={cx} cy={cy} r={r*0.27} fill="#090909" stroke={G+'.34)'} strokeWidth="0.9"/>
       <circle cx={cx} cy={cy} r={r*0.1} fill="#111" stroke={G+'.42)'} strokeWidth="0.6"/>
@@ -552,26 +470,11 @@ function Canvas({a}){
         </g>;
       })}
       <text x={mid+w*0.25} y={y+h-4} textAnchor="middle" fill={active?'rgba(249,115,22,.44)':(G+'.28)')} fontSize="5.5" fontFamily="monospace">HEAT EXCH.</text>
-      {/* Flue — straight up from HX section through the roof */}
-      {(()=>{
-        const fx=mid+w*0.22;
-        const pipeW=is90?6:9;
-        const pipeC=is90?"#bfdbfe":"#d0d0d0";
-        const pipeS=is90?"#93c5fd":"#b0b0b0";
-        const pipeTop=Math.min(y-80, -10); // goes all the way through roofline
-        return <>
-          <rect x={fx-pipeW/2} y={pipeTop} width={pipeW} height={y-pipeTop} rx="1"
-            fill={pipeC} stroke={pipeS} strokeWidth="1"/>
-          {is90
-            ?<rect x={fx-pipeW-1} y={pipeTop-4} width={pipeW*2+2} height={5} rx="1"
-                fill={pipeC} stroke={pipeS} strokeWidth="0.8"/>
-            :<path d={`M${fx-pipeW*1.4} ${pipeTop+2} L${fx} ${pipeTop-6} L${fx+pipeW*1.4} ${pipeTop+2}`}
-                fill={pipeC}/>}
-          <text x={fx+pipeW+5} y={pipeTop+20} textAnchor="start"
-            fill={is90?"rgba(147,197,253,.55)":"rgba(185,185,185,.5)"}
-            fontSize="6.5" fontFamily="monospace">{is90?'PVC FLUE':'B-VENT'}</text>
-        </>;
-      })()}
+      <rect x={mid+w*0.17} y={y-12} width={is90?5:7} height={13}
+        fill={is90?"#bfdbfe":"#c0c0c0"} stroke={is90?"#93c5fd":"#999"} strokeWidth="0.7"/>
+      {!is90&&<path d={`M${mid+w*0.15} ${y-11} L${mid+w*0.2} ${y-18} L${mid+w*0.25} ${y-11}`} fill="#bbb"/>}
+      <text x={mid+w*0.2} y={y-20} textAnchor="middle"
+        fill={is90?"rgba(147,197,253,.46)":"rgba(146,146,146,.4)"} fontSize="5" fontFamily="monospace">{is90?'PVC':'B-VENT'}</text>
       <rect x={x+4} y={y+11} width={isComm?62:is2?52:44} height="8" rx="2" fill={isComm?"url(#blue)":(G+'.1)')}/>
       <text x={x+7} y={y+18} fill={isComm?"#fff":(G+'.78)')} fontSize="5.5" fontFamily="monospace">{isComm?'COMMUNICATING':is2?'2-STAGE':'1-STAGE'}</text>
       <rect x={mid+4} y={y+11} width={36} height="8" rx="2" fill={is90?"rgba(35,137,224,.13)":(G+'.07)')} stroke={is90?(B+'.24)'):(G+'.16)')} strokeWidth="0.5"/>
@@ -605,355 +508,268 @@ function Canvas({a}){
     </g>;
   }
 
-  // CapFan — side-perspective view into the top of a condenser
-  // Blades clipped to cap bounds so nothing escapes the housing
-  function CapFan({x,y,w,h,active,bladeColor,slatFill,slatCount,clipId}){
+  // CapFan -- side-perspective view into condenser top cap
+  // Fan blades contained by keeping radii tight -- no clipPath needed
+  function CapFan({x,y,w,h,active,bladeColor,slatFill,slatCount}){
     slatCount=slatCount||Math.floor(h*0.7/4.5);
     const cx=x+w/2, cy=y+h/2;
-    const fanRx=w*0.46, fanRy=h*0.36;
+    const fanRx=Math.min(w*0.44, w/2-2);
+    const fanRy=Math.min(h*0.34, h/2-2);
     const spd=active?0.9:0;
     const spinStyle=active?{
-      transformOrigin:'50% 50%',
-      transformBox:'fill-box',
-      animation:`spin ${(1/spd).toFixed(2)}s linear infinite`,
+      transformOrigin:'50% 50%',transformBox:'fill-box',
+      animation:'spin '+(1/spd).toFixed(2)+'s linear infinite',
     }:{};
     const bC=bladeColor||(active?'rgba(80,85,95,.75)':'rgba(50,55,62,.5)');
-    // Use a unique clipId per instance to avoid collisions
-    const cid=clipId||'capfan-clip';
     return <>
-      {/* ClipPath — strict rect matching cap bounds */}
-      <defs>
-        <clipPath id={cid}>
-          <rect x={x} y={y} width={w} height={h} rx="3"/>
-        </clipPath>
-      </defs>
-      {/* Everything inside the clip */}
-      <g clipPath={`url(#${cid})`}>
-        {/* Dark recess */}
-        <ellipse cx={cx} cy={cy} rx={fanRx} ry={fanRy}
-          fill={active?"rgba(10,11,14,.95)":"rgba(8,9,12,.9)"}
-          stroke="rgba(30,32,38,.6)" strokeWidth="0.7"/>
-        {/* Fan blades */}
-        <g style={spinStyle}>
-          {Array.from({length:4},(_,i)=>{
-            const ang=i*(Math.PI/2);
-            const bx1=cx+fanRx*0.15*Math.cos(ang);
-            const by1=cy+fanRy*0.15*Math.sin(ang);
-            const bx2=cx+fanRx*0.88*Math.cos(ang+0.55);
-            const by2=cy+fanRy*0.88*Math.sin(ang+0.55);
-            const cpx=cx+fanRx*0.72*Math.cos(ang+0.28);
-            const cpy=cy+fanRy*0.72*Math.sin(ang+0.28);
-            return <path key={i}
-              d={`M${bx1} ${by1} Q${cpx} ${cpy} ${bx2} ${by2}`}
-              fill="none" stroke={bC} strokeWidth="5" strokeLinecap="round" opacity="0.9"/>;
-          })}
-        </g>
-        {/* Hub */}
-        <ellipse cx={cx} cy={cy} rx={fanRx*0.1} ry={fanRy*0.1}
-          fill="#1a1c20" stroke="rgba(55,60,68,.6)" strokeWidth="0.8"/>
+      <ellipse cx={cx} cy={cy} rx={fanRx} ry={fanRy}
+        fill={active?"rgba(10,11,14,.95)":"rgba(8,9,12,.9)"}
+        stroke="rgba(30,32,38,.6)" strokeWidth="0.7"/>
+      <g style={spinStyle}>
+        {Array.from({length:4},(_,i)=>{
+          const ang=i*(Math.PI/2);
+          const bx1=cx+fanRx*0.15*Math.cos(ang);
+          const by1=cy+fanRy*0.15*Math.sin(ang);
+          const bx2=cx+fanRx*0.86*Math.cos(ang+0.55);
+          const by2=cy+fanRy*0.86*Math.sin(ang+0.55);
+          const cpx=cx+fanRx*0.70*Math.cos(ang+0.28);
+          const cpy=cy+fanRy*0.70*Math.sin(ang+0.28);
+          return <path key={i} d={'M'+bx1+' '+by1+' Q'+cpx+' '+cpy+' '+bx2+' '+by2}
+            fill="none" stroke={bC} strokeWidth="4" strokeLinecap="round" opacity="0.9"/>;
+        })}
       </g>
-      {/* Grille slats — outside clip, drawn over fan, always visible */}
+      <ellipse cx={cx} cy={cy} rx={fanRx*0.1} ry={fanRy*0.1}
+        fill="#1a1c20" stroke="rgba(55,60,68,.6)" strokeWidth="0.8"/>
       {Array.from({length:slatCount},(_,i)=>{
         const sy=y+2+i*(h-4)/slatCount;
         return <rect key={i} x={x+2} y={sy} width={w-4} height={(h-4)/slatCount*0.55} rx="0.5"
-          fill={slatFill||"rgba(36,39,46,.9)"}
-          stroke="rgba(18,20,24,.5)" strokeWidth="0.3"/>;
+          fill={slatFill||"rgba(36,39,46,.9)"} stroke="rgba(18,20,24,.5)" strokeWidth="0.3"/>;
       })}
     </>;
   }
 
-  // Condenser — real-world proportioned by tier
-  // Fed min: ~30"W × 37"H — square/boxy, fan covers 90% of top
-  // Mid (GE Connect): mini-split style — horizontal rectangle, inverter label
-  // High/Premium: ~36"W × 50"H — larger square, big fan, more imposing
-  // Scale: ~3.2px per inch
+  // Condenser -- three distinct tiers
   function Condenser({x,y,w,h,active,tierKey}){
     const isMini=tierKey==='mid_ge15';
     const isBig=tierKey==='high_ge18'||tierKey==='premium';
+    const isFed=tierKey==='fedmin';
     const cc=active?condC:'rgba(55,18,18,.5)';
 
-    // Fan takes 90% of the TOP face for fed min, 85% for big units
-    const fanTopPct=tierKey==='fedmin'?0.82:isBig?0.78:0.5;
-    const fanSectionH=Math.round(h*fanTopPct);
-    const coilSectionH=h-fanSectionH;
-    const fanR=Math.round(Math.min(w,fanSectionH)*0.42);
-    const fanCX=x+w/2;
-    const fanCY=y+fanSectionH/2+4;
-
     return <g>
-      <rect x={x} y={y} width={w} height={h} rx={isMini?10:4}
-        fill={active?"#090808":"#080808"}
-        stroke={active?cc:(G+'.42)')} strokeWidth={active?2:1.5}/>
-      {active&&<rect x={x} y={y} width={w} height={h} rx={isMini?10:4}
-        fill={condenserActive&&!refReversed?"rgba(239,68,68,.025)":"rgba(35,137,224,.018)"} stroke="none"/>}
+      {isFed&&<>
+        {/* FED MIN: light gray louvered box */}
+        <rect x={x} y={y} width={w} height={h} rx={3}
+          fill={active?"#b8bcc4":"#c2c6ce"}
+          stroke={active?"rgba(150,155,165,.9)":"rgba(130,135,145,.8)"} strokeWidth="1.2"/>
+        {/* Dark top cap with CapFan */}
+        {(()=>{
+          const capH=Math.round(h*0.16);
+          return <>
+            <rect x={x} y={y} width={w} height={capH} rx={3}
+              fill={active?"#3a3d42":"#2e3035"} stroke="rgba(20,22,26,.8)" strokeWidth="1"/>
+            <CapFan x={x+2} y={y+1} w={w-4} h={capH-2} active={active}
+              bladeColor={active?"rgba(90,95,105,.8)":"rgba(45,48,55,.6)"}
+              slatFill={active?"rgba(44,47,54,.88)":"rgba(36,39,46,.92)"}
+              slatCount={Math.floor((capH-2)*0.7/4.5)}/>
+            {[[x+5,y+4],[x+w-5,y+4],[x+5,y+capH-4],[x+w-5,y+capH-4]].map(([sx,sy],i)=>(
+              <circle key={i} cx={sx} cy={sy} r={1.8}
+                fill="rgba(50,55,62,.9)" stroke="rgba(80,85,95,.5)" strokeWidth="0.5"/>
+            ))}
+          </>;
+        })()}
+        {/* Horizontal louver slats on body */}
+        {(()=>{
+          const capH=Math.round(h*0.16);
+          const slotY=y+capH+2, slotH=h-capH-4;
+          const count=Math.floor(slotH/5.5), step=slotH/count;
+          return Array.from({length:count},(_,i)=>(
+            <g key={i}>
+              <rect x={x+2} y={slotY+i*step} width={w-4} height={step-1.5} rx="0.5"
+                fill={active?"rgba(145,150,158,.85)":"rgba(155,160,168,.8)"}/>
+              <rect x={x+2} y={slotY+i*step} width={w-4} height={1.5}
+                fill={active?"rgba(190,195,202,.6)":"rgba(200,204,210,.55)"}/>
+              <rect x={x+2} y={slotY+i*step+step-2.5} width={w-4} height={1.2}
+                fill="rgba(100,105,115,.4)"/>
+            </g>
+          ));
+        })()}
+        {/* Brand badge centered */}
+        {(()=>{
+          const capH=Math.round(h*0.16);
+          const by=y+capH+Math.round((h-capH)*0.38);
+          return <>
+            <circle cx={x+w/2} cy={by} r={10}
+              fill="rgba(55,58,65,.9)" stroke="rgba(80,85,95,.7)" strokeWidth="1.2"/>
+            <circle cx={x+w/2} cy={by} r={7.5}
+              fill="rgba(35,38,45,.8)" stroke="rgba(90,95,108,.4)" strokeWidth="0.6"/>
+            <text x={x+w/2} y={by+3.5} textAnchor="middle"
+              fill="rgba(200,205,215,.7)" fontSize="7" fontFamily="sans-serif" fontWeight="700">G</text>
+          </>;
+        })()}
+        {[[x+4,y+h-4],[x+w-4,y+h-4]].map(([fx,fy],i)=>(
+          <circle key={i} cx={fx} cy={fy} r={2.5}
+            fill="rgba(90,95,105,.8)" stroke="rgba(60,65,75,.6)" strokeWidth="0.7"/>
+        ))}
+        {/* SEER badge */}
+        <rect x={x+3} y={y+h-16} width={w-6} height={13} rx="2"
+          fill="rgba(40,43,50,.82)" opacity="0.95"/>
+        <text x={x+w/2} y={y+h-6} textAnchor="middle"
+          fill="rgba(195,200,210,.9)" fontSize="7.5" fontFamily="monospace" fontWeight="700">{TL}</text>
+      </>}
 
-      {isMini
-        /* ── MINI-SPLIT / GE COMPACT — matches reference photo ── */
-        ?<>
-          {/* Outer body — slightly rounded, square-ish, medium gray */}
-          <rect x={x} y={y} width={w} height={h} rx={6}
-            fill={active?"#1c1e22":"#181a1e"}
-            stroke={active?cc:"rgba(80,85,95,.7)"} strokeWidth={active?1.8:1.4}/>
+      {isMini&&<>
+        {/* MID: GE compact mini-split style */}
+        <rect x={x} y={y} width={w} height={h} rx={6}
+          fill={active?"#1c1e22":"#181a1e"}
+          stroke={active?cc:"rgba(80,85,95,.7)"} strokeWidth={active?1.8:1.4}/>
+        {/* Discharge grille top */}
+        <rect x={x+4} y={y+2} width={w-8} height={Math.round(h*0.1)} rx="2"
+          fill="rgba(0,0,0,.35)" stroke="rgba(70,75,85,.5)" strokeWidth="0.6"/>
+        {Array.from({length:3},(_,i)=>(
+          <rect key={i} x={x+6} y={y+4+i*4} width={w-12} height={2} rx="0.5"
+            fill="rgba(35,38,45,.9)" stroke="rgba(60,65,75,.4)" strokeWidth="0.3"/>
+        ))}
+        {/* Left: large fan area ~68% */}
+        {(()=>{
+          const fanAreaW=Math.round(w*0.68);
+          const fanAreaH=h-Math.round(h*0.1)-4;
+          const fanAreaY=y+Math.round(h*0.1)+2;
+          const fCX=x+fanAreaW/2, fCY=fanAreaY+fanAreaH/2;
+          const fR=Math.round(Math.min(fanAreaW,fanAreaH)*0.43);
+          return <>
+            <rect x={x+2} y={fanAreaY} width={fanAreaW-2} height={fanAreaH} rx="3"
+              fill="rgba(0,0,0,.4)" stroke="rgba(55,60,70,.5)" strokeWidth="0.7"/>
+            {Array.from({length:Math.floor(fanAreaH/5)},(_,row)=>
+              Array.from({length:Math.floor(fanAreaW/5)},(_,col)=>{
+                const gx=x+4+col*5, gy=fanAreaY+2+row*5;
+                const dx=gx-fCX, dy=gy-fCY;
+                if(Math.sqrt(dx*dx+dy*dy)>fR+4) return null;
+                return <rect key={row+'-'+col} x={gx} y={gy} width={1.5} height={1.5} rx="0.3"
+                  fill="rgba(40,45,55,.9)"/>;
+              })
+            )}
+            <circle cx={fCX} cy={fCY} r={fR+8} fill="none" stroke="rgba(60,65,78,.7)" strokeWidth="2.5"/>
+            <circle cx={fCX} cy={fCY} r={fR+4} fill="rgba(12,13,16,.6)" stroke="rgba(50,55,65,.5)" strokeWidth="1.2"/>
+            <BlowerWheel cx={fCX} cy={fCY} r={fR} spd={active?1.1:0.3} active={active}/>
+            <circle cx={fCX} cy={fCY} r={fR*0.14} fill="#2a2c32" stroke="rgba(90,95,110,.6)" strokeWidth="0.8"/>
+          </>;
+        })()}
+        {/* Right: service panel ~30% */}
+        {(()=>{
+          const panelX=x+Math.round(w*0.7);
+          const panelW=w-Math.round(w*0.7)-2;
+          const panelY=y+Math.round(h*0.1)+4;
+          const panelH=h-Math.round(h*0.1)-8;
+          return <>
+            <rect x={panelX} y={panelY} width={panelW} height={panelH} rx="4"
+              fill={active?"rgba(28,32,40,.8)":"rgba(22,24,30,.7)"} stroke="rgba(55,60,72,.6)" strokeWidth="0.8"/>
+            <rect x={panelX+3} y={panelY+6} width={panelW-6} height={Math.round(panelH*0.55)} rx="3"
+              fill={active?"rgba(20,25,35,.9)":"rgba(16,18,24,.8)"} stroke="rgba(50,55,68,.5)" strokeWidth="0.7"/>
+            <circle cx={panelX+panelW/2} cy={panelY+Math.round(panelH*0.7)} r={3.5}
+              fill={active?(cc):"rgba(40,45,55,.6)"} stroke={active?cc:"rgba(55,60,70,.3)"} strokeWidth="0.8"/>
+            {active&&<circle cx={panelX+panelW/2} cy={panelY+Math.round(panelH*0.7)} r={2}
+              fill="#fff" className="glow-pulse"/>}
+            {[0.18,0.88].map((ty,i)=>(
+              <circle key={i} cx={panelX+panelW/2} cy={panelY+panelH*ty} r={1.8}
+                fill="rgba(45,50,60,.9)" stroke="rgba(70,75,90,.5)" strokeWidth="0.5"/>
+            ))}
+            <circle cx={panelX+panelW/2} cy={panelY+Math.round(panelH*0.85)} r={5}
+              fill="rgba(30,35,45,.8)" stroke={active?cc:"rgba(70,75,90,.5)"} strokeWidth="0.8"/>
+            <text x={panelX+panelW/2} y={panelY+Math.round(panelH*0.87)} textAnchor="middle"
+              fill={active?cc:"rgba(90,95,110,.7)"} fontSize="4.5" fontFamily="sans-serif" fontWeight="700">VS</text>
+          </>;
+        })()}
+        {/* SEER badge */}
+        <rect x={x+3} y={y+h-16} width={w-6} height={13} rx="2"
+          fill={active?(refReversed?"url(#blue)":"url(#red-g)"):"url(#gold)"} opacity=".6"/>
+        <text x={x+w/2} y={y+h-6} textAnchor="middle"
+          fill="#fff" fontSize="7.5" fontFamily="monospace" fontWeight="700">{TL}</text>
+      </>}
 
-          {/* Discharge grille across top — horizontal slots */}
-          <rect x={x+4} y={y+2} width={w-8} height={Math.round(h*0.1)} rx="2"
-            fill="rgba(0,0,0,.35)" stroke="rgba(70,75,85,.5)" strokeWidth="0.6"/>
-          {Array.from({length:3},(_,i)=>(
-            <rect key={i} x={x+6} y={y+4+i*4} width={w-12} height={2} rx="0.5"
-              fill="rgba(35,38,45,.9)" stroke="rgba(60,65,75,.4)" strokeWidth="0.3"/>
-          ))}
-
-          {/* LEFT: Large circular fan area — ~68% of unit width */}
-          {(()=>{
-            const fanAreaW=Math.round(w*0.68);
-            const fanAreaH=h-Math.round(h*0.1)-4;
-            const fanAreaY=y+Math.round(h*0.1)+2;
-            const fCX=x+fanAreaW/2;
-            const fCY=fanAreaY+fanAreaH/2;
-            const fR=Math.round(Math.min(fanAreaW,fanAreaH)*0.43);
-            return <>
-              {/* Fan housing — recessed circle */}
-              <rect x={x+2} y={fanAreaY} width={fanAreaW-2} height={fanAreaH} rx="3"
-                fill="rgba(0,0,0,.4)" stroke="rgba(55,60,70,.5)" strokeWidth="0.7"/>
-              {/* Fine mesh grille — dot pattern behind fan */}
-              {Array.from({length:Math.floor(fanAreaH/5)},(_,row)=>
-                Array.from({length:Math.floor(fanAreaW/5)},(_,col)=>{
-                  const gx=x+4+col*5, gy=fanAreaY+2+row*5;
-                  const dx=gx-fCX, dy=gy-fCY;
-                  if(Math.sqrt(dx*dx+dy*dy)>fR+4) return null;
-                  return <rect key={`${row}-${col}`} x={gx} y={gy} width={1.5} height={1.5} rx="0.3"
-                    fill="rgba(40,45,55,.9)"/>;
-                })
-              )}
-              {/* Outer grille ring */}
-              <circle cx={fCX} cy={fCY} r={fR+8}
-                fill="none" stroke="rgba(60,65,78,.7)" strokeWidth="2.5"/>
-              {/* Inner shroud ring */}
-              <circle cx={fCX} cy={fCY} r={fR+4}
-                fill="rgba(12,13,16,.6)" stroke="rgba(50,55,65,.5)" strokeWidth="1.2"/>
-              {/* Fan blades */}
-              <BlowerWheel cx={fCX} cy={fCY} r={fR} spd={active?1.1:0.3} active={active}/>
-              {/* Hub cap */}
-              <circle cx={fCX} cy={fCY} r={fR*0.14}
-                fill="#2a2c32" stroke="rgba(90,95,110,.6)" strokeWidth="0.8"/>
-            </>;
-          })()}
-
-          {/* RIGHT: Narrow service panel — ~30% of unit width */}
-          {(()=>{
-            const panelX=x+Math.round(w*0.7);
-            const panelW=w-Math.round(w*0.7)-2;
-            const panelY=y+Math.round(h*0.1)+4;
-            const panelH=h-Math.round(h*0.1)-8;
-            return <>
-              {/* Panel background */}
-              <rect x={panelX} y={panelY} width={panelW} height={panelH} rx="4"
-                fill={active?"rgba(28,32,40,.8)":"rgba(22,24,30,.7)"}
-                stroke="rgba(55,60,72,.6)" strokeWidth="0.8"/>
-              {/* Service cover — rounded rectangle cutout */}
-              <rect x={panelX+3} y={panelY+6} width={panelW-6} height={Math.round(panelH*0.55)} rx="3"
-                fill={active?"rgba(20,25,35,.9)":"rgba(16,18,24,.8)"}
-                stroke="rgba(50,55,68,.5)" strokeWidth="0.7"/>
-              {/* Status indicator LED */}
-              <circle cx={panelX+panelW/2} cy={panelY+Math.round(panelH*0.7)} r={3.5}
-                fill={active?(heatMode?"rgba(249,115,22,.8)":"rgba(35,137,224,.8)"):"rgba(40,45,55,.6)"}
-                stroke={active?(heatMode?"rgba(249,115,22,.5)":"rgba(35,137,224,.4)"):"rgba(55,60,70,.3)"}
-                strokeWidth="0.8"/>
-              {active&&<circle cx={panelX+panelW/2} cy={panelY+Math.round(panelH*0.7)} r={2}
-                fill={heatMode?"#fbbf24":"#60a5fa"} className="glow-pulse"/>}
-              {/* Service screws */}
-              {[0.18,0.88].map((ty,i)=>(
-                <circle key={i} cx={panelX+panelW/2} cy={panelY+panelH*ty} r={1.8}
-                  fill="rgba(45,50,60,.9)" stroke="rgba(70,75,90,.5)" strokeWidth="0.5"/>
-              ))}
-              {/* Brand mark — subtle circle */}
-              <circle cx={panelX+panelW/2} cy={panelY+Math.round(panelH*0.85)} r={5}
-                fill="rgba(30,35,45,.8)" stroke={active?cc:"rgba(70,75,90,.5)"} strokeWidth="0.8"/>
-              <text x={panelX+panelW/2} y={panelY+Math.round(panelH*0.87)} textAnchor="middle"
-                fill={active?cc:"rgba(90,95,110,.7)"} fontSize="4.5" fontFamily="sans-serif" fontWeight="700">VS</text>
-            </>;
-          })()}
-        </>
-        /* ── STANDARD CONDENSER ── fedmin = louvered box, big = premium ── */
-        :<>
-          {tierKey==='fedmin'
-            ?<>
-              {/* ── FED MIN: louvered box — matches reference photo ── */}
-              {/* Light gray body */}
-              <rect x={x} y={y} width={w} height={h} rx={3}
-                fill={active?"#b8bcc4":"#c2c6ce"}
-                stroke={active?"rgba(150,155,165,.9)":"rgba(130,135,145,.8)"} strokeWidth="1.2"/>
-
-              {/* Dark top cap — CapFan: side-perspective view through grille slats */}
-              {(()=>{
-                const capH=Math.round(h*0.16);
-                return <>
-                  <rect x={x} y={y} width={w} height={capH} rx={3}
-                    fill={active?"#3a3d42":"#2e3035"}
-                    stroke="rgba(20,22,26,.8)" strokeWidth="1"/>
-                  <CapFan x={x+2} y={y+1} w={w-4} h={capH-2}
-                    active={active}
-                    clipId={`cf-fed-${x|0}-${y|0}`}
-                    bladeColor={active?"rgba(90,95,105,.8)":"rgba(45,48,55,.6)"}
-                    slatFill={active?"rgba(44,47,54,.88)":"rgba(36,39,46,.92)"}
-                    slatCount={Math.floor(capH*0.7/4.5)}/>
-                  {/* Corner screws */}
-                  {[[x+5,y+4],[x+w-5,y+4],[x+5,y+capH-4],[x+w-5,y+capH-4]].map(([sx,sy],i)=>(
-                    <circle key={i} cx={sx} cy={sy} r={1.8}
-                      fill="rgba(50,55,62,.9)" stroke="rgba(80,85,95,.5)" strokeWidth="0.5"/>
-                  ))}
-                </>;
-              })()}
-
-              {/* Horizontal louver slats — cover the full body below the cap */}
-              {(()=>{
-                const capH=Math.round(h*0.16);
-                const slotY=y+capH+2;
-                const slotH=h-capH-4;
-                const slotCount=Math.floor(slotH/5.5);
-                const slotStep=slotH/slotCount;
-                return Array.from({length:slotCount},(_,i)=>{
-                  const sy=slotY+i*slotStep;
-                  return <g key={i}>
-                    {/* Shadow gap between louvers */}
-                    <rect x={x+2} y={sy} width={w-4} height={slotStep-1.5} rx="0.5"
-                      fill={active?"rgba(145,150,158,.85)":"rgba(155,160,168,.8)"}/>
-                    {/* Louver face highlight */}
-                    <rect x={x+2} y={sy} width={w-4} height={1.5} rx="0"
-                      fill={active?"rgba(190,195,202,.6)":"rgba(200,204,210,.55)"}/>
-                    {/* Louver shadow line at bottom */}
-                    <rect x={x+2} y={sy+slotStep-2.5} width={w-4} height={1.2} rx="0"
-                      fill="rgba(100,105,115,.4)"/>
-                  </g>;
-                });
-              })()}
-
-              {/* Brand badge — centered on face */}
-              {(()=>{
-                const capH=Math.round(h*0.16);
-                const badgeY=y+capH+Math.round((h-capH)*0.38);
-                return <>
-                  <circle cx={x+w/2} cy={badgeY} r={10}
-                    fill="rgba(55,58,65,.9)" stroke="rgba(80,85,95,.7)" strokeWidth="1.2"/>
-                  <circle cx={x+w/2} cy={badgeY} r={7.5}
-                    fill="rgba(35,38,45,.8)" stroke="rgba(90,95,108,.4)" strokeWidth="0.6"/>
-                  {/* Simple brand initial */}
-                  <text x={x+w/2} y={badgeY+3.5} textAnchor="middle"
-                    fill="rgba(200,205,215,.7)" fontSize="7" fontFamily="sans-serif" fontWeight="700">G</text>
-                </>;
-              })()}
-
-              {/* Bottom corner feet/bolts */}
-              {[[x+4,y+h-4],[x+w-4,y+h-4]].map(([fx,fy],i)=>(
-                <circle key={i} cx={fx} cy={fy} r={2.5}
-                  fill="rgba(90,95,105,.8)" stroke="rgba(60,65,75,.6)" strokeWidth="0.7"/>
-              ))}
-            </>
-            :<>
-              {/* ── HIGH EFFICIENCY: taller premium unit — dark, vertical louvers, rounded top cap ── */}
-
-              {/* Main body — dark charcoal/graphite, premium color */}
-              <rect x={x} y={y} width={w} height={h} rx={5}
-                fill={active?"#3a3d42":"#343740"}
-                stroke={active?cc:"rgba(55,60,68,.8)"} strokeWidth={active?1.8:1.4}/>
-
-              {/* Chamfered corner panels — left and right vertical strips */}
-              <rect x={x} y={y+4} width={8} height={h-8} rx="2"
-                fill={active?"#3e424a":"#383c44"}
-                stroke="rgba(50,55,62,.7)" strokeWidth="0.8"/>
-              <rect x={x+w-8} y={y+4} width={8} height={h-8} rx="2"
-                fill={active?"#3e424a":"#383c44"}
-                stroke="rgba(50,55,62,.7)" strokeWidth="0.8"/>
-
-              {/* DARK ROUNDED TOP CAP — CapFan side-perspective view */}
-              {(()=>{
-                const capH=Math.round(h*0.2);
-                return <>
-                  <rect x={x} y={y} width={w} height={capH} rx={5}
-                    fill="#1e2024" stroke="rgba(15,17,20,.9)" strokeWidth="1.2"/>
-                  <CapFan x={x+4} y={y+2} w={w-8} h={capH-4}
-                    active={active}
-                    clipId={`cf-hi-${x|0}-${y|0}`}
-                    bladeColor={active?(refReversed?"rgba(100,160,220,.7)":"rgba(220,90,90,.65)"):"rgba(40,44,52,.6)"}
-                    slatFill={active?"rgba(24,27,33,.88)":"rgba(18,21,27,.92)"}
-                    slatCount={Math.floor(capH*0.72/5.5)}/>
-                  {/* Corner screws */}
-                  {[[x+6,y+6],[x+w-6,y+6],[x+6,y+capH-6],[x+w-6,y+capH-6]].map(([sx,sy],i)=>(
-                    <circle key={i} cx={sx} cy={sy} r={2}
-                      fill="rgba(35,38,44,.9)" stroke="rgba(55,60,68,.5)" strokeWidth="0.5"/>
-                  ))}
-                </>;
-              })()}
-
-              {/* VERTICAL LOUVER PANELS — fine vertical slats covering body below cap */}
-              {(()=>{
-                const capH=Math.round(h*0.2);
-                const bodyY=y+capH+2;
-                const bodyH=h-capH-4;
-                const slotW=3.5;
-                const gap=2;
-                const step=slotW+gap;
-                // Left panel
-                const leftPanelW=Math.round(w*0.44);
-                const rightPanelX=x+w-leftPanelW;
-                return <>
-                  {/* Left louver panel */}
-                  {Array.from({length:Math.floor(leftPanelW/step)},(_,i)=>(
-                    <rect key={'l'+i} x={x+9+i*step} y={bodyY} width={slotW} height={bodyH} rx="0.5"
-                      fill={active?"rgba(48,52,60,.9)":"rgba(42,46,54,.85)"}
-                      stroke="rgba(30,33,40,.5)" strokeWidth="0.3"/>
-                  ))}
-                  {/* Fine mesh fins visible behind left louvers */}
-                  {Array.from({length:Math.floor(bodyH/4)},(_,i)=>(
-                    <line key={'lf'+i}
-                      x1={x+9} y1={bodyY+2+i*4} x2={x+9+leftPanelW-8} y2={bodyY+2+i*4}
-                      stroke="rgba(25,28,34,.6)" strokeWidth="0.5"/>
-                  ))}
-                  {/* Vertical divider strip between panels */}
-                  <rect x={x+leftPanelW+4} y={bodyY} width={6} height={bodyH} rx="1"
-                    fill={active?"#3c4048":"#363a40"}
-                    stroke="rgba(45,50,58,.6)" strokeWidth="0.6"/>
-                  {/* Right louver panel */}
-                  {Array.from({length:Math.floor(leftPanelW/step)},(_,i)=>(
-                    <rect key={'r'+i} x={rightPanelX-3+i*step} y={bodyY} width={slotW} height={bodyH} rx="0.5"
-                      fill={active?"rgba(48,52,60,.9)":"rgba(42,46,54,.85)"}
-                      stroke="rgba(30,33,40,.5)" strokeWidth="0.3"/>
-                  ))}
-                  {Array.from({length:Math.floor(bodyH/4)},(_,i)=>(
-                    <line key={'rf'+i}
-                      x1={rightPanelX-3} y1={bodyY+2+i*4} x2={rightPanelX+leftPanelW-12} y2={bodyY+2+i*4}
-                      stroke="rgba(25,28,34,.6)" strokeWidth="0.5"/>
-                  ))}
-                </>;
-              })()}
-
-              {/* Active glow overlay */}
-              {active&&<rect x={x} y={y} width={w} height={h} rx={5}
-                fill={refReversed?"rgba(35,137,224,.04)":"rgba(239,68,68,.03)"} stroke="none"/>}
-
-              {/* Black base pan */}
-              <rect x={x} y={y+h-6} width={w} height={6} rx={2}
-                fill="#14151a" stroke="rgba(20,22,28,.8)" strokeWidth="0.7"/>
-            </>
-          }
-        </>
-      }
-
-      {/* SEER badge bottom — bigger text, taller badge */}
-      {tierKey==='fedmin'
-        ?<>
-          <rect x={x+3} y={y+h-16} width={w-6} height={13} rx="2"
-            fill="rgba(40,43,50,.82)" opacity="0.95"/>
-          <text x={x+w/2} y={y+h-6} textAnchor="middle"
-            fill="rgba(195,200,210,.9)" fontSize="7.5" fontFamily="monospace" fontWeight="700">{TL}</text>
-        </>
-        :<>
-          <rect x={x+3} y={y+h-16} width={w-6} height={13} rx="2"
-            fill={active?(refReversed?"url(#blue)":"url(#red-g)"):"url(#gold)"} opacity=".6"/>
-          <text x={x+w/2} y={y+h-6} textAnchor="middle"
-            fill="#fff" fontSize="7.5" fontFamily="monospace" fontWeight="700">{TL}</text>
-        </>
-      }
+      {isBig&&<>
+        {/* HIGH EFF: tall dark unit, vertical louvers, rounded top cap */}
+        <rect x={x} y={y} width={w} height={h} rx={5}
+          fill={active?"#3a3d42":"#343740"}
+          stroke={active?cc:"rgba(55,60,68,.8)"} strokeWidth={active?1.8:1.4}/>
+        {/* Chamfered corner strips */}
+        <rect x={x} y={y+4} width={8} height={h-8} rx="2"
+          fill={active?"#3e424a":"#383c44"} stroke="rgba(50,55,62,.7)" strokeWidth="0.8"/>
+        <rect x={x+w-8} y={y+4} width={8} height={h-8} rx="2"
+          fill={active?"#3e424a":"#383c44"} stroke="rgba(50,55,62,.7)" strokeWidth="0.8"/>
+        {/* Dark rounded top cap with CapFan */}
+        {(()=>{
+          const capH=Math.round(h*0.2);
+          return <>
+            <rect x={x} y={y} width={w} height={capH} rx={5}
+              fill="#1e2024" stroke="rgba(15,17,20,.9)" strokeWidth="1.2"/>
+            <CapFan x={x+4} y={y+2} w={w-8} h={capH-4} active={active}
+              bladeColor={active?(refReversed?"rgba(100,160,220,.7)":"rgba(220,90,90,.65)"):"rgba(40,44,52,.6)"}
+              slatFill={active?"rgba(24,27,33,.88)":"rgba(18,21,27,.92)"}
+              slatCount={Math.floor((capH-4)*0.72/5.5)}/>
+            {[[x+6,y+6],[x+w-6,y+6],[x+6,y+capH-6],[x+w-6,y+capH-6]].map(([sx,sy],i)=>(
+              <circle key={i} cx={sx} cy={sy} r={2}
+                fill="rgba(35,38,44,.9)" stroke="rgba(55,60,68,.5)" strokeWidth="0.5"/>
+            ))}
+          </>;
+        })()}
+        {/* Vertical louver panels */}
+        {(()=>{
+          const capH=Math.round(h*0.2);
+          const bodyY=y+capH+2, bodyH=h-capH-4;
+          const slotW=3.5, gap=2, step=slotW+gap;
+          const leftW=Math.round(w*0.44);
+          const rightX=x+w-leftW;
+          return <>
+            {Array.from({length:Math.floor(leftW/step)},(_,i)=>(
+              <rect key={'l'+i} x={x+9+i*step} y={bodyY} width={slotW} height={bodyH} rx="0.5"
+                fill={active?"rgba(48,52,60,.9)":"rgba(42,46,54,.85)"} stroke="rgba(30,33,40,.5)" strokeWidth="0.3"/>
+            ))}
+            {Array.from({length:Math.floor(bodyH/4)},(_,i)=>(
+              <line key={'lf'+i} x1={x+9} y1={bodyY+2+i*4} x2={x+9+leftW-8} y2={bodyY+2+i*4}
+                stroke="rgba(25,28,34,.6)" strokeWidth="0.5"/>
+            ))}
+            <rect x={x+leftW+4} y={bodyY} width={6} height={bodyH} rx="1"
+              fill={active?"#3c4048":"#363a40"} stroke="rgba(45,50,58,.6)" strokeWidth="0.6"/>
+            {Array.from({length:Math.floor(leftW/step)},(_,i)=>(
+              <rect key={'r'+i} x={rightX-3+i*step} y={bodyY} width={slotW} height={bodyH} rx="0.5"
+                fill={active?"rgba(48,52,60,.9)":"rgba(42,46,54,.85)"} stroke="rgba(30,33,40,.5)" strokeWidth="0.3"/>
+            ))}
+            {Array.from({length:Math.floor(bodyH/4)},(_,i)=>(
+              <line key={'rf'+i} x1={rightX-3} y1={bodyY+2+i*4} x2={rightX+leftW-12} y2={bodyY+2+i*4}
+                stroke="rgba(25,28,34,.6)" strokeWidth="0.5"/>
+            ))}
+          </>;
+        })()}
+        {active&&<rect x={x} y={y} width={w} height={h} rx={5}
+          fill={refReversed?"rgba(35,137,224,.04)":"rgba(239,68,68,.03)"} stroke="none"/>}
+        <rect x={x} y={y+h-6} width={w} height={6} rx={2}
+          fill="#14151a" stroke="rgba(20,22,28,.8)" strokeWidth="0.7"/>
+        {/* Compressor outline -- visible inside housing */}
+        {(()=>{
+          const capH=Math.round(h*0.2);
+          const bodyH=h-capH;
+          const cW=Math.round(w*0.28), cH=Math.round(bodyH*0.45);
+          const cX=x+w-cW-8, cY=y+capH+bodyH-cH-10;
+          const domeH=Math.round(cH*0.22);
+          return <g>
+            <rect x={cX} y={cY+domeH} width={cW} height={cH-domeH} rx="3"
+              fill="rgba(20,22,28,.65)" stroke={active?cc:"rgba(70,75,85,.4)"} strokeWidth={active?1.2:0.7} opacity={active?0.9:0.55}/>
+            <ellipse cx={cX+cW/2} cy={cY+domeH} rx={cW/2} ry={domeH}
+              fill="rgba(25,28,35,.7)" stroke={active?cc:"rgba(70,75,85,.4)"} strokeWidth={active?1.2:0.7} opacity={active?0.9:0.55}/>
+            <rect x={cX+cW*0.6} y={cY-6} width={4} height={domeH+6} rx="1"
+              fill={active?line1C:"rgba(60,65,75,.5)"} opacity={active?0.7:0.4}/>
+            <rect x={cX-6} y={cY+domeH+Math.round(cH*0.25)} width={8} height={4} rx="1"
+              fill={active?line2C:"rgba(60,65,75,.5)"} opacity={active?0.7:0.4}/>
+            <text x={cX+cW/2} y={cY+cH+domeH+10} textAnchor="middle"
+              fill={active?cc:"rgba(80,85,95,.45)"} fontSize="5" fontFamily="monospace">COMP.</text>
+          </g>;
+        })()}
+        {/* SEER badge */}
+        <rect x={x+3} y={y+h-16} width={w-6} height={13} rx="2"
+          fill={active?(refReversed?"url(#blue)":"url(#red-g)"):"url(#gold)"} opacity=".6"/>
+        <text x={x+w/2} y={y+h-6} textAnchor="middle"
+          fill="#fff" fontSize="7.5" fontFamily="monospace" fontWeight="700">{TL}</text>
+      </>}
     </g>;
   }
 
@@ -991,7 +807,7 @@ function Canvas({a}){
       {/* ── WALL CROSS-SECTION ── proper side view of exterior wall */}
       {/* Wall body */}
       <rect x={sidingX} y={0} width={wallThick} height={groundY}
-        fill="#111318" stroke="rgba(90,90,110,.25)" strokeWidth="0.8"/>
+        fill="#1a1d26" stroke="rgba(120,118,140,.35)" strokeWidth="1"/>
       {/* Siding horizontal courses */}
       {Array.from({length:Math.floor(groundY/10)},(_,i)=>(
         <rect key={i} x={sidingX} y={i*10} width={wallThick} height={9}
@@ -1000,7 +816,7 @@ function Canvas({a}){
       ))}
       {/* Wall face highlight */}
       <line x1={sidingX+wallThick} y1={0} x2={sidingX+wallThick} y2={groundY}
-        stroke="rgba(180,175,160,.1)" strokeWidth="1"/>
+        stroke="rgba(200,195,175,.22)" strokeWidth="1.5"/>
       {/* Inside wall face */}
       <line x1={sidingX} y1={0} x2={sidingX} y2={groundY}
         stroke="rgba(180,175,160,.08)" strokeWidth="0.5"/>
@@ -1016,11 +832,11 @@ function Canvas({a}){
         fill="none" stroke="rgba(30,30,50,.65)" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round"/>
       {/* Liquid line */}
       <path d={`M${sidingX+wallThick} ${lineY1} L${condX+condW*0.35} ${lineY1} L${condX+condW*0.35} ${condY+condH}`}
-        fill="none" stroke={active?evapC:'rgba(28,28,48,.55)'} strokeWidth="3.5"
+        fill="none" stroke={line1C} strokeWidth="4" opacity="0.9"
         strokeLinecap="round" strokeLinejoin="round" className="draw"/>
       {/* Suction line (offset) */}
       <path d={`M${sidingX+wallThick} ${lineY2} L${condX+condW*0.42} ${lineY2} L${condX+condW*0.42} ${condY+condH}`}
-        fill="none" stroke={active?evapC2:'rgba(28,28,48,.45)'} strokeWidth="3.5"
+        fill="none" stroke={line2C} strokeWidth="4" opacity="0.9"
         strokeLinecap="round" strokeLinejoin="round" className="draw" style={{animationDelay:'.1s'}}/>
       {/* Animated flow dots */}
       {active&&Array.from({length:3},(_,i)=>(
@@ -1164,13 +980,12 @@ function Canvas({a}){
     const DECK_Y=VH-120;
     const ATTIC_H=DECK_Y-EAVE_Y;
 
-    // Match upflow scale (6.2px/inch @ 20" wide = 124px)
-    const SCALE_PX=6.2;
-    const UNIT_H=Math.round(15*SCALE_PX*1.13); // ~105px — 13% thicker
+    // Units larger when no condenser (fill space), tighter when condenser shown
+    const UNIT_H=hasCond?Math.round(ATTIC_H*0.36):Math.round(ATTIC_H*0.52);
     const UNIT_Y=EAVE_Y+Math.round((ATTIC_H-UNIT_H)/2)+4;
 
-    const RET_PLEN_W=72;          // bigger — was 52
-    const APR_W=hasAprilaire?32:0; // bigger — was 20
+    const RET_PLEN_W=52;
+    const APR_W=hasAprilaire?20:0;
     // Scale furnace/AH wider when no condenser
     const SCALE=hasCond?1:1.18;
     const FURN_W=hasFurnace?Math.round(196*SCALE):0;
@@ -1192,17 +1007,14 @@ function Canvas({a}){
     const SUP_X=unitRightEdge+4;
     const SUP_PLEN_Y=UNIT_Y;
 
-    // LINE-SET exits LEFT face of the coil section:
-    // For furnace: left face of A-coil (closest to HX side)
-    // For AH: left edge of A-coil section (right half of AH, so x = AH_X + AH_W/2)
-    const RL_START_X=hasFurnace ? ACOIL_X+4 : AH_X+Math.round(AH_W/2)+4;
+    const RL_START_X=unitRightEdge+4;
     const RL_ROOF_Y=EAVE_Y+14;
 
     // Real-world condenser sizes @ 3.2px/inch
     // Outside zone is 1/3 of VW. Condenser takes up majority of that zone.
     const PX_C=3.2;
     const COND_SIZES={
-      fedmin:   {w:Math.round(24*PX_C), h:Math.round(30*PX_C)},
+      fedmin:   {w:Math.round(30*PX_C), h:Math.round(37*PX_C)},
       mid_ge15: {w:Math.round(36*PX_C), h:Math.round(22*PX_C)},
       high_ge18:{w:Math.round(36*PX_C), h:Math.round(50*PX_C)},
     };
@@ -1224,28 +1036,28 @@ function Canvas({a}){
     return(
       <div style={{position:'relative',width:'100%'}}>
         {hasCoil&&<ToggleUI style={{position:'absolute',top:8,right:8,zIndex:10}}/>}
-        <svg viewBox={`0 0 ${VW} ${VH}`} className="canvas-svg">
+        <svg viewBox={`0 0 ${VW} ${VH}`} className="canvas-svg" style={{maxHeight:VH}}>
           <Defs/>
 
           {/* Full canvas background */}
-          <rect x="0" y="0" width={VW} height={VH} fill="#040404"/>
+          <rect x="0" y="0" width={VW} height={VH} fill="#0b0d14"/>
 
           {/* Outside zone (right of wall) — darker, sky-like */}
-          {hasCond&&<rect x={EXT_WALL_X} y="0" width={OUTSIDE_W} height={VH} fill="#030305"/>}
+          {hasCond&&<rect x={EXT_WALL_X} y="0" width={OUTSIDE_W} height={VH} fill="#080a10"/>}
 
           {/* Attic interior (above deck, inside house) */}
-          <rect x="0" y={EAVE_Y} width={HOUSE_W} height={DECK_Y-EAVE_Y} fill="#060608"/>
+          <rect x="0" y={EAVE_Y} width={HOUSE_W} height={DECK_Y-EAVE_Y} fill="#10121c"/>
 
           {/* Living space below deck */}
-          <rect x="0" y={DECK_Y} width={HOUSE_W} height={VH-DECK_Y} fill="#030305"/>
+          <rect x="0" y={DECK_Y} width={HOUSE_W} height={VH-DECK_Y} fill="#0d0f18"/>
 
           {/* ── LOW-PITCH ROOF — shallow, full house width ── */}
           {/* Left slope: eave (left edge) → ridge */}
           <line x1="0" y1={EAVE_Y} x2={RIDGE_X} y2={RIDGE_Y}
-            stroke="rgba(130,124,106,.38)" strokeWidth="2.8"/>
+            stroke="rgba(160,152,128,.55)" strokeWidth="3"/>
           {/* Right slope: ridge → eave (right edge of house) */}
           <line x1={RIDGE_X} y1={RIDGE_Y} x2={HOUSE_W} y2={EAVE_Y}
-            stroke="rgba(130,124,106,.38)" strokeWidth="2.8"/>
+            stroke="rgba(160,152,128,.55)" strokeWidth="3"/>
           {/* Ridge cap */}
           <rect x={RIDGE_X-5} y={RIDGE_Y-2} width="10" height="7" rx="2" fill="rgba(160,155,135,.18)"/>
           {/* Roof deck fill (very subtle) */}
@@ -1285,7 +1097,7 @@ function Canvas({a}){
           )}
 
           {/* Attic deck — full house width */}
-          <rect x="0" y={DECK_Y} width={HOUSE_W} height="5" fill="#141416" stroke="rgba(188,184,168,.09)" strokeWidth="0.4"/>
+          <rect x="0" y={DECK_Y} width={HOUSE_W} height="5" fill="#1c1e28" stroke="rgba(200,196,172,.22)" strokeWidth="0.4"/>
           {Array.from({length:Math.floor(HOUSE_W/68)},(_,i)=>(
             <rect key={i} x={38+i*68} y={DECK_Y-2} width="10" height="7" rx="1"
               fill="rgba(90,68,32,.2)" stroke="rgba(108,82,36,.12)" strokeWidth="0.4"/>
@@ -1324,7 +1136,7 @@ function Canvas({a}){
               return <ellipse key={i} cx={bx} cy={by} rx={6+(i%4)*2.5} ry={5+(i%3)*1.5} fill="rgba(255,182,193,.1)"/>;
             })}
             <text x={RET_X+RET_PLEN_W/2} y={UNIT_Y+UNIT_H/2+3} textAnchor="middle"
-              fill="rgba(255,182,193,.52)" fontSize="8" fontFamily="monospace"
+              fill="rgba(255,182,193,.52)" fontSize="6" fontFamily="monospace"
               transform={`rotate(-90,${RET_X+RET_PLEN_W/2},${UNIT_Y+UNIT_H/2})`}>RETURN PLENUM</text>
             {Array.from({length:8},(_,i)=>(
               <line key={i} x1={RET_X+2} y1={UNIT_Y+12+i*(UNIT_H-24)/8}
@@ -1346,7 +1158,7 @@ function Canvas({a}){
                 stroke="#22c55e" strokeWidth="0.55" opacity="0.52"/>
             ))}
             <text x={APR_X+APR_W/2} y={UNIT_Y+UNIT_H/2+3} textAnchor="middle"
-              fill="#22c55e" fontSize="8" fontFamily="monospace"
+              fill="#22c55e" fontSize="6" fontFamily="monospace"
               transform={`rotate(-90,${APR_X+APR_W/2},${UNIT_Y+UNIT_H/2})`}>APRILAIRE 5"</text>
           </g>}
 
@@ -1354,10 +1166,10 @@ function Canvas({a}){
           {hasCoil&&hasFurnace&&<g className="snap" key={'fu'+a.stage+a.furnace_eff} filter="url(#shadow)">
             <FurnaceH x={FURN_X} y={UNIT_Y} w={FURN_W} h={UNIT_H} active={furnaceActive}/>
             <text x={FURN_X+FURN_W/2} y={UNIT_Y+UNIT_H+12} textAnchor="middle"
-              fill={furnaceActive?'rgba(249,115,22,.64)':(G+'.38)')} fontSize="8.5" fontFamily="monospace">FURNACE</text>
+              fill={furnaceActive?'rgba(249,115,22,.64)':(G+'.38)')} fontSize="6.5" fontFamily="monospace">FURNACE</text>
             <text x={FURN_X+FURN_W/2} y={UNIT_Y+UNIT_H+22} textAnchor="middle"
               fill={furnaceActive?'rgba(249,115,22,.44)':'rgba(255,255,255,.15)'} fontSize="5.5" fontFamily="monospace">
-              {furnaceActive?"HEATING ACTIVE":"STANDBY"}
+              {furnaceActive?"GAS HEATING ACTIVE":"STANDBY"}
             </text>
           </g>}
 
@@ -1376,7 +1188,7 @@ function Canvas({a}){
                 <ACoilH x={ACOIL_X+8} y={UNIT_Y+12} w={ACOIL_W-16} h={UNIT_H-20} active={active}/>
                 <rect x={ACOIL_X} y={UNIT_Y+UNIT_H-2} width={ACOIL_W} height={6} rx="1" fill="#08121e" stroke={B+'.18)'} strokeWidth="0.6"/>
                 <text x={ACOIL_X+ACOIL_W/2} y={UNIT_Y+UNIT_H+12} textAnchor="middle"
-                  fill={active?evapC:(G+'.36)')} fontSize="8.5" fontFamily="monospace">A-COIL</text>
+                  fill={active?evapC:(G+'.36)')} fontSize="6.5" fontFamily="monospace">A-COIL</text>
                 <text x={ACOIL_X+ACOIL_W/2} y={UNIT_Y+UNIT_H+22} textAnchor="middle"
                   fill={active?(refReversed?'rgba(239,68,68,.5)':'rgba(35,137,224,.46)'):'rgba(255,255,255,.14)'} fontSize="5.5" fontFamily="monospace">
                   {active?(refReversed?"REJECTING HEAT":"ABSORBING HEAT"):"STANDBY"}
@@ -1389,7 +1201,7 @@ function Canvas({a}){
           {hasCoil&&!hasFurnace&&<g className="snap" key={'ah'+a.cond_tier} filter="url(#shadow)">
             <AirHandlerH x={AH_X} y={UNIT_Y} w={AH_W} h={UNIT_H} active={evapActive}/>
             <text x={AH_X+AH_W/2} y={UNIT_Y+UNIT_H+12} textAnchor="middle"
-              fill={evapActive?evapC:(G+'.36)')} fontSize="8.5" fontFamily="monospace">AIR HANDLER</text>
+              fill={evapActive?evapC:(G+'.36)')} fontSize="6.5" fontFamily="monospace">AIR HANDLER</text>
             <text x={AH_X+AH_W/2} y={UNIT_Y+UNIT_H+22} textAnchor="middle"
               fill={evapActive?(refReversed?'rgba(239,68,68,.5)':'rgba(35,137,224,.46)'):'rgba(255,255,255,.14)'} fontSize="5.5" fontFamily="monospace">
               {evapActive?(refReversed?"REJECTING HEAT":"ABSORBING HEAT"):"STANDBY"}
@@ -1424,14 +1236,11 @@ function Canvas({a}){
                 </text>
                 {!isExisting&&<text x={SUP_X+SUP_PLEN_W/2} y={SUP_PLEN_Y+SUP_PLEN_H/2+14} textAnchor="middle"
                   fill={G+'.32)'} fontSize="5.5" fontFamily="monospace">4–6 FT SUPPLY</text>}
-                {/* Ionizer — bulb at top of plenum interior, rod extends down */}
-                {hasIonizer&&!isExisting&&(()=>{
-                  const iX=SUP_X+SUP_PLEN_W/2;
-                  // Bulb sits just inside the top of the plenum, rod goes down
-                  const bulbY=SUP_PLEN_Y+18;
-                  const rodLen=Math.round(SUP_PLEN_H*0.6);
-                  return <Ionizer bulbX={iX} bulbY={bulbY} rodLen={rodLen}/>;
-                })()}
+                {/* Ionizer */}
+                {hasIonizer&&!isExisting&&<Ionizer
+                  bulbX={SUP_X+SUP_PLEN_W*0.55}
+                  bulbY={SUP_PLEN_Y-16}
+                  rodLen={Math.round(SUP_PLEN_H*0.55)}/>}
               </>;
             })()}
           </g>}
@@ -1491,10 +1300,10 @@ function Canvas({a}){
                   fill="none" stroke="rgba(24,24,44,.6)" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round"/>
                 {/* Liquid line */}
                 <path d={`M${RL_START_X} ${ry1} L${RL_START_X} ${RL_ROOF_Y} L${wallX} ${RL_ROOF_Y}`}
-                  fill="none" stroke={lc} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="draw"/>
+                  fill="none" stroke={line1C} strokeWidth="4" opacity="0.9" strokeLinecap="round" strokeLinejoin="round" className="draw"/>
                 {/* Suction line */}
                 <path d={`M${RL_START_X+5} ${ry2} L${RL_START_X+5} ${RL_ROOF_Y+9} L${wallX} ${RL_ROOF_Y+9}`}
-                  fill="none" stroke={lc2} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="draw" style={{animationDelay:'.1s'}}/>
+                  fill="none" stroke={line2C} strokeWidth="4" opacity="0.9" strokeLinecap="round" strokeLinejoin="round" className="draw" style={{animationDelay:'.1s'}}/>
                 {/* Flow dots */}
                 {active&&Array.from({length:3},(_,i)=>(
                   <circle key={i} r="3" fill={i%2===0?evapC:evapC2} opacity="0.74" filter="url(#glow-sm)">
@@ -1551,115 +1360,57 @@ function Canvas({a}){
             })()}
           </g>}
 
-          {/* Dehu + ERV — compact boxes above furnace/AH, dehu fixed left of flue, ERV left of dehu */}
-          {(hasDehu||Array.isArray(a.extras)&&a.extras.includes('erv'))&&<g>
+          {/* Dehu — hangs from roofline */}
+          {hasDehu&&<g className="snap" key="dehu" style={{animationDelay:'.3s'}}>
             {(()=>{
-              const sysX=hasFurnace?FURN_X:AH_X;
-              const sysW=hasFurnace?FURN_W:AH_W;
-              const BW=80, BH=48;
-              const GAP=10;
-              const BY=UNIT_Y-BH-14;
+              const DW=hasFurnace?FURN_W:AH_W;
+              const DH=Math.round(UNIT_H*0.5);
+              const DX=hasFurnace?FURN_X:AH_X;
+              const DY=UNIT_Y-DH-18;
+              const rod1X=DX+DW*0.25, rod2X=DX+DW*0.75;
               const roofY=EAVE_Y+14;
-              const hasERV=Array.isArray(a.extras)&&a.extras.includes('erv');
-
-              // Dehu: anchored at left side of system, shifted slightly left of center
-              // so it sits clear of the flue pipe (which exits right of furnace HX)
-              const dehuX=sysX+Math.round(sysW*0.08);
-              // ERV: always to the left of dehu, never shifts dehu
-              const ervX=dehuX-BW-GAP;
-
-              const items=[];
-              if(hasERV) items.push({type:'erv',BX:ervX});
-              if(hasDehu) items.push({type:'dehu',BX:dehuX});
-
-              return items.map(({type,BX})=>{
-                const isDehu=type==='dehu';
-                const r1X=BX+BW*0.28, r2X=BX+BW*0.72;
-                // ERV uses blue (IN) and orange (OUT) pipes through roof
-                const pipe1X=BX+BW*0.28;
-                const pipe2X=BX+BW*0.68;
-                return <g key={type}>
-                  {isDehu
-                    ?<>
-                      {/* Hanging rods */}
-                      <line x1={r1X} y1={roofY} x2={r1X} y2={BY} stroke="#22c55e" strokeWidth="1" strokeDasharray="4 2" opacity="0.6"/>
-                      <line x1={r2X} y1={roofY} x2={r2X} y2={BY} stroke="#22c55e" strokeWidth="1" strokeDasharray="4 2" opacity="0.6"/>
-                      <rect x={r1X-3} y={roofY-4} width="7" height="5" rx="1" fill="rgba(34,197,94,.3)" stroke="#22c55e" strokeWidth="0.7"/>
-                      <rect x={r2X-3} y={roofY-4} width="7" height="5" rx="1" fill="rgba(34,197,94,.3)" stroke="#22c55e" strokeWidth="0.7"/>
-                    </>
-                    :<>
-                      {/* ERV fresh air IN pipe — blue, through roof */}
-                      <rect x={pipe1X-2} y={4} width={5} height={BY-4} rx="1"
-                        fill={B+'.35)'} stroke={B+'.55)'} strokeWidth="0.8"/>
-                      <rect x={pipe1X-5} y={1} width={11} height={5} rx="1"
-                        fill={B+'.4)'} stroke={B+'.6)'} strokeWidth="0.8"/>
-                      <text x={pipe1X} y={-1} textAnchor="middle"
-                        fill={B+'.55)'} fontSize="5" fontFamily="monospace">IN</text>
-                      {/* ERV stale air OUT pipe — orange, through roof */}
-                      <rect x={pipe2X-2} y={4} width={5} height={BY-4} rx="1"
-                        fill="rgba(249,115,22,.35)" stroke="rgba(249,115,22,.55)" strokeWidth="0.8"/>
-                      <path d={`M${pipe2X-4} ${2} L${pipe2X} ${-4} L${pipe2X+4} ${2}`}
-                        fill="rgba(249,115,22,.4)"/>
-                      <text x={pipe2X} y={-1} textAnchor="middle"
-                        fill="rgba(249,115,22,.55)" fontSize="5" fontFamily="monospace">OUT</text>
-                      {/* Hanging rods */}
-                      <line x1={r1X} y1={roofY} x2={r1X} y2={BY} stroke={G+'.45)'} strokeWidth="1" strokeDasharray="4 2" opacity="0.6"/>
-                      <line x1={r2X} y1={roofY} x2={r2X} y2={BY} stroke={G+'.45)'} strokeWidth="1" strokeDasharray="4 2" opacity="0.6"/>
-                      <rect x={r1X-3} y={roofY-4} width="7" height="5" rx="1" fill={G+'.2)'} stroke={G+'.42)'} strokeWidth="0.7"/>
-                      <rect x={r2X-3} y={roofY-4} width="7" height="5" rx="1" fill={G+'.2)'} stroke={G+'.42)'} strokeWidth="0.7"/>
-                    </>
-                  }
-                  {/* Box */}
-                  <rect x={BX} y={BY} width={BW} height={BH} rx="4"
-                    fill={isDehu?"#05120a":"#0a0a06"}
-                    stroke={isDehu?"#22c55e":(G+'.55)')} strokeWidth="1.4"/>
-                  <rect x={BX} y={BY} width={BW} height={7} rx="4"
-                    fill={isDehu?"rgba(34,197,94,.3)":(G+'.25)')} stroke="none"/>
-                  {isDehu
-                    ?<>
-                      <text x={BX+BW/2} y={BY+BH/2-2} textAnchor="middle" fill="#22c55e" fontSize="11">💧</text>
-                      <text x={BX+BW/2} y={BY+BH/2+13} textAnchor="middle" fill="#22c55e" fontSize="7.5" fontFamily="monospace">DEHU</text>
-                    </>
-                    :<>
-                      <path d={`M${BX+10} ${BY+BH*0.44} L${BX+BW*0.52} ${BY+BH*0.44}`} fill="none" stroke={B+'.65)'} strokeWidth="1.8" markerEnd="url(#arr)"/>
-                      <path d={`M${BX+BW-10} ${BY+BH*0.64} L${BX+BW*0.48} ${BY+BH*0.64}`} fill="none" stroke="rgba(249,115,22,.65)" strokeWidth="1.8" markerEnd="url(#arr)"/>
-                      <text x={BX+BW/2} y={BY+BH*0.3} textAnchor="middle" fill={G+'.78)'} fontSize="9" fontFamily="monospace">ERV</text>
-                    </>
-                  }
-                </g>;
-              });
+              return <>
+                <line x1={rod1X} y1={roofY} x2={rod1X} y2={DY} stroke="#22c55e" strokeWidth="1.2" strokeDasharray="4 2" opacity="0.6"/>
+                <line x1={rod2X} y1={roofY} x2={rod2X} y2={DY} stroke="#22c55e" strokeWidth="1.2" strokeDasharray="4 2" opacity="0.6"/>
+                <rect x={rod1X-4} y={roofY-4} width="8" height="5" rx="1" fill="rgba(34,197,94,.3)" stroke="#22c55e" strokeWidth="0.8"/>
+                <rect x={rod2X-4} y={roofY-4} width="8" height="5" rx="1" fill="rgba(34,197,94,.3)" stroke="#22c55e" strokeWidth="0.8"/>
+                <rect x={DX} y={DY} width={DW} height={DH} rx="4" fill="#05120a" stroke="#22c55e" strokeWidth="1.5"/>
+                <rect x={DX} y={DY} width={DW} height={8} rx="4" fill="rgba(34,197,94,.3)" stroke="none"/>
+                <text x={DX+DW/2} y={DY+DH/2-4} textAnchor="middle" fill="#22c55e" fontSize="9">💧</text>
+                <text x={DX+DW/2} y={DY+DH/2+10} textAnchor="middle" fill="#22c55e" fontSize="7" fontFamily="monospace">DEHUMIDIFIER</text>
+                <text x={DX+DW/2} y={DY+DH/2+21} textAnchor="middle" fill="rgba(34,197,94,.5)" fontSize="5.5" fontFamily="monospace">HANGING MOUNT</text>
+              </>;
             })()}
           </g>}
 
-          {/* Condensate drain — straight down below attic floor from coil */}
-          {hasCoil&&<g key="attic-drain">
+          {/* ERV */}
+          {Array.isArray(a.extras)&&a.extras.includes('erv')&&<g className="snap" key="erv" style={{animationDelay:'.32s'}}>
             {(()=>{
-              const hasPump=Array.isArray(a.extras)&&a.extras.includes('condensate');
-              const coilCX=hasFurnace?ACOIL_X+ACOIL_W*0.5:AH_X+AH_W*0.6;
-              const drainTopY=UNIT_Y+UNIT_H+4;
-              if(hasPump){
-                // Pump box sits just below the unit
-                const pW=56, pH=20;
-                const pX=coilCX-pW/2, pY=drainTopY+4;
-                return <>
-                  <rect x={pX} y={pY} width={pW} height={pH} rx="3"
-                    fill="rgba(35,137,224,.1)" stroke={B+'.5)'} strokeWidth="1.1"/>
-                  <text x={coilCX} y={pY+9} textAnchor="middle" fill={B+'.75)'} fontSize="6.5" fontFamily="monospace">COND. PUMP</text>
-                  <text x={coilCX} y={pY+17} textAnchor="middle" fill={B+'.5)'} fontSize="5" fontFamily="monospace">condensate</text>
-                  {/* Short line from coil to pump */}
-                  <line x1={coilCX} y1={drainTopY} x2={coilCX} y2={pY}
-                    stroke={B+'.45)'} strokeWidth="2" strokeDasharray="3 2"/>
-                </>;
-              } else {
-                // No pump — drain goes straight down through the deck
-                return <>
-                  <line x1={coilCX} y1={drainTopY} x2={coilCX} y2={DECK_Y+24}
-                    stroke={B+'.4)'} strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round"/>
-                  <text x={coilCX+7} y={DECK_Y+16} textAnchor="start"
-                    fill={B+'.4)'} fontSize="6" fontFamily="monospace">DRAIN</text>
-                </>;
-              }
+              const DW=hasFurnace?FURN_W:AH_W;
+              const DH=Math.round(UNIT_H*0.5);
+              const baseX=hasFurnace?FURN_X:AH_X;
+              const DX=hasDehu?baseX-DW-10:baseX;
+              const DY=UNIT_Y-DH-18;
+              const rod1X=DX+DW*0.28, rod2X=DX+DW*0.72;
+              const roofY=EAVE_Y+14;
+              return <>
+                <line x1={rod1X} y1={roofY} x2={rod1X} y2={DY} stroke={G+'.45)'} strokeWidth="1.2" strokeDasharray="4 2" opacity="0.6"/>
+                <line x1={rod2X} y1={roofY} x2={rod2X} y2={DY} stroke={G+'.45)'} strokeWidth="1.2" strokeDasharray="4 2" opacity="0.6"/>
+                <rect x={rod1X-4} y={roofY-4} width="8" height="5" rx="1" fill={G+'.2)'} stroke={G+'.45)'} strokeWidth="0.8"/>
+                <rect x={rod2X-4} y={roofY-4} width="8" height="5" rx="1" fill={G+'.2)'} stroke={G+'.45)'} strokeWidth="0.8"/>
+                <rect x={DX} y={DY} width={DW} height={DH} rx="4" fill="#0a0a06" stroke={G+'.55)'} strokeWidth="1.5"/>
+                <rect x={DX} y={DY} width={DW} height={8} rx="4" fill={G+'.25)'} stroke="none"/>
+                <path d={`M${DX+DW*0.18} ${DY+DH*0.44} L${DX+DW*0.46} ${DY+DH*0.44}`} fill="none" stroke={B+'.6)'} strokeWidth="2" markerEnd="url(#arr)"/>
+                <path d={`M${DX+DW*0.82} ${DY+DH*0.6} L${DX+DW*0.54} ${DY+DH*0.6}`} fill="none" stroke="rgba(249,115,22,.6)" strokeWidth="2" markerEnd="url(#arr)"/>
+                <text x={DX+DW/2} y={DY+DH*0.33} textAnchor="middle" fill={G+'.7)'} fontSize="9" fontFamily="monospace">ERV</text>
+                <text x={DX+DW/2} y={DY+DH*0.78} textAnchor="middle" fill={G+'.45)'} fontSize="5.5" fontFamily="monospace">ENERGY RECOVERY</text>
+              </>;
             })()}
+          </g>}
+
+          {/* Condensate pump */}
+          {Array.isArray(a.extras)&&a.extras.includes('condensate')&&hasCoil&&<g className="fadein" key="cpump">
+            <CondensatePump x={hasFurnace?ACOIL_X:AH_X} y={UNIT_Y+UNIT_H+8} w={hasFurnace?ACOIL_W:AH_W}/>
           </g>}
 
           {/* Empty state */}
@@ -1678,12 +1429,12 @@ function Canvas({a}){
   // Ionizer enters horizontally from side of plenum with external bulb.
   // ══════════════════════════════════════════════════════════
   if(isCloset){
-    const VW=800, VH=720;       // bigger canvas for iPad
-    const SCALE=6.2;             // was 4.8 — wider units
-    const UNIT_W=Math.round(20*SCALE);   // 124px
-    const FURN_H=Math.round(33*SCALE);   // 205px
-    const COIL_H=Math.round(24*SCALE);   // 149px
-    const AH_H=Math.round(55*SCALE);     // 341px
+    const VW=720, VH=680;
+    const SCALE=4.8;
+    const UNIT_W=Math.round(20*SCALE);   // 96px
+    const FURN_H=Math.round(33*SCALE);   // 158px
+    const COIL_H=Math.round(24*SCALE);   // 115px
+    const AH_H=Math.round(55*SCALE);     // 264px
 
     // 2/3 house when condenser, full width otherwise
     const HOUSE_W=hasCond?Math.round(VW*(2/3)):VW-8;
@@ -1707,11 +1458,10 @@ function Canvas({a}){
     const ACOIL_H=hasFurnace?COIL_H:AH_H;
     const ACOIL_Y=UNIT_TOP;
     const FURN_Y=ACOIL_Y+ACOIL_H+4;
-    const APR_H=hasAprilaire?24:0;
+    const APR_H=hasAprilaire?16:0;
     const APR_Y=hasFurnace?FURN_Y+FURN_H:ACOIL_Y+ACOIL_H;
-    const CHASE_H=64;  // taller — was 52
+    const CHASE_H=52;
     const CHASE_Y=APR_Y+APR_H+2;
-    const CLOSET_PAD=Math.round(UNIT_W*0.28); // closet wall margin scales with unit
     // Lineset exits RIGHT face of A-coil at its vertical midpoint
     const LS_Y1=ACOIL_Y+Math.round(ACOIL_H*0.30);
     const LS_Y2=ACOIL_Y+Math.round(ACOIL_H*0.48);
@@ -1719,7 +1469,7 @@ function Canvas({a}){
     // Condenser — same real-world proportions, scaled to fill ~70% of outside zone
     const PX=3.2;
     const CU_SIZES={
-      fedmin:   {w:Math.round(24*PX), h:Math.round(30*PX)},
+      fedmin:   {w:Math.round(30*PX), h:Math.round(37*PX)},
       mid_ge15: {w:Math.round(36*PX), h:Math.round(22*PX)},
       high_ge18:{w:Math.round(36*PX), h:Math.round(50*PX)},
       premium:  {w:Math.round(36*PX), h:Math.round(50*PX)},
@@ -1744,20 +1494,20 @@ function Canvas({a}){
     return(
       <div style={{position:'relative',width:'100%'}}>
         {hasCoil&&<ToggleUI style={{position:'absolute',top:8,right:8,zIndex:10}}/>}
-        <svg viewBox={`0 0 ${VW} ${VH}`} className="canvas-svg">
+        <svg viewBox={`0 0 ${VW} ${VH}`} className="canvas-svg" style={{maxHeight:VH}}>
           <Defs/>
-          <rect x="0" y="0" width={VW} height={VH} fill="#040404"/>
+          <rect x="0" y="0" width={VW} height={VH} fill="#0b0d14"/>
           {/* Outside zone */}
-          {hasCond&&<rect x={HOUSE_W} y="0" width={VW-HOUSE_W} height={VH} fill="#030305"/>}
+          {hasCond&&<rect x={HOUSE_W} y="0" width={VW-HOUSE_W} height={VH} fill="#080a10"/>}
           {/* Full attic space above deck */}
-          <rect x="0" y="0" width={hasCond?HOUSE_W:VW} height={DECK_Y} fill="#060608"/>
+          <rect x="0" y="0" width={hasCond?HOUSE_W:VW} height={DECK_Y} fill="#10121c"/>
           {/* Closet below deck */}
-          <rect x={UNIT_X-CLOSET_PAD} y={DECK_Y} width={UNIT_W+CLOSET_PAD*2} height={VH-DECK_Y}
+          <rect x={UNIT_X-28} y={DECK_Y} width={UNIT_W+56} height={VH-DECK_Y}
             fill="rgba(9,9,16,.9)" stroke={W+'.05)'} strokeWidth="1.4"/>
-          <rect x={UNIT_X-CLOSET_PAD} y={DECK_Y} width="5" height={VH-DECK_Y} fill="#0d0d0d"/>
-          <rect x={UNIT_X+UNIT_W+CLOSET_PAD} y={DECK_Y} width="5" height={VH-DECK_Y} fill="#0d0d0d"/>
+          <rect x={UNIT_X-28} y={DECK_Y} width="4" height={VH-DECK_Y} fill="#0d0d0d"/>
+          <rect x={UNIT_X+UNIT_W+28} y={DECK_Y} width="4" height={VH-DECK_Y} fill="#0d0d0d"/>
           <text x={UNIT_X+UNIT_W/2} y={DECK_Y+14} textAnchor="middle"
-            fill={W+'.1)'} fontSize="8.5" fontFamily="monospace" letterSpacing="1.5">UTILITY CLOSET</text>
+            fill={W+'.1)'} fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">UTILITY CLOSET</text>
 
           {/* ── LOW-PITCH ROOF — spans attic width ── */}
           {(()=>{
@@ -1766,8 +1516,8 @@ function Canvas({a}){
             const rEave=rRise+12;
             const rRidge=8, rMid=rW/2;
             return <>
-              <line x1="0" y1={rEave} x2={rMid} y2={rRidge} stroke="rgba(130,124,106,.36)" strokeWidth="2.8"/>
-              <line x1={rMid} y1={rRidge} x2={rW} y2={rEave} stroke="rgba(130,124,106,.36)" strokeWidth="2.8"/>
+              <line x1="0" y1={rEave} x2={rMid} y2={rRidge} stroke="rgba(160,152,128,.55)" strokeWidth="3"/>
+              <line x1={rMid} y1={rRidge} x2={rW} y2={rEave} stroke="rgba(160,152,128,.55)" strokeWidth="3"/>
               <polygon points={`0,${rEave} ${rMid},${rRidge} ${rW},${rEave}`} fill="rgba(10,10,16,.55)"/>
               <rect x={rMid-5} y={rRidge-2} width="10" height="7" rx="2" fill="rgba(160,155,135,.17)"/>
               {/* Interior rafters */}
@@ -1818,7 +1568,7 @@ function Canvas({a}){
 
           {/* Attic deck line */}
           <rect x="0" y={DECK_Y} width={hasCond?HOUSE_W:VW-8} height="5"
-            fill="#141416" stroke="rgba(186,182,166,.08)" strokeWidth="0.4"/>
+            fill="#22243a" stroke="rgba(200,196,172,.28)" strokeWidth="0.4"/>
           {/* Ceiling joists */}
           {Array.from({length:Math.floor((hasCond?HOUSE_W:VW-8)/68)},(_,i)=>(
             <rect key={i} x={38+i*68} y={DECK_Y-2} width="10" height="7" rx="1"
@@ -1826,40 +1576,17 @@ function Canvas({a}){
           ))}
           <text x="22" y={DECK_Y+20} fill={W+'.08)'} fontSize="5.5" fontFamily="monospace" letterSpacing="0.8">ATTIC</text>
 
-          {/* Supply duct branches off the SIDES of the plenum in the attic */}
+          {/* Supply ducts — arrows INSIDE the plenum showing airflow direction */}
           {hasCoil&&hasPlenum&&a.plenum!=='none'&&<g>
-            {[
-              // Left branch: exits left face of plenum, runs left then up
-              {sx:UNIT_X, sy:PLEN_TOP+PLEN_ABOVE*0.35, ex:UNIT_X-80, ey:PLEN_TOP+PLEN_ABOVE*0.12, dir:'left'},
-              // Right branch: exits right face of plenum, runs right then up
-              {sx:UNIT_X+PLEN_W, sy:PLEN_TOP+PLEN_ABOVE*0.35, ex:UNIT_X+PLEN_W+80, ey:PLEN_TOP+PLEN_ABOVE*0.12, dir:'right'},
-            ].map((b,i)=>{
-              const DW=13;
-              const DC=G+'.32)';
-              const DS='rgba(0,0,0,.4)';
-              // L-shaped duct: horizontal run from plenum face, then vertical up to boot
-              const horizLen=Math.abs(b.ex-b.sx);
-              const vertStart=b.sy;
-              const vertEnd=b.ey;
-              const hx1=b.sx, hy=b.sy;
-              const hx2=b.ex;
-              return <g key={i}>
-                {/* Horizontal run */}
-                <rect x={Math.min(hx1,hx2)} y={hy-DW/2} width={horizLen} height={DW} rx="0"
-                  fill={DC} stroke={DS} strokeWidth="0.8"/>
-                {/* Vertical drop to top */}
-                <rect x={hx2-(DW/2)} y={vertEnd} width={DW} height={vertStart-vertEnd} rx="0"
-                  fill={DC} stroke={DS} strokeWidth="0.8"/>
-                {/* Elbow corner fill */}
-                <rect x={Math.min(hx1,hx2)} y={hy-DW/2} width={DW} height={DW} rx="0"
-                  fill={DC} stroke="none"/>
-                {/* Boot cap at top */}
-                <rect x={hx2-DW/2-4} y={vertEnd-5} width={DW+8} height={DW+5} rx="2"
-                  fill="#0a0a0a" stroke={DC} strokeWidth="1.2"/>
-                <text x={hx2} y={vertEnd-8} textAnchor="middle"
-                  fill={G+'.38)'} fontSize="6" fontFamily="monospace">SUPPLY</text>
-              </g>;
-            })}
+            {/* Two vertical trunk ducts above the plenum */}
+            {[UNIT_X+UNIT_W*0.28, UNIT_X+UNIT_W*0.68].map((dx,i)=>(
+              <g key={i}>
+                <rect x={dx-10} y={DUCT_TOP} width={20} height={PLEN_TOP-DUCT_TOP} rx="2"
+                  fill={G+'.04)'} stroke={G+'.20)'} strokeWidth="1"/>
+                <text x={dx} y={DUCT_TOP+7} textAnchor="middle"
+                  fill={G+'.26)'} fontSize="5" fontFamily="monospace">SUPPLY</text>
+              </g>
+            ))}
           </g>}
 
           {/* ── SUPPLY PLENUM — crosses deck, extends into attic ── */}
@@ -1905,7 +1632,7 @@ function Canvas({a}){
                 {hasIonizer&&!isExisting&&(()=>{
                   const rodLen=Math.round(PLEN_W*0.62);
                   const bulbX=UNIT_X+PLEN_W+12;
-                  const rodY=PLEN_TOP+PLEN_TOTAL*0.82;  // near coil transition
+                  const rodY=PLEN_TOP+PLEN_TOTAL*0.55;
                   const rodTip=UNIT_X+PLEN_W-rodLen;
                   return <g className="fadein">
                     <circle cx={bulbX} cy={rodY} r={16} fill="rgba(253,224,71,.07)" stroke="rgba(253,224,71,.18)" strokeWidth="0.5" filter="url(#glow-uv)"/>
@@ -1957,12 +1684,12 @@ function Canvas({a}){
                   <path d={`M${UNIT_X+UNIT_W} ${ACOIL_Y+ACOIL_H*0.52} L${UNIT_X+UNIT_W+28} ${ACOIL_Y+ACOIL_H*0.52}`}
                     fill="none" stroke={active?evapC2:'rgba(32,32,52,.4)'} strokeWidth="2.8" strokeLinecap="round" className="draw" style={{animationDelay:'.08s'}}/>
                   {active&&<text x={UNIT_X+UNIT_W+14} y={ACOIL_Y+ACOIL_H*0.24}
-                    textAnchor="middle" fill={evapC} fontSize="9" fontFamily="monospace">
+                    textAnchor="middle" fill={evapC} fontSize="7" fontFamily="monospace">
                     {refReversed?'←':'→'}
                   </text>}
                 </>}
                 <text x={UNIT_X+UNIT_W/2} y={ACOIL_Y+ACOIL_H+12} textAnchor="middle"
-                  fill={active?evapC:(G+'.35)')} fontSize="8" fontFamily="monospace">
+                  fill={active?evapC:(G+'.35)')} fontSize="6" fontFamily="monospace">
                   {hasFurnace?"A-COIL":"AIR HANDLER"}
                 </text>
               </>;
@@ -2003,51 +1730,54 @@ function Canvas({a}){
               spd={furnaceActive?1.55:0.5} active={furnaceActive||!heatMode}/>
             <text x={UNIT_X+UNIT_W/2} y={FURN_Y+FURN_H-6} textAnchor="middle"
               fill={G+'.26)'} fontSize="5.5" fontFamily="monospace">BLOWER</text>
-            {/* Flue — original routing:
-                exits top of furnace HX → short rise → 45° elbow LEFT
-                → horizontal run left past unit → 45° elbow UP → vertical through roof */}
+            {/* Flue — 45° elbow routing:
+                exits top of furnace → 45° elbow left → horizontal run → 45° elbow up → vertical through roof */}
             {(()=>{
-              const PIPE_W=is90?6:9;
-              const PIPE_C=is90?"#bfdbfe":"#d0d0d0";
-              const PIPE_S=is90?"#93c5fd":"#aaa";
+              const PIPE_W=is90?5:7;
+              const PIPE_C=is90?"#bfdbfe":"#c0c0c0";
+              const PIPE_S=is90?"#93c5fd":"#999";
+              // Exit point: top of furnace HX section (left half of furnace)
               const EXIT_X=UNIT_X+UNIT_W*0.38;
               const EXIT_Y=FURN_Y;
-              const ELB1_Y=EXIT_Y-20;
-              const HORIZ_X=UNIT_X-56;
+              // Elbow 1: rise a bit then turn left
+              const ELB1_Y=EXIT_Y-18;
+              // Horizontal run: go left past unit and return plenum
+              const HORIZ_X=UNIT_X-52;
+              // Elbow 2: turn upward
               const ELB2_Y=ELB1_Y;
-              const TOP_Y=DUCT_TOP+4;
-              const ELBOW_R=9;
+              // Vertical: straight up through roof
+              const TOP_Y=DUCT_TOP-4;
+              const ELBOW_R=8; // elbow radius
               return <>
-                {/* Short vertical stub from furnace top up to elbow 1 */}
+                {/* Vertical stub from furnace up to elbow 1 */}
                 <rect x={EXIT_X-PIPE_W/2} y={ELB1_Y+ELBOW_R} width={PIPE_W} height={EXIT_Y-ELB1_Y-ELBOW_R}
-                  fill={PIPE_C} stroke={PIPE_S} strokeWidth="0.8"/>
-                {/* 45° elbow 1: turn left */}
+                  fill={PIPE_C} stroke={PIPE_S} strokeWidth="0.7"/>
+                {/* 45° elbow 1: turn left — quarter circle arc */}
                 <path d={`M${EXIT_X-PIPE_W/2} ${ELB1_Y+ELBOW_R} Q${EXIT_X-PIPE_W/2} ${ELB1_Y} ${EXIT_X-PIPE_W/2-ELBOW_R} ${ELB1_Y}`}
                   fill="none" stroke={PIPE_S} strokeWidth={PIPE_W} strokeLinecap="round"/>
+                <path d={`M${EXIT_X+PIPE_W/2} ${ELB1_Y+ELBOW_R} Q${EXIT_X+PIPE_W/2} ${ELB1_Y-PIPE_W} ${EXIT_X+PIPE_W/2-ELBOW_R-PIPE_W} ${ELB1_Y-PIPE_W}`}
+                  fill="none" stroke={PIPE_C} strokeWidth="1" strokeLinecap="round" opacity="0.6"/>
                 {/* Horizontal run left */}
                 <rect x={HORIZ_X+ELBOW_R} y={ELB1_Y-PIPE_W} width={EXIT_X-PIPE_W/2-ELBOW_R-HORIZ_X-ELBOW_R} height={PIPE_W}
-                  fill={PIPE_C} stroke={PIPE_S} strokeWidth="0.8"/>
+                  fill={PIPE_C} stroke={PIPE_S} strokeWidth="0.7"/>
                 {/* 45° elbow 2: turn up */}
                 <path d={`M${HORIZ_X+ELBOW_R} ${ELB1_Y-PIPE_W} Q${HORIZ_X} ${ELB1_Y-PIPE_W} ${HORIZ_X} ${ELB2_Y-ELBOW_R-PIPE_W}`}
                   fill="none" stroke={PIPE_S} strokeWidth={PIPE_W} strokeLinecap="round"/>
                 {/* Vertical run up through roof */}
                 <rect x={HORIZ_X-PIPE_W/2} y={TOP_Y} width={PIPE_W} height={ELB2_Y-ELBOW_R-PIPE_W-TOP_Y}
-                  fill={PIPE_C} stroke={PIPE_S} strokeWidth="0.8"/>
-                {/* Cap */}
-                {is90
-                  ?<rect x={HORIZ_X-PIPE_W-1} y={TOP_Y-5} width={PIPE_W*2+2} height={6} rx="1"
-                      fill={PIPE_C} stroke={PIPE_S} strokeWidth="0.7"/>
-                  :<path d={`M${HORIZ_X-PIPE_W-3} ${TOP_Y+2} L${HORIZ_X} ${TOP_Y-5} L${HORIZ_X+PIPE_W+3} ${TOP_Y+2}`}
-                      fill={PIPE_C}/>}
-                <text x={HORIZ_X-PIPE_W-6} y={TOP_Y+16} textAnchor="end"
-                  fill={is90?"rgba(147,197,253,.55)":"rgba(185,185,185,.5)"}
-                  fontSize="7" fontFamily="monospace">{is90?'PVC FLUE':'B-VENT'}</text>
+                  fill={PIPE_C} stroke={PIPE_S} strokeWidth="0.7"/>
+                {/* Cap at top */}
+                {!is90&&<path d={`M${HORIZ_X-PIPE_W-2} ${TOP_Y+4} L${HORIZ_X} ${TOP_Y-2} L${HORIZ_X+PIPE_W+2} ${TOP_Y+4}`} fill={PIPE_C}/>}
+                <text x={HORIZ_X} y={TOP_Y-6} textAnchor="middle"
+                  fill={is90?"rgba(147,197,253,.5)":"rgba(148,148,148,.44)"} fontSize="5" fontFamily="monospace">
+                  {is90?'PVC':'B-VENT'}
+                </text>
               </>;
             })()}
             <rect x={UNIT_X+4} y={FURN_Y+11} width={isComm?62:is2?52:44} height="8" rx="2" fill={isComm?"url(#blue)":(G+'.1)')}/>
             <text x={UNIT_X+7} y={FURN_Y+18} fill={isComm?"#fff":(G+'.78)')} fontSize="5.5" fontFamily="monospace">{isComm?'COMMUNICATING':is2?'2-STAGE':'1-STAGE'}</text>
             <text x={UNIT_X+UNIT_W/2} y={FURN_Y+FURN_H+12} textAnchor="middle"
-              fill={furnaceActive?'rgba(249,115,22,.62)':(G+'.36)')} fontSize="8" fontFamily="monospace">FURNACE</text>
+              fill={furnaceActive?'rgba(249,115,22,.62)':(G+'.36)')} fontSize="6" fontFamily="monospace">FURNACE</text>
           </g>}
 
           {/* Aprilaire — between bottom of unit and 2x4 chase */}
@@ -2059,87 +1789,25 @@ function Canvas({a}){
                 x2={UNIT_X+5+i*(UNIT_W-10)/14} y2={APR_Y+APR_H-2}
                 stroke="#22c55e" strokeWidth="0.6" opacity="0.52"/>
             ))}
-            <text x={UNIT_X+UNIT_W/2} y={APR_Y-5} textAnchor="middle"
-              fill="#22c55e" fontSize="9.5" fontFamily="monospace">APRILAIRE 5" FILTER RACK</text>
+            <text x={UNIT_X+UNIT_W/2} y={APR_Y-4} textAnchor="middle"
+              fill="#22c55e" fontSize="5.5" fontFamily="monospace">APRILAIRE 5" FILTER RACK</text>
           </g>}
 
-          {/* Condensate drain — routed: exits right face of A-coil bottom
-              → 90° RIGHT → 90° DOWN beside furnace right face → 45° into chase */}
-          {hasCoil&&<g key="drain">
-            {(()=>{
-              const DW=2.5;  // pipe visual width
-              const DC=B+'.5)';
-              const DCD=B+'.35)';
-              const hasPump=Array.isArray(a.extras)&&a.extras.includes('condensate');
-
-              // Start: right face of A-coil, near the bottom (drain pan)
-              const startX=UNIT_X+UNIT_W;
-              const startY=ACOIL_Y+ACOIL_H-12;
-
-              // Horizontal run right — clear of the unit
-              const rightX=UNIT_X+UNIT_W+32;
-              // Always run straight down to chase regardless of pump
-              const downToY=CHASE_Y-16;
-              const ang=14;
-
-              return <>
-                {/* Horizontal stub right from coil */}
-                <line x1={startX} y1={startY} x2={rightX} y2={startY}
-                  stroke={DCD} strokeWidth="3" strokeLinecap="round" strokeDasharray="5 3"/>
-                {/* 90° elbow corner */}
-                <path d={`M${rightX} ${startY-3} Q${rightX+3} ${startY} ${rightX} ${startY+3}`}
-                  fill="none" stroke={DCD} strokeWidth="3" strokeLinecap="round"/>
-                {/* Vertical run down beside furnace */}
-                <line x1={rightX} y1={startY} x2={rightX} y2={downToY}
-                  stroke={DCD} strokeWidth="3" strokeLinecap="round" strokeDasharray="5 3"/>
-                {/* 45° into chase */}
-                <path d={`M${rightX} ${downToY} L${rightX-ang} ${downToY+ang}`}
-                  fill="none" stroke={DCD} strokeWidth="3" strokeLinecap="round"/>
-                {/* Entry dot or line to pump */}
-                {hasPump
-                  ?<line x1={rightX-ang} y1={downToY+ang} x2={UNIT_X+UNIT_W-6} y2={downToY+ang}
-                      stroke={DCD} strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round"/>
-                  :<circle cx={rightX-ang} cy={downToY+ang} r="4"
-                      fill={B+'.25)'} stroke={B+'.5)'} strokeWidth="1"/>
-                }
-                {/* Label */}
-                <text x={rightX+6} y={startY-5} textAnchor="start"
-                  fill={B+'.45)'} fontSize="6.5" fontFamily="monospace">CONDENSATE</text>
-              </>;
-            })()}
-          </g>}
-
-          {/* 2×4 return chase + optional condensate pump inside */}
+          {/* 2×4 return chase */}
           {hasCoil&&<g className="snap" key="chase">
-            <rect x={UNIT_X-6} y={CHASE_Y} width={UNIT_W+12} height={CHASE_H} rx="3"
+            <rect x={UNIT_X-4} y={CHASE_Y} width={UNIT_W+8} height={CHASE_H} rx="3"
               fill="rgba(100,75,34,.07)" stroke="rgba(138,98,42,.42)" strokeWidth="1.5"/>
-            {[0,1,2,3,4,5].map(i=>(
-              <rect key={i} x={UNIT_X-6+i*(UNIT_W+12)/6} y={CHASE_Y} width={11} height={CHASE_H}
+            {[0,1,2,3,4].map(i=>(
+              <rect key={i} x={UNIT_X-4+i*(UNIT_W+8)/5} y={CHASE_Y} width={9} height={CHASE_H}
                 fill="rgba(118,82,32,.18)" stroke="rgba(148,104,40,.28)" strokeWidth="0.7"/>
             ))}
-            <rect x={UNIT_X+6} y={CHASE_Y+5} width={UNIT_W-12} height={CHASE_H-10}
+            <rect x={UNIT_X+5} y={CHASE_Y+4} width={UNIT_W-10} height={CHASE_H-8}
               fill="rgba(35,137,224,.03)" stroke={B+'.1)'} strokeWidth="0.5" strokeDasharray="4 3"/>
-            <path d={`M${UNIT_X+UNIT_W/2} ${CHASE_Y+CHASE_H-6} L${UNIT_X+UNIT_W/2} ${CHASE_Y+12}`}
-              fill="none" stroke={W+'.09)'} strokeWidth="1.2"
+            <path d={`M${UNIT_X+UNIT_W/2} ${CHASE_Y+CHASE_H-6} L${UNIT_X+UNIT_W/2} ${CHASE_Y+10}`}
+              fill="none" stroke={W+'.09)'} strokeWidth="1"
               strokeDasharray="5 3" className="airflow" style={{strokeDashoffset:0}} markerEnd="url(#arr)"/>
-            <text x={UNIT_X+UNIT_W/2} y={CHASE_Y+CHASE_H+14} textAnchor="middle"
-              fill="rgba(138,98,42,.62)" fontSize="9.5" fontFamily="monospace">2×4 RETURN AIR CHASE</text>
-            {/* Condensate pump — sits inside chase on the right side */}
-            {Array.isArray(a.extras)&&a.extras.includes('condensate')&&<g className="fadein">
-              {(()=>{
-                const pW=52, pH=CHASE_H-14;
-                const pX=UNIT_X+UNIT_W-pW-8;
-                const pY=CHASE_Y+7;
-                return <>
-                  <rect x={pX} y={pY} width={pW} height={pH} rx="3"
-                    fill="rgba(35,137,224,.14)" stroke={B+'.55)'} strokeWidth="1.2"/>
-                  <text x={pX+pW/2} y={pY+pH*0.45} textAnchor="middle"
-                    fill={B+'.8)'} fontSize="8" fontFamily="monospace">PUMP</text>
-                  <text x={pX+pW/2} y={pY+pH*0.75} textAnchor="middle"
-                    fill={B+'.55)'} fontSize="6" fontFamily="monospace">COND.</text>
-                </>;
-              })()}
-            </g>}
+            <text x={UNIT_X+UNIT_W/2} y={CHASE_Y+CHASE_H+12} textAnchor="middle"
+              fill="rgba(138,98,42,.62)" fontSize="6" fontFamily="monospace">2×4 RETURN AIR CHASE</text>
           </g>}
 
           {/* ── REFRIGERANT LINE STUBS — exit right face of A-coil, run to wall ── */}
@@ -2149,11 +1817,11 @@ function Canvas({a}){
               fill="none" stroke="rgba(22,22,42,.55)" strokeWidth="10" strokeLinecap="round"/>
             {/* Liquid line */}
             <path d={`M${UNIT_X+UNIT_W} ${LS_Y1} L${EXT_WALL_X} ${LS_Y1}`}
-              fill="none" stroke={evapActive?evapC:'rgba(30,30,50,.5)'} strokeWidth="3.5"
+              fill="none" stroke={line1C} strokeWidth="4" opacity="0.9"
               strokeLinecap="round" className="draw"/>
             {/* Suction line */}
             <path d={`M${UNIT_X+UNIT_W} ${LS_Y2} L${EXT_WALL_X} ${LS_Y2}`}
-              fill="none" stroke={evapActive?evapC2:'rgba(30,30,50,.4)'} strokeWidth="3.5"
+              fill="none" stroke={line2C} strokeWidth="4" opacity="0.9"
               strokeLinecap="round" className="draw" style={{animationDelay:'.1s'}}/>
             {/* Flow dots */}
             {evapActive&&Array.from({length:3},(_,i)=>(
@@ -2176,7 +1844,7 @@ function Canvas({a}){
           {/* Thermostat */}
           {hasTstat&&<g className="snap" key="tstat-c" style={{animationDelay:'.26s'}}>
             {(()=>{
-              const TX=10, TY=hasFurnace?FURN_Y-36:ACOIL_Y+20; // at coil/furnace junction
+              const TX=10, TY=ACOIL_Y+20;
               return a.thermostat==='wifi'
                 ?<>
                   <circle cx={TX+38} cy={TY+38} r={36} fill="#0d0d0d" stroke={G+'.62)'} strokeWidth="1.8"/>
@@ -2190,7 +1858,7 @@ function Canvas({a}){
                   <path d={`M${TX+28} ${TY+67} Q${TX+38} ${TY+61} ${TX+48} ${TY+67}`}
                     fill="none" stroke={B+'.7)'} strokeWidth="1.8" strokeLinecap="round"/>
                   <circle cx={TX+38} cy={TY+71} r={2.5} fill={B+'.8)'}/>
-                  <text x={TX+38} y={TY+85} textAnchor="middle" fill={G+'.45)'} fontSize="8.5" fontFamily="monospace">WI-FI SMART</text>
+                  <text x={TX+38} y={TY+85} textAnchor="middle" fill={G+'.45)'} fontSize="6.5" fontFamily="monospace">WI-FI SMART</text>
                 </>
                 :<>
                   <rect x={TX} y={TY} width={76} height={62} rx="3"
@@ -2203,78 +1871,34 @@ function Canvas({a}){
                     <rect key={i} x={TX+bx-4} y={TY+46} width="9" height="5" rx="1.5"
                       fill={G+'.22)'} stroke={G+'.12)'} strokeWidth="0.4"/>
                   ))}
-                  <text x={TX+38} y={TY+58} textAnchor="middle" fill={G+'.38)'} fontSize="8" fontFamily="monospace">BASIC</text>
+                  <text x={TX+38} y={TY+58} textAnchor="middle" fill={G+'.38)'} fontSize="6" fontFamily="monospace">BASIC</text>
                 </>;
             })()}
           </g>}
 
-          {/* Dehumidifier — small box, top-RIGHT corner of attic */}
+          {/* Dehumidifier — in attic beside plenum */}
           {hasDehu&&<g className="snap" key="dehu-c" style={{animationDelay:'.32s'}}>
             {(()=>{
-              const DW=72, DH=52;
-              const DX=HOUSE_W-DW-12;
-              const DY=DECK_Y-DH-28;
+              const DX=UNIT_X+UNIT_W+10;
+              const DY=PLEN_TOP;
+              const DW=UNIT_W;
+              const DH=ACOIL_H;
               return <>
-                <rect x={DX} y={DY} width={DW} height={DH} rx="4"
-                  fill="#05120a" stroke="#22c55e" strokeWidth="1.4"/>
-                <rect x={DX} y={DY} width={DW} height={8} rx="4" fill="rgba(34,197,94,.3)" stroke="none"/>
-                {Array.from({length:5},(_,i)=>(
-                  <line key={i} x1={DX+6} y1={DY+12+i*7} x2={DX+DW-6} y2={DY+12+i*7}
-                    stroke="rgba(34,197,94,.28)" strokeWidth="1"/>
+                <rect x={DX} y={DY} width={DW} height={DH} rx="5"
+                  fill="#05120a" stroke="#22c55e" strokeWidth="1.5"/>
+                <rect x={DX} y={DY} width={DW} height={9} rx="5"
+                  fill="rgba(34,197,94,.3)" stroke="none"/>
+                {Array.from({length:8},(_,i)=>(
+                  <line key={i} x1={DX+8} y1={DY+16+i*(DH-30)/8}
+                    x2={DX+DW-8} y2={DY+16+i*(DH-30)/8}
+                    stroke="rgba(34,197,94,.3)" strokeWidth="1"/>
                 ))}
-                <text x={DX+DW/2} y={DY+DH/2-2} textAnchor="middle" fill="#22c55e" fontSize="10">💧</text>
-                <text x={DX+DW/2} y={DY+DH/2+12} textAnchor="middle"
-                  fill="#22c55e" fontSize="7.5" fontFamily="monospace">DEHU</text>
-                {/* Drain line down to deck */}
+                <text x={DX+DW/2} y={DY+DH/2-8} textAnchor="middle" fill="#22c55e" fontSize="14">💧</text>
+                <text x={DX+DW/2} y={DY+DH/2+10} textAnchor="middle" fill="#22c55e" fontSize="6" fontFamily="monospace">DEHU</text>
                 <line x1={DX+DW/2} y1={DY+DH} x2={DX+DW/2} y2={DECK_Y}
                   stroke={B+'.35)'} strokeWidth="1.5" strokeDasharray="3 2"/>
                 <text x={DX+DW/2} y={DY-6} textAnchor="middle"
-                  fill="rgba(34,197,94,.38)" fontSize="6" fontFamily="monospace">DEHUMIDIFIER</text>
-              </>;
-            })()}
-          </g>}
-
-          {/* ERV — small box, top-LEFT corner of attic, with roof penetration pipes */}
-          {Array.isArray(a.extras)&&a.extras.includes('erv')&&<g className="snap" key="erv-c" style={{animationDelay:'.34s'}}>
-            {(()=>{
-              const DW=72, DH=52;
-              const DX=12;
-              const DY=DECK_Y-DH-28;
-              // Two pipes through roof — fresh air in (left) and exhaust out (right)
-              const pipe1X=DX+DW*0.28;  // fresh air intake pipe
-              const pipe2X=DX+DW*0.68;  // exhaust pipe
-              const pipeTop=4;           // exits well above roofline
-              const pipeW=5;
-              return <>
-                {/* Fresh air intake pipe — through roof, caps at top */}
-                <rect x={pipe1X-pipeW/2} y={pipeTop} width={pipeW} height={DY-pipeTop} rx="1"
-                  fill={B+'.35)'} stroke={B+'.5)'} strokeWidth="0.8"/>
-                <rect x={pipe1X-pipeW-1} y={pipeTop-3} width={pipeW*2+2} height={5} rx="1"
-                  fill={B+'.4)'} stroke={B+'.55)'} strokeWidth="0.8"/>
-                {/* Exhaust pipe — through roof */}
-                <rect x={pipe2X-pipeW/2} y={pipeTop} width={pipeW} height={DY-pipeTop} rx="1"
-                  fill="rgba(249,115,22,.35)" stroke="rgba(249,115,22,.5)" strokeWidth="0.8"/>
-                <path d={`M${pipe2X-pipeW-1} ${pipeTop+2} L${pipe2X} ${pipeTop-4} L${pipe2X+pipeW+1} ${pipeTop+2}`}
-                  fill="rgba(249,115,22,.4)"/>
-                {/* Labels above roof */}
-                <text x={pipe1X} y={pipeTop-6} textAnchor="middle"
-                  fill={B+'.5)'} fontSize="5" fontFamily="monospace">IN</text>
-                <text x={pipe2X} y={pipeTop-6} textAnchor="middle"
-                  fill="rgba(249,115,22,.5)" fontSize="5" fontFamily="monospace">OUT</text>
-                {/* Box */}
-                <rect x={DX} y={DY} width={DW} height={DH} rx="4"
-                  fill="#0a0a06" stroke={G+'.55)'} strokeWidth="1.4"/>
-                <rect x={DX} y={DY} width={DW} height={8} rx="4" fill={G+'.25)'} stroke="none"/>
-                <path d={`M${DX+8} ${DY+DH*0.44} L${DX+DW*0.5-4} ${DY+DH*0.44}`}
-                  fill="none" stroke={B+'.65)'} strokeWidth="2" markerEnd="url(#arr)"/>
-                <path d={`M${DX+DW-8} ${DY+DH*0.65} L${DX+DW*0.5+4} ${DY+DH*0.65}`}
-                  fill="none" stroke="rgba(249,115,22,.65)" strokeWidth="2" markerEnd="url(#arr)"/>
-                <text x={DX+DW/2} y={DY+DH*0.33} textAnchor="middle"
-                  fill={G+'.78)'} fontSize="9" fontFamily="monospace">ERV</text>
-                <text x={DX+DW/2} y={DY+DH*0.82} textAnchor="middle"
-                  fill={G+'.5)'} fontSize="6" fontFamily="monospace">ENERGY RECOV.</text>
-                <text x={DX+DW/2} y={DY-6} textAnchor="middle"
-                  fill={G+'.35)'} fontSize="6" fontFamily="monospace">ATTIC MOUNT</text>
+                  fill="rgba(34,197,94,.35)" fontSize="4.5" fontFamily="monospace">DEHUMIDIFIER</text>
               </>;
             })()}
           </g>}
@@ -2291,16 +1915,8 @@ function App(){
   const [answers,setAnswers]=useState({});
   const [stepIdx,setStepIdx]=useState(0);
   const [done,setDone]=useState(false);
-  const [orient,setOrient]=useState(()=>window.innerWidth>window.innerHeight?'land':'port');
   const topRef=useRef(null);
-  const mainRef=useRef(null);
-
-  React.useEffect(()=>{
-    const check=()=>setOrient(window.innerWidth>window.innerHeight?'land':'port');
-    window.addEventListener('resize',check);
-    window.addEventListener('orientationchange',()=>setTimeout(check,120));
-    return()=>{window.removeEventListener('resize',check);};
-  },[]);
+  const scrollTop=useCallback(()=>setTimeout(()=>topRef.current?.scrollIntoView({behavior:'smooth',block:'start'}),50),[]);
 
   const activeSteps=useMemo(()=>STEPS.filter(s=>!s.showIf||s.showIf(answers)),[answers]);
   const cur=activeSteps[stepIdx];
@@ -2310,6 +1926,7 @@ function App(){
   const msel=id=>Array.isArray(answers[id])?answers[id]:[];
   const setA=(k,v)=>setAnswers(p=>{
     const next={...p,[k]:v};
+    // Auto-set furnace_eff when insulation is chosen
     if(k==='insulation') next.furnace_eff=deriveFurnaceEff(v);
     return next;
   });
@@ -2321,144 +1938,89 @@ function App(){
     return!!answers[cur.id];
   },[cur,answers]);
 
-  const goNext=()=>{if(stepIdx<activeSteps.length-1){setStepIdx(s=>s+1);}else{setDone(true);}};
+  const goNext=()=>{if(stepIdx<activeSteps.length-1){setStepIdx(s=>s+1);scrollTop();}else{setDone(true);scrollTop();}};
   const goBack=()=>{
     if(stepIdx>0){
       const curId=cur?.id;
       if(curId){setAnswers(p=>{const n={...p};delete n[curId];return n;});}
       setStepIdx(s=>s-1);
+      scrollTop();
     }
   };
   const skip=()=>{if(cur.multi)setA(cur.id,[]);goNext();};
   const restart=()=>{setAnswers({});setStepIdx(0);setDone(false);};
+
   const opts=useMemo(()=>cur?getOpts(cur.id,answers):[], [cur,answers]);
 
-  const isAttic=!answers.location||answers.location==='attic';
-  const isMobile=window.innerWidth<1100&&'ontouchstart' in window;
-  const isLandscape=orient==='land';
-  // Landscape attic on mobile → side-by-side locked layout
-  const useLandscape=isAttic&&isLandscape&&isMobile;
-  // Show nudge only in portrait mobile after attic selected
-  const showNudge=isAttic&&!isLandscape&&isMobile&&answers.location;
-
-  const [showInfo,setShowInfo]=useState(false);
-  // Reset info panel when step changes
-  React.useEffect(()=>setShowInfo(false),[stepIdx]);
-
-  // Per-step extended explanations
-  const INFO_TEXT={
-    location:"Your indoor unit location determines the system layout. Attic installs are the most common in Austin — the unit lies on its side horizontally above the living space. Closet installs are upflow — the unit stands vertically in a utility closet, usually in a hallway. Both work great; closet installs are slightly more accessible for maintenance.",
-    indoor_type:"A furnace uses natural gas to heat your home and pairs with an AC system for cooling. Most Austin homes have gas lines already. An air handler is all-electric — it works exclusively with a heat pump for both heating and cooling. Great if you don't have a gas line or want to go fully electric.",
-    insulation:"Your attic insulation type determines which furnace efficiency you can install. Fiberglass batts or blown insulation means your attic is vented — standard 80% AFUE furnace with a metal B-vent flue works fine. Spray foam means your attic is sealed (conditioned) — this requires a 90% AFUE condensing furnace that uses a PVC pipe through the roof deck instead of a B-vent.",
-    plenum:"The supply plenum is the large box that connects your indoor unit to all the ductwork in your home. Think of it as the distribution hub — conditioned air flows from your unit into the plenum, then out through the ducts to every room. If your existing plenum is damaged, leaking, or over 15 years old, replacing it significantly improves efficiency and airflow balance.",
-    thermostat:"A basic programmable thermostat is reliable, accurate, and straightforward — set your schedule and forget it. A Wi-Fi smart thermostat connects to your phone, learns your habits, and can cut 10–15% off your energy bill through smarter scheduling. Both work with any system we install.",
-    purif:"Air purification add-ons are installed inside your indoor unit and treat the air every time your system runs. The Aprilaire 5\" filter captures physical particles like dust and pollen. A UV light kills biological growth — mold and bacteria that can form on the evaporator coil. An ionizer/plasma unit neutralizes airborne particles, odors, and VOCs throughout the home.",
-    system_for:"With a gas furnace you have two options. Dual fuel (heat pump + furnace) means the heat pump handles cooling in summer and heating in mild weather — the gas furnace only fires when it's genuinely cold (below ~35°F). This is the most efficient combo and qualifies for rebates. Straight cool means your AC only cools — the furnace handles all heating year-round.",
-    cond_tier:"The condenser is the outdoor unit. Federal Minimum meets current energy code — solid and reliable, gets the job done. Mid Efficiency is our best-value tier — variable speed operation, noticeably lower monthly bills, and better humidity control than a standard unit. High Efficiency is our top tier — inverter-driven, eligible for Austin Energy rebates, and the best humidity performance available.",
-    dehu:"Austin humidity makes your home feel significantly warmer than the thermostat reads. A whole-home dehumidifier connects directly to your HVAC system and runs automatically — no buckets, no maintenance, just consistently comfortable air. Recommended for any home that feels muggy even when the AC is running.",
-    extras:"A surge protector mounts on the disconnect box outside and shields your condenser from voltage spikes — one lightning strike can destroy a compressor. A condensate pump is required when gravity drainage isn't available. An ERV (Energy Recovery Ventilator) brings fresh filtered outdoor air into your home while recovering the energy from the outgoing stale air.",
-  };
-  const infoText=cur?.id&&INFO_TEXT[cur.id];
-
-  const sidebar=(
-    <div className="sidebar">
-      {!done?(
-        <>
-          <div className="step-hdr">
-            <div className="step-eyebrow" style={{justifyContent:'space-between'}}>
-              <span>Step {stepIdx+1} of {activeSteps.length}</span>
-              <span className="step-eyebrow-line"/>
-              {infoText&&<button className="info-btn" onClick={()=>setShowInfo(v=>!v)}
-                title="Learn more about this step">
-                {showInfo?'✕':'ⓘ'}
-              </button>}
-            </div>
-            <div className="step-q">{cur?.q}</div>
-            {cur?.hint&&<div className="step-hint">{cur.hint}</div>}
-          </div>
-          {showInfo&&infoText&&(
-            <div className="info-expand">
-              <div className="info-expand-body">{infoText}</div>
-            </div>
-          )}
-
-          <div className="opts">
-            {opts.map(opt=>{
-              const isMulti=cur?.multi;
-              const isOn=isMulti?msel(cur.id).includes(opt.v):sel(cur?.id)===opt.v;
-              const isDisabled=!!opt.disabled;
-              // No auto-advance — just set the value, wait for Next button
-              const click=isDisabled?null:isMulti
-                ?()=>toggle(cur.id,opt.v)
-                :()=>setA(cur.id,opt.v);
-              return(
-                <button key={opt.v} className={`opt${isOn?' sel':''}${isDisabled?' disabled':''}`} onClick={click}>
-                  <div className="opt-inner">
-                    <div className="opt-body">
-                      <span className="opt-label">
-                        {opt.label}
-                        {opt.badge&&<span className="opt-badge">★ GES</span>}
-                        {opt.recommended&&<span className="opt-badge" style={{marginLeft:6}}>Recommended</span>}
-                      </span>
-                      {opt.desc&&<span className="opt-desc">{opt.desc}</span>}
-                      {opt.note&&<span className="opt-note">{opt.note}</span>}
-                      {opt.disabledNote&&<span className="opt-note" style={{color:'rgba(249,115,22,.6)'}}>{opt.disabledNote}</span>}
-                    </div>
-                    <div className="opt-check">{isOn?'✓':''}</div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="nav-row">
-            {stepIdx>0&&<button className="btn-back" onClick={goBack}>← Back</button>}
-            {(cur?.optional||cur?.multi)&&<button className="btn-skip" onClick={skip}>Skip</button>}
-            <button className="btn-next" onClick={goNext} disabled={!canNext}>
-              {stepIdx===activeSteps.length-1?'See Full Build →':'Next →'}
-            </button>
-          </div>
-        </>
-      ):(
-        <div className="done-wrap">
-          <div className="done-icon">✓</div>
-          <div className="done-title">Your System is Built</div>
-          <div className="done-sub">Every component is visualized on the left. A Gold Eagle tech will walk you through it — free, about 30 minutes on-site.</div>
-          <a href="tel:5124894653" className="done-cta">📞 Call Today — 512-489-4653</a>
-          <div className="done-discount">💰 Ask about current manufacturer discounts — they change monthly and can save you hundreds.</div>
-          <button className="done-restart" onClick={restart}>Start over</button>
-        </div>
-      )}
-    </div>
-  );
-
-  const mainClass=useLandscape?'main main--landscape':'main';
-
   return(
-    <div ref={topRef} style={{display:'flex',flexDirection:'column',height:'100%',minHeight:0}}>
+    <div ref={topRef}>
       <header className="hdr">
         <div className="hdr-logo">GOLD EAGLE SERVICES™</div>
-        <div className="hdr-step">BUILD YOUR SYSTEM</div>
-        <div style={{fontFamily:'var(--fm)',fontSize:'9px',color:'rgba(215,183,64,.4)',letterSpacing:'.15em',whiteSpace:'nowrap'}}>{done?'COMPLETE':`${stepIdx+1} / ${activeSteps.length}`}</div>
+        <div className="hdr-step">{cur?`${cur.id.replace(/_/g,' ').toUpperCase()}`:done?'COMPLETE':''}</div>
+        <div style={{fontFamily:'var(--fm)',fontSize:'9px',color:'rgba(215,183,64,.4)',letterSpacing:'.15em'}}>BUILD YOUR SYSTEM</div>
       </header>
       <div className="prog"><div className="prog-fill" style={{width:done?'100%':`${pct}%`}}/></div>
 
-      {showNudge&&(
-        <div style={{background:'rgba(215,183,64,.08)',borderBottom:'1px solid rgba(215,183,64,.18)',
-          padding:'7px 14px',display:'flex',alignItems:'center',gap:'10px',
-          fontFamily:'var(--fb)',fontSize:'12px',color:'rgba(215,183,64,.82)',flexShrink:0}}>
-          <span style={{fontSize:'16px'}}>↺</span>
-          <span>Rotate sideways for the best attic view</span>
-        </div>
-      )}
-
-      <div className={mainClass} ref={mainRef}>
+      <div className="main">
         <div className="canvas-wrap">
           <div className="canvas-grid"/>
           <div className="canvas-tag">Live System Preview</div>
           <Canvas a={answers}/>
         </div>
-        {sidebar}
+
+        <div className="sidebar">
+          {!done?(
+            <>
+              <div className="step-hdr">
+                <div className="step-eyebrow">Step {stepIdx+1} of {activeSteps.length}</div>
+                <div className="step-q">{cur?.q}</div>
+                {cur?.hint&&<div className="step-hint">{cur.hint}</div>}
+              </div>
+
+              <div className="opts">
+                {opts.map(opt=>{
+                  const isMulti=cur?.multi;
+                  const isOn=isMulti?msel(cur.id).includes(opt.v):sel(cur?.id)===opt.v;
+                  const isDisabled=!!opt.disabled;
+                  const click=isDisabled?null:isMulti?()=>toggle(cur.id,opt.v):()=>setA(cur.id,opt.v);
+                  return(
+                    <button key={opt.v} className={`opt${isOn?' sel':''}${isDisabled?' disabled':''}`} onClick={click}>
+                      <div className="opt-inner">
+                        <div className="opt-body">
+                          <span className="opt-label">
+                            {opt.label}
+                            {opt.badge&&<span className="opt-badge">★ GES</span>}
+                            {opt.recommended&&<span className="opt-badge" style={{marginLeft:6}}>Recommended</span>}
+                          </span>
+                          {opt.desc&&<span className="opt-desc">{opt.desc}</span>}
+                          {opt.note&&<span className="opt-note">{opt.note}</span>}
+                          {opt.disabledNote&&<span className="opt-note" style={{color:'rgba(249,115,22,.6)'}}>{opt.disabledNote}</span>}
+                        </div>
+                        <div className="opt-check">{isOn?'✓':''}</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="nav-row">
+                {stepIdx>0&&<button className="btn-back" onClick={goBack}>← Back</button>}
+                {(cur?.optional||cur?.multi)&&<button className="btn-skip" onClick={skip}>Skip</button>}
+                <button className="btn-next" onClick={goNext} disabled={!canNext}>
+                  {stepIdx===activeSteps.length-1?'See Full Build →':'Next →'}
+                </button>
+              </div>
+            </>
+          ):(
+            <div className="done-wrap">
+              <div className="done-icon">✓</div>
+              <div className="done-title">Your System is Built</div>
+              <div className="done-sub">Every component you selected is visualized to the left. A Gold Eagle tech will walk you through the full install — free, about 30 minutes on-site.</div>
+              <a href="tel:5124894653" className="done-cta">📞 Schedule Your Free Visit — 512-489-4653</a>
+              <div style={{background:"rgba(215,183,64,.07)",border:"1px solid rgba(215,183,64,.2)",padding:"10px 14px",fontSize:"12px",color:"rgba(215,183,64,.75)",lineHeight:"1.55",borderRadius:"2px",marginBottom:"14px",textAlign:"left",width:"100%"}}>Call today to check out current manufacturer discounts -- they change monthly and can save you hundreds.</div><button className="done-restart" onClick={restart}>Start over</button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
