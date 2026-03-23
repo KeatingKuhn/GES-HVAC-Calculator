@@ -129,6 +129,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .done-cta{display:block;width:100%;background:var(--gh);border:none;color:var(--bk);padding:13px;font-family:var(--ft);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.04em;margin-bottom:8px;text-decoration:none;text-align:center}
 .done-restart{background:transparent;border:none;color:rgba(255,255,255,.2);font-family:var(--fb);font-size:11px;cursor:pointer;text-decoration:underline;outline:none}
 .toggle-hint{animation:glow-pulse 2.5s ease-in-out 3;animation-fill-mode:both;animation-delay:1.2s}
+.line-pulse{animation:linepulse 1.8s ease-in-out infinite}
+@keyframes linepulse{0%,100%{opacity:0.55;stroke-width:3}50%{opacity:1;stroke-width:5.5}}
 @keyframes toggle-glow{0%,100%{box-shadow:0 0 0 0 rgba(215,183,64,0)}50%{box-shadow:0 0 12px 3px rgba(215,183,64,.35)}}
 </style>
 </head>
@@ -862,12 +864,10 @@ function Canvas({a}){
         fill="none" stroke="rgba(30,30,50,.65)" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round"/>
       {/* Liquid line */}
       <path d={`M${sidingX+wallThick} ${lineY1} L${condX+condW*0.35} ${lineY1} L${condX+condW*0.35} ${condY+condH}`}
-        fill="none" stroke={line1C} strokeWidth="4" opacity="0.9"
-        strokeLinecap="round" strokeLinejoin="round" className="draw"/>
+        fill="none" stroke={line1C} strokeLinecap="round" strokeLinejoin="round" className={active?"line-pulse draw":"draw"}/>
       {/* Suction line (offset) */}
       <path d={`M${sidingX+wallThick} ${lineY2} L${condX+condW*0.42} ${lineY2} L${condX+condW*0.42} ${condY+condH}`}
-        fill="none" stroke={line2C} strokeWidth="4" opacity="0.9"
-        strokeLinecap="round" strokeLinejoin="round" className="draw" style={{animationDelay:'.1s'}}/>
+        fill="none" stroke={line2C} strokeLinecap="round" strokeLinejoin="round" className={active?"line-pulse draw":"draw"} style={{animationDelay:'.15s'}}/>
       {/* Animated flow dots -- both pipes */}
       {active&&Array.from({length:6},(_,i)=>{
         const isLine1=i<3;
@@ -1335,10 +1335,10 @@ function Canvas({a}){
                   fill="none" stroke="rgba(24,24,44,.6)" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round"/>
                 {/* Liquid line */}
                 <path d={`M${RL_START_X} ${ry1} L${RL_START_X} ${RL_ROOF_Y} L${wallX} ${RL_ROOF_Y}`}
-                  fill="none" stroke={line1C} strokeWidth="4" opacity="0.9" strokeLinecap="round" strokeLinejoin="round" className="draw"/>
+                  fill="none" stroke={line1C} strokeLinecap="round" strokeLinejoin="round" className={active?"line-pulse draw":"draw"}/>
                 {/* Suction line */}
                 <path d={`M${RL_START_X+5} ${ry2} L${RL_START_X+5} ${RL_ROOF_Y+9} L${wallX} ${RL_ROOF_Y+9}`}
-                  fill="none" stroke={line2C} strokeWidth="4" opacity="0.9" strokeLinecap="round" strokeLinejoin="round" className="draw" style={{animationDelay:'.1s'}}/>
+                  fill="none" stroke={line2C} strokeLinecap="round" strokeLinejoin="round" className={active?"line-pulse draw":"draw"} style={{animationDelay:'.15s'}}/>
                 {/* Flow dots -- both pipes */}
                 {active&&Array.from({length:6},(_,i)=>{
                   const isLine1=i<3;
@@ -1401,50 +1401,85 @@ function Canvas({a}){
             })()}
           </g>}
 
-          {/* Dehu — hangs from roofline */}
+          {/* Dehu -- anchored left of flue pipe, clear of it */}
           {hasDehu&&<g className="snap" key="dehu" style={{animationDelay:'.3s'}}>
             {(()=>{
-              const DW=hasFurnace?FURN_W:AH_W;
-              const DH=Math.round(UNIT_H*0.5);
-              const DX=hasFurnace?FURN_X:AH_X;
+              const sysX=hasFurnace?FURN_X:AH_X;
+              const sysW=hasFurnace?FURN_W:AH_W;
+              const DW=Math.round(sysW*0.82);
+              const DH=Math.round(UNIT_H*0.52);
+              // Anchor left of center -- flue exits right side of HX, so dehu goes left
+              const DX=sysX+Math.round(sysW*0.06);
               const DY=UNIT_Y-DH-18;
               const rod1X=DX+DW*0.25, rod2X=DX+DW*0.75;
               const roofY=EAVE_Y+14;
               return <>
-                <line x1={rod1X} y1={roofY} x2={rod1X} y2={DY} stroke="#22c55e" strokeWidth="1.2" strokeDasharray="4 2" opacity="0.6"/>
-                <line x1={rod2X} y1={roofY} x2={rod2X} y2={DY} stroke="#22c55e" strokeWidth="1.2" strokeDasharray="4 2" opacity="0.6"/>
-                <rect x={rod1X-4} y={roofY-4} width="8" height="5" rx="1" fill="rgba(34,197,94,.3)" stroke="#22c55e" strokeWidth="0.8"/>
-                <rect x={rod2X-4} y={roofY-4} width="8" height="5" rx="1" fill="rgba(34,197,94,.3)" stroke="#22c55e" strokeWidth="0.8"/>
-                <rect x={DX} y={DY} width={DW} height={DH} rx="4" fill="#05120a" stroke="#22c55e" strokeWidth="1.5"/>
-                <rect x={DX} y={DY} width={DW} height={8} rx="4" fill="rgba(34,197,94,.3)" stroke="none"/>
+                <line x1={rod1X} y1={roofY} x2={rod1X} y2={DY}
+                  stroke="#22c55e" strokeWidth="1.2" strokeDasharray="4 2" opacity="0.6"/>
+                <line x1={rod2X} y1={roofY} x2={rod2X} y2={DY}
+                  stroke="#22c55e" strokeWidth="1.2" strokeDasharray="4 2" opacity="0.6"/>
+                <rect x={rod1X-4} y={roofY-4} width="8" height="5" rx="1"
+                  fill="rgba(34,197,94,.3)" stroke="#22c55e" strokeWidth="0.8"/>
+                <rect x={rod2X-4} y={roofY-4} width="8" height="5" rx="1"
+                  fill="rgba(34,197,94,.3)" stroke="#22c55e" strokeWidth="0.8"/>
+                <rect x={DX} y={DY} width={DW} height={DH} rx="4"
+                  fill="#05120a" stroke="#22c55e" strokeWidth="1.5"/>
+                <rect x={DX} y={DY} width={DW} height={8} rx="4"
+                  fill="rgba(34,197,94,.3)" stroke="none"/>
                 <text x={DX+DW/2} y={DY+DH/2-4} textAnchor="middle" fill="#22c55e" fontSize="9">💧</text>
-                <text x={DX+DW/2} y={DY+DH/2+10} textAnchor="middle" fill="#22c55e" fontSize="7" fontFamily="monospace">DEHUMIDIFIER</text>
-                <text x={DX+DW/2} y={DY+DH/2+21} textAnchor="middle" fill="rgba(34,197,94,.5)" fontSize="5.5" fontFamily="monospace">HANGING MOUNT</text>
+                <text x={DX+DW/2} y={DY+DH/2+10} textAnchor="middle"
+                  fill="#22c55e" fontSize="7" fontFamily="monospace">DEHUMIDIFIER</text>
               </>;
             })()}
           </g>}
 
-          {/* ERV */}
+          {/* ERV -- blue IN + orange OUT pipes through roof */}
           {Array.isArray(a.extras)&&a.extras.includes('erv')&&<g className="snap" key="erv" style={{animationDelay:'.32s'}}>
             {(()=>{
               const DW=hasFurnace?FURN_W:AH_W;
               const DH=Math.round(UNIT_H*0.5);
               const baseX=hasFurnace?FURN_X:AH_X;
-              const DX=hasDehu?baseX-DW-10:baseX;
+              const DX=hasDehu?baseX-DW-14:baseX;
               const DY=UNIT_Y-DH-18;
-              const rod1X=DX+DW*0.28, rod2X=DX+DW*0.72;
+              const pipe1X=DX+Math.round(DW*0.28);
+              const pipe2X=DX+Math.round(DW*0.68);
               const roofY=EAVE_Y+14;
+              const pipeTop=4;
               return <>
-                <line x1={rod1X} y1={roofY} x2={rod1X} y2={DY} stroke={G+'.45)'} strokeWidth="1.2" strokeDasharray="4 2" opacity="0.6"/>
-                <line x1={rod2X} y1={roofY} x2={rod2X} y2={DY} stroke={G+'.45)'} strokeWidth="1.2" strokeDasharray="4 2" opacity="0.6"/>
-                <rect x={rod1X-4} y={roofY-4} width="8" height="5" rx="1" fill={G+'.2)'} stroke={G+'.45)'} strokeWidth="0.8"/>
-                <rect x={rod2X-4} y={roofY-4} width="8" height="5" rx="1" fill={G+'.2)'} stroke={G+'.45)'} strokeWidth="0.8"/>
-                <rect x={DX} y={DY} width={DW} height={DH} rx="4" fill="#0a0a06" stroke={G+'.55)'} strokeWidth="1.5"/>
-                <rect x={DX} y={DY} width={DW} height={8} rx="4" fill={G+'.25)'} stroke="none"/>
-                <path d={`M${DX+DW*0.18} ${DY+DH*0.44} L${DX+DW*0.46} ${DY+DH*0.44}`} fill="none" stroke={B+'.6)'} strokeWidth="2" markerEnd="url(#arr)"/>
-                <path d={`M${DX+DW*0.82} ${DY+DH*0.6} L${DX+DW*0.54} ${DY+DH*0.6}`} fill="none" stroke="rgba(249,115,22,.6)" strokeWidth="2" markerEnd="url(#arr)"/>
-                <text x={DX+DW/2} y={DY+DH*0.33} textAnchor="middle" fill={G+'.7)'} fontSize="9" fontFamily="monospace">ERV</text>
-                <text x={DX+DW/2} y={DY+DH*0.78} textAnchor="middle" fill={G+'.45)'} fontSize="5.5" fontFamily="monospace">ENERGY RECOVERY</text>
+                {/* Blue IN pipe -- fresh air in, from outside through roof */}
+                <rect x={pipe1X-3} y={pipeTop} width={6} height={DY-pipeTop} rx="1"
+                  fill={B+'.3)'} stroke={B+'.55)'} strokeWidth="0.9"/>
+                <rect x={pipe1X-6} y={pipeTop} width={12} height={5} rx="1"
+                  fill={B+'.35)'} stroke={B+'.6)'} strokeWidth="0.8"/>
+                <text x={pipe1X} y={pipeTop-2} textAnchor="middle"
+                  fill={B+'.65)'} fontSize="6" fontFamily="monospace">IN</text>
+                {/* Orange OUT pipe -- stale air exhaust through roof */}
+                <rect x={pipe2X-3} y={pipeTop} width={6} height={DY-pipeTop} rx="1"
+                  fill="rgba(249,115,22,.3)" stroke="rgba(249,115,22,.55)" strokeWidth="0.9"/>
+                <path d={'M'+(pipe2X-5)+' '+(pipeTop+2)+' L'+pipe2X+' '+(pipeTop-5)+' L'+(pipe2X+5)+' '+(pipeTop+2)}
+                  fill="rgba(249,115,22,.45)"/>
+                <text x={pipe2X} y={pipeTop-2} textAnchor="middle"
+                  fill="rgba(249,115,22,.65)" fontSize="6" fontFamily="monospace">OUT</text>
+                {/* Hanging mount rods */}
+                <line x1={DX+DW*0.28} y1={roofY} x2={DX+DW*0.28} y2={DY}
+                  stroke={G+'.35)'} strokeWidth="1" strokeDasharray="4 2" opacity="0.5"/>
+                <line x1={DX+DW*0.72} y1={roofY} x2={DX+DW*0.72} y2={DY}
+                  stroke={G+'.35)'} strokeWidth="1" strokeDasharray="4 2" opacity="0.5"/>
+                {/* ERV box */}
+                <rect x={DX} y={DY} width={DW} height={DH} rx="4"
+                  fill="#0a0a06" stroke={G+'.55)'} strokeWidth="1.5"/>
+                <rect x={DX} y={DY} width={DW} height={8} rx="4"
+                  fill={G+'.25)'} stroke="none"/>
+                {/* Blue IN arrow (left to center) */}
+                <path d={'M'+(DX+DW*0.12)+' '+(DY+DH*0.44)+' L'+(DX+DW*0.46)+' '+(DY+DH*0.44)}
+                  fill="none" stroke={B+'.65)'} strokeWidth="2.5" markerEnd="url(#arr)"/>
+                {/* Orange OUT arrow (right to center) */}
+                <path d={'M'+(DX+DW*0.88)+' '+(DY+DH*0.64)+' L'+(DX+DW*0.54)+' '+(DY+DH*0.64)}
+                  fill="none" stroke="rgba(249,115,22,.65)" strokeWidth="2.5" markerEnd="url(#arr)"/>
+                <text x={DX+DW/2} y={DY+DH*0.3} textAnchor="middle"
+                  fill={G+'.8)'} fontSize="10" fontFamily="monospace" fontWeight="700">ERV</text>
+                <text x={DX+DW/2} y={DY+DH*0.82} textAnchor="middle"
+                  fill={G+'.4)'} fontSize="5.5" fontFamily="monospace">ENERGY RECOVERY</text>
               </>;
             })()}
           </g>}
@@ -1857,12 +1892,10 @@ function Canvas({a}){
               fill="none" stroke="rgba(22,22,42,.55)" strokeWidth="10" strokeLinecap="round"/>
             {/* Liquid line */}
             <path d={`M${UNIT_X+UNIT_W} ${LS_Y1} L${EXT_WALL_X} ${LS_Y1}`}
-              fill="none" stroke={line1C} strokeWidth="4" opacity="0.9"
-              strokeLinecap="round" className="draw"/>
+              fill="none" stroke={line1C} strokeLinecap="round" className={evapActive?"line-pulse draw":"draw"}/>
             {/* Suction line */}
             <path d={`M${UNIT_X+UNIT_W} ${LS_Y2} L${EXT_WALL_X} ${LS_Y2}`}
-              fill="none" stroke={line2C} strokeWidth="4" opacity="0.9"
-              strokeLinecap="round" className="draw" style={{animationDelay:'.1s'}}/>
+              fill="none" stroke={line2C} strokeLinecap="round" className={evapActive?"line-pulse draw":"draw"} style={{animationDelay:'.15s'}}/>
             {/* Flow dots -- both pipes */}
             {Array.from({length:6},(_,i)=>{
               const isLine1=i<3;
