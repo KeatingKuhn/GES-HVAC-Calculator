@@ -28,18 +28,18 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .hdr-total{font-family:var(--fm);font-size:17px;color:var(--gl);letter-spacing:.04em;transition:all .3s}
 
 /* PROGRESS */
-.prog{height:4px;background:rgba(215,183,64,.12)}
+.prog{height:2px;background:rgba(215,183,64,.08)}
 .prog-fill{height:100%;background:var(--gh);transition:width .55s cubic-bezier(.4,0,.2,1)}
 
 /* LAYOUT */
-.main{display:grid;grid-template-columns:1fr 300px;height:calc(100vh - 45px);overflow:hidden}
-@media(max-width:900px){.main{grid-template-columns:1fr;grid-template-rows:55vw 1fr;height:auto;overflow:visible}}
+.main{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 45px)}
+@media(max-width:860px){.main{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
 
 /* CANVAS */
-.canvas-wrap{position:relative;background:var(--bk);display:flex;align-items:stretch;justify-content:stretch;overflow:hidden}
+.canvas-wrap{position:relative;background:var(--bk);display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;min-height:440px}
 .canvas-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(215,183,64,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(215,183,64,.03) 1px,transparent 1px);background-size:36px 36px;pointer-events:none}
 .canvas-tag{position:absolute;top:12px;left:16px;font-family:var(--fm);font-size:9px;color:rgba(215,183,64,.3);letter-spacing:.15em;text-transform:uppercase}
-.canvas-svg{width:100%;height:100%;display:block}
+.canvas-svg{width:100%;max-width:620px}
 
 /* ANIMATIONS */
 .snap{animation:snap .45s cubic-bezier(.34,1.46,.64,1) both}
@@ -56,22 +56,18 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 @keyframes gpulse{0%,100%{opacity:.5}50%{opacity:1}}
 
 /* SIDEBAR */
-.sidebar{background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;height:100%;min-height:0}
-@media(max-width:900px){.sidebar{border-left:none;border-top:1px solid var(--border);height:auto;overflow-y:auto;max-height:none}}
+.sidebar{background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;max-height:calc(100vh - 45px)}
+@media(max-width:860px){.sidebar{border-left:none;border-top:1px solid var(--border);max-height:none}}
 
 /* STEP HEADER */
 .step-hdr{padding:16px 18px 12px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel);z-index:10}
 .step-eyebrow{font-family:var(--fm);font-size:8.5px;color:var(--gm);letter-spacing:.2em;text-transform:uppercase;margin-bottom:3px;display:flex;align-items:center;gap:8px}
-.info-btn{background:none;border:1px solid rgba(215,183,64,.28);color:rgba(215,183,64,.65);width:20px;height:20px;border-radius:50%;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;outline:none;line-height:1;transition:background .15s,border-color .15s}
-.info-btn:hover{background:rgba(215,183,64,.1);border-color:rgba(215,183,64,.5)}
-.info-expand{background:rgba(215,183,64,.05);border-bottom:1px solid rgba(215,183,64,.12);animation:fadein .18s ease both}
-.info-body{padding:10px 16px;font-size:11.5px;color:rgba(255,255,255,.48);line-height:1.65}
 .step-eyebrow::after{content:'';flex:1;height:1px;background:rgba(215,183,64,.15)}
 .step-q{font-family:var(--ft);font-size:15.5px;font-weight:600;color:var(--wh);line-height:1.3;margin-bottom:3px}
 .step-hint{font-size:11px;color:var(--mut);line-height:1.5}
 
 /* OPTIONS */
-.opts{padding:12px 14px;display:flex;flex-direction:column;gap:7px;flex:1;overflow-y:auto;min-height:0}
+.opts{padding:12px 14px;display:flex;flex-direction:column;gap:7px;flex:1}
 .opt{background:var(--surf);border:1px solid var(--border);cursor:pointer;text-align:left;outline:none;-webkit-appearance:none;transition:border-color .15s,background .15s;position:relative;overflow:hidden}
 .opt:hover{border-color:rgba(215,183,64,.35);background:#1a1a1a}
 .opt.sel{border-color:var(--gl);background:rgba(240,214,78,.05)}
@@ -89,11 +85,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .opt-badge{display:inline-block;background:var(--gh);color:var(--bk);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:1px 6px;margin-left:6px;vertical-align:middle}
 .opt-badge-blue{background:linear-gradient(90deg,#1a6cb5,#2389e0);color:#fff}
 .opt-note{font-size:10px;color:rgba(240,214,78,.45);margin-top:2px;display:block;font-style:italic}
-.opt-check{width:17px;height:17px;border:1.5px solid rgba(215,183,64,.45);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;margin-top:2px;transition:all .15s;border-radius:0}
-.opt-check.radio{border-radius:50%}
+.opt-check{width:17px;height:17px;border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;margin-top:2px;transition:all .15s}
 .opt.sel .opt-check{border-color:var(--gl);background:var(--gm);color:var(--bk)}
-.opt-check.radio.sel-radio{border-color:var(--gl);background:transparent}
-.opt-check.radio.sel-radio::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--gh);display:block}
 
 /* INFO CARD */
 .info-card{margin:0 14px 10px;padding:10px 12px;background:rgba(215,183,64,.05);border:1px solid rgba(215,183,64,.15);font-size:11px;color:rgba(255,255,255,.45);line-height:1.55}
@@ -114,8 +107,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 /* NAV */
 .nav-row{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--panel);position:sticky;bottom:0}
-.btn-back{flex:0 0 auto;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.55);padding:10px 18px;font-family:var(--fb);font-size:12px;cursor:pointer;transition:all .2s;outline:none;border-radius:0;display:flex;align-items:center;gap:6px}
-.btn-back:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3);color:#fff}
+.btn-back{flex:0 0 auto;background:transparent;border:1px solid var(--border);color:var(--mut);padding:9px 16px;font-family:var(--fb);font-size:12px;cursor:pointer;transition:border-color .2s,color .2s;outline:none}
+.btn-back:hover{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.55)}
 .btn-next{flex:1;background:var(--gh);border:none;color:var(--bk);padding:10px 16px;font-family:var(--ft);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:opacity .2s,transform .12s;outline:none}
 .btn-next:hover:not(:disabled){opacity:.85;transform:translateY(-1px)}
 .btn-next:disabled{opacity:.22;cursor:not-allowed;transform:none}
@@ -131,18 +124,45 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .done-note{font-size:10px;color:rgba(255,255,255,.25);margin-bottom:22px}
 .done-cta{display:block;width:100%;background:var(--gh);border:none;color:var(--bk);padding:13px;font-family:var(--ft);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.04em;margin-bottom:8px;text-decoration:none;text-align:center}
 .done-restart{background:transparent;border:none;color:rgba(255,255,255,.2);font-family:var(--fb);font-size:11px;cursor:pointer;text-decoration:underline;outline:none}
-@media print{
-  .sidebar{width:100%!important;max-width:420px;margin:0 auto}
-  .canvas-wrap,.hdr-step,.btn-back,.btn-next,.btn-skip,.done-restart,[class*="btn-"]{display:none!important}
-  .main{display:block!important}
-  body{background:#fff!important;color:#000!important}
-  .done-wrap{padding:20px!important;color:#000!important}
-  .done-title{color:#000!important}
-}
-.toggle-hint{animation:glow-pulse 2.5s ease-in-out 3;animation-fill-mode:both;animation-delay:1.2s}
-.line-pulse{animation:linepulse 1.6s ease-in-out infinite;stroke-width:4.5}
-@keyframes linepulse{0%,100%{opacity:0.6}50%{opacity:1}}
-@keyframes toggle-glow{0%,100%{box-shadow:0 0 0 0 rgba(215,183,64,0)}50%{box-shadow:0 0 12px 3px rgba(215,183,64,.35)}}
+
+/* ── ADAPTIVE LAYOUT ── */
+.app-root{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bk)}
+.splash-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;z-index:20;background:var(--bk);transition:opacity .5s,transform .5s}
+.splash-screen.out{opacity:0;pointer-events:none;transform:scale(.97)}
+.splash-logo{font-family:var(--ft);font-size:64px;font-weight:700;background:var(--gh);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.04em;text-align:center}
+.splash-sub{font-family:var(--fm);font-size:13px;color:rgba(215,183,64,.5);letter-spacing:.22em;margin-top:-8px}
+.splash-cards{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.splash-card{width:360px;padding:28px 32px;background:rgba(215,183,64,.04);border:1px solid rgba(215,183,64,.15);cursor:pointer;transition:all .18s;display:flex;flex-direction:row;align-items:center;gap:18px}
+.splash-card:hover{background:rgba(215,183,64,.09);border-color:rgba(215,183,64,.4);transform:translateY(-2px)}
+.splash-card-icon{font-size:40px;line-height:1}
+.splash-card-title{font-family:var(--ft);font-size:22px;font-weight:700;color:var(--wh);white-space:nowrap}
+.splash-card-desc{font-family:var(--fb);font-size:13px;color:var(--mut);text-align:left;line-height:1.6}
+/* Attic: canvas fills all, step bar on bottom */
+.attic-layout{position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .35s,transform .35s}
+.attic-layout.out{opacity:0;pointer-events:none;transform:translateY(8px)}
+.attic-canvas-area{flex:1;min-height:0;position:relative;overflow:hidden}
+.attic-bar{height:210px;flex-shrink:0;background:var(--panel);border-top:1px solid var(--border);display:flex;flex-direction:column}
+.attic-bar-top{height:28px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:10px}
+.attic-bar-body{flex:1;display:flex;min-height:0;overflow:hidden}
+.attic-info{width:230px;flex-shrink:0;border-right:1px solid var(--border);padding:10px 14px;display:flex;flex-direction:column;gap:5px;overflow:hidden}
+.attic-scroll{flex:1;overflow-x:auto;overflow-y:hidden;display:flex;align-items:stretch;gap:5px;padding:5px 8px;scrollbar-width:none}
+.attic-scroll::-webkit-scrollbar{display:none}
+.attic-opt{flex-shrink:0;width:168px;background:var(--surf);border:1px solid var(--border);cursor:pointer;padding:10px 12px;text-align:left;display:flex;flex-direction:column;gap:2px;transition:all .14s;outline:none;-webkit-appearance:none;position:relative;overflow:hidden}
+.attic-opt:hover{border-color:rgba(215,183,64,.3);background:#1a1a1a}
+.attic-opt.sel{border-color:var(--gl);background:rgba(240,214,78,.05)}
+.attic-opt.sel::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gh)}
+.attic-opt-label{font-family:var(--ft);font-size:14px;font-weight:600;color:var(--wh);line-height:1.3}
+.attic-opt.sel .attic-opt-label{color:var(--gl)}
+.attic-opt-desc{font-size:11.5px;color:var(--dim);line-height:1.45;flex:1}
+.attic-opt-foot{display:flex;align-items:center;justify-content:flex-end;margin-top:2px}
+.attic-chk{width:15px;height:15px;border:1.5px solid rgba(215,183,64,.35);display:flex;align-items:center;justify-content:center;font-size:8px;color:transparent}
+.attic-opt.sel .attic-chk{border-color:var(--gl);background:var(--gm);color:var(--bk)}
+.attic-chk.radio{border-radius:50%}
+.attic-next-col{width:110px;flex-shrink:0;border-left:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:0 10px}
+/* Closet: canvas left, sidebar right (unchanged) */
+.closet-layout{position:absolute;inset:0;display:flex;flex-direction:row;transition:opacity .35s,transform .35s}
+.closet-layout.out{opacity:0;pointer-events:none;transform:translateX(8px)}
+.closet-canvas-area{flex:1;min-width:0;position:relative;overflow:hidden}
 </style>
 </head>
 <body>
@@ -190,7 +210,7 @@ function getOpts(stepId, answers){
   switch(stepId){
     case 'location':return[
       {v:'attic', label:'Attic',          desc:'Horizontal install — most common in Austin'},
-      {v:'closet',label:'Interior closet',desc:'Upflow unit — hallway or utility closet'},
+      {v:'closet',label:'Closet',desc:'Upflow unit — hallway or utility closet'},
     ];
     case 'indoor_type':return[
       {v:'furnace',label:'Furnace',     desc:'Gas heat + AC — most popular in Austin. I have a gas line.'},
@@ -983,96 +1003,101 @@ function Canvas({a, stepIdx, activeSteps}){
   }
 
 
-  function SystemInfoPanel({px,py,pw,ph,tierKey,heatMode,active,isHP,is90}){
+  function SystemInfoPanel({px,py,pw,ph,tierKey,heatMode,active,is90}){
     if(ph<80) return null;
-    const G2='rgba(215,183,64,';
-    const W2='rgba(255,255,255,';
-    const B2='rgba(35,137,224,';
-    const seer=tierKey==='fedmin'?'14':tierKey==='mid_ge15'?'18':'21';
-    const brand=tierKey==='mid_ge15'||tierKey==='high_ge18'?'GE CONNECT™':'AMERISTAR™';
-    const isHigh=tierKey==='high_ge18';
-    const isMid=tierKey==='mid_ge15';
-    const savings=isMid?'~$28/mo':isHigh?'~$52/mo':null;
-    const rebate=isHigh?'$300–800':null;
-    const afue=is90?'90% AFUE':'80% AFUE';
-    // Weather
-    const season=heatMode?'WINTER':'SUMMER';
-    const condition=heatMode?'28°F':'96°F';
-    const tColor=heatMode?'rgba(147,197,253,.85)':'rgba(253,186,116,.85)';
-    const tBg=heatMode?'rgba(30,58,138,.18)':'rgba(124,45,18,.18)';
-    const tBorder=heatMode?'rgba(147,197,253,.2)':'rgba(253,186,116,.2)';
-    const row=(n)=>py+18+n*16;
-    const iX=px+12, iY=row(0)+2, iR=7;
+    var G2='rgba(215,183,64,'; var W2='rgba(255,255,255,'; var B2='rgba(35,137,224,';
+    var seer=tierKey==='high_ge18'?'21':tierKey==='mid_ge15'?'18':'14';
+    var brand=tierKey==='mid_ge15'||tierKey==='high_ge18'?'GE CONNECT™':'AMERISTAR™';
+    var isHigh=tierKey==='high_ge18'; var isMid=tierKey==='mid_ge15';
+    var savings=isMid?'~$28/mo':isHigh?'~$52/mo':null;
+    var rebate=isHigh?'$300-800':null;
+    var afue=is90?'90% AFUE':'80% AFUE';
+    var season=heatMode?'WINTER':'SUMMER';
+    var condition=heatMode?'28°F':'96°F';
+    var tColor=heatMode?'rgba(147,197,253,.85)':'rgba(253,186,116,.85)';
+    var tBg=heatMode?'rgba(30,58,138,.18)':'rgba(124,45,18,.18)';
+    var tBorder=heatMode?'rgba(147,197,253,.2)':'rgba(253,186,116,.2)';
+    var effColor=isHigh?'#5ba8f5':isMid?(G2+'.9)'):(W2+'.55)');
+    var iX=px+14; var iY=py+38; var iR=7;
+    // Pre-compute icon coords
+    var p0x=iX; var p0y=iY-iR;
+    var p1x=iX; var p1y=iY+iR;
+    var p2x=iX-iR; var p2y=iY;
+    var p3x=iX+iR; var p3y=iY;
+    var d=iR*0.7;
+    var p4x=iX-d; var p4y=iY-d;
+    var p5x=iX+d; var p5y=iY-d;
+    var p6x=iX+d; var p6y=iY+d;
+    var p7x=iX-d; var p7y=iY+d;
+    var r2=iR*0.52;
+    var si=iR*0.55;
+    var sc0x=iX+si; var sc0y=iY;
+    var sc1x=iX; var sc1y=iY+si;
+    var sc2x=iX-si; var sc2y=iY;
+    var sc3x=iX; var sc3y=iY-si;
+    var rc=iR*0.65;
+    var row=function(n){return py+18+n*16;};
     return <g>
-      {/* Panel bg */}
       <rect x={px} y={py} width={pw} height={ph} rx="4"
         fill="rgba(8,10,20,.75)" stroke={G2+'.12)'} strokeWidth="0.8"/>
       <rect x={px} y={py} width={pw} height={12} rx="4" fill={G2+'.07)'} stroke="none"/>
       <text x={px+pw/2} y={py+9} textAnchor="middle"
         fill={G2+'.5)'} fontSize="6" fontFamily="monospace" letterSpacing=".12em">SYSTEM DATA</text>
-
-      {/* Weather block */}
-      <rect x={px+4} y={row(0)-8} width={pw-8} height={32} rx="3" fill={tBg} stroke={tBorder} strokeWidth="0.8"/>
-      {/* Season icon */}
+      <rect x={px+4} y={py+14} width={pw-8} height={34} rx="3" fill={tBg} stroke={tBorder} strokeWidth="0.8"/>
       {heatMode
         ?<>
-          <line x1={iX} y1={iY-iR} x2={iX} y2={iY+iR} stroke={tColor} strokeWidth="1.2"/>
-          <line x1={iX-iR} y1={iY} x2={iX+iR} y2={iY} stroke={tColor} strokeWidth="1.2"/>
-          <line x1={iX-iR*.7} y1={iY-iR*.7} x2={iX+iR*.7} y2={iY+iR*.7} stroke={tColor} strokeWidth="1.2"/>
-          <line x1={iX+iR*.7} y1={iY-iR*.7} x2={iX-iR*.7} y2={iY+iR*.7} stroke={tColor} strokeWidth="1.2"/>
-          <circle cx={iX+iR*.55*Math.cos(0)} cy={iY+iR*.55*Math.sin(0)} r="1.2" fill={tColor}/>
-          <circle cx={iX+iR*.55*Math.cos(Math.PI/2)} cy={iY+iR*.55*Math.sin(Math.PI/2)} r="1.2" fill={tColor}/>
-          <circle cx={iX+iR*.55*Math.cos(Math.PI)} cy={iY+iR*.55*Math.sin(Math.PI)} r="1.2" fill={tColor}/>
-          <circle cx={iX+iR*.55*Math.cos(3*Math.PI/2)} cy={iY+iR*.55*Math.sin(3*Math.PI/2)} r="1.2" fill={tColor}/>
+          <line x1={p0x} y1={p0y} x2={p1x} y2={p1y} stroke={tColor} strokeWidth="1.2"/>
+          <line x1={p2x} y1={p2y} x2={p3x} y2={p3y} stroke={tColor} strokeWidth="1.2"/>
+          <line x1={p4x} y1={p4y} x2={p6x} y2={p6y} stroke={tColor} strokeWidth="1.2"/>
+          <line x1={p5x} y1={p5y} x2={p7x} y2={p7y} stroke={tColor} strokeWidth="1.2"/>
+          <circle cx={sc0x} cy={sc0y} r="1.2" fill={tColor}/>
+          <circle cx={sc1x} cy={sc1y} r="1.2" fill={tColor}/>
+          <circle cx={sc2x} cy={sc2y} r="1.2" fill={tColor}/>
+          <circle cx={sc3x} cy={sc3y} r="1.2" fill={tColor}/>
         </>
         :<>
-          <circle cx={iX} cy={iY} r={iR*.52} fill={tColor} opacity=".9"/>
-          <line x1={iX} y1={iY-iR} x2={iX} y2={iY-iR*.65} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
-          <line x1={iX} y1={iY+iR*.65} x2={iX} y2={iY+iR} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
-          <line x1={iX-iR} y1={iY} x2={iX-iR*.65} y2={iY} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
-          <line x1={iX+iR*.65} y1={iY} x2={iX+iR} y2={iY} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
-          <line x1={iX-iR*.46} y1={iY-iR*.46} x2={iX-iR*.7} y2={iY-iR*.7} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
-          <line x1={iX+iR*.46} y1={iY-iR*.46} x2={iX+iR*.7} y2={iY-iR*.7} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
-          <line x1={iX+iR*.46} y1={iY+iR*.46} x2={iX+iR*.7} y2={iY+iR*.7} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
-          <line x1={iX-iR*.46} y1={iY+iR*.46} x2={iX-iR*.7} y2={iY+iR*.7} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
+          <circle cx={iX} cy={iY} r={r2} fill={tColor} opacity=".9"/>
+          <line x1={iX} y1={iY-rc} x2={p0x} y2={p0y} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
+          <line x1={iX} y1={iY+rc} x2={p1x} y2={p1y} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
+          <line x1={iX-rc} y1={iY} x2={p2x} y2={p2y} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
+          <line x1={iX+rc} y1={iY} x2={p3x} y2={p3y} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
+          <line x1={iX-rc*0.7} y1={iY-rc*0.7} x2={p4x} y2={p4y} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
+          <line x1={iX+rc*0.7} y1={iY-rc*0.7} x2={p5x} y2={p5y} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
+          <line x1={iX+rc*0.7} y1={iY+rc*0.7} x2={p6x} y2={p6y} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
+          <line x1={iX-rc*0.7} y1={iY+rc*0.7} x2={p7x} y2={p7y} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>
         </>
       }
-      <text x={px+24} y={row(0)} fill={tColor} fontSize="11" fontFamily="monospace" fontWeight="700">{condition}</text>
-      <text x={px+24} y={row(0)+9} fill={tColor} opacity=".7" fontSize="5.5" fontFamily="monospace">{season}</text>
-      <text x={px+pw-6} y={row(0)+9} textAnchor="end" fill={tColor} opacity=".4" fontSize="5" fontFamily="monospace">AUSTIN TX</text>
-
-      {/* Spec rows */}
-      <line x1={px+4} y1={row(0)+24} x2={px+pw-4} y2={row(0)+24} stroke={G2+'.07)'} strokeWidth="0.5"/>
-
-      <text x={px+6} y={row(2)} fill={G2+'.4)'} fontSize="5.5" fontFamily="monospace">EFFICIENCY</text>
-      <text x={px+pw-6} y={row(2)} textAnchor="end" fill={isHigh?'#5ba8f5':isMid?(G2+'.9)'):W2+'.55)'} fontSize="6.5" fontFamily="monospace" fontWeight="700">{seer} SEER2</text>
-      <line x1={px+4} y1={row(2)+4} x2={px+pw-4} y2={row(2)+4} stroke={G2+'.07)'} strokeWidth="0.5"/>
-
-      {is90!==undefined&&<>
-        <text x={px+6} y={row(3)} fill={G2+'.4)'} fontSize="5.5" fontFamily="monospace">FURNACE</text>
-        <text x={px+pw-6} y={row(3)} textAnchor="end" fill={W2+'.55)'} fontSize="6" fontFamily="monospace">{afue}</text>
-        <line x1={px+4} y1={row(3)+4} x2={px+pw-4} y2={row(3)+4} stroke={G2+'.07)'} strokeWidth="0.5"/>
+      <text x={px+28} y={py+34} fill={tColor} fontSize="12" fontFamily="monospace" fontWeight="700">{condition}</text>
+      <text x={px+28} y={py+44} fill={tColor} opacity=".7" fontSize="5.5" fontFamily="monospace">{season}</text>
+      <text x={px+pw-6} y={py+44} textAnchor="end" fill={tColor} opacity=".4" fontSize="5" fontFamily="monospace">AUSTIN TX</text>
+      <line x1={px+4} y1={py+50} x2={px+pw-4} y2={py+50} stroke={G2+'.08)'} strokeWidth="0.5"/>
+      <text x={px+6} y={row(3)} fill={G2+'.4)'} fontSize="5.5" fontFamily="monospace">EFFICIENCY</text>
+      <text x={px+pw-6} y={row(3)} textAnchor="end" fill={effColor} fontSize="6" fontFamily="monospace" fontWeight="700">{seer} SEER2</text>
+      <line x1={px+4} y1={row(3)+4} x2={px+pw-4} y2={row(3)+4} stroke={G2+'.08)'} strokeWidth="0.5"/>
+      {is90!==null&&<>
+        <text x={px+6} y={row(4)} fill={G2+'.4)'} fontSize="5.5" fontFamily="monospace">FURNACE</text>
+        <text x={px+pw-6} y={row(4)} textAnchor="end" fill={W2+'.55)'} fontSize="5.5" fontFamily="monospace">{afue}</text>
+        <line x1={px+4} y1={row(4)+4} x2={px+pw-4} y2={row(4)+4} stroke={G2+'.08)'} strokeWidth="0.5"/>
       </>}
-
       {savings&&<>
-        <text x={px+6} y={row(4)} fill={G2+'.4)'} fontSize="5.5" fontFamily="monospace">VS FED. MIN</text>
-        <text x={px+pw-6} y={row(4)} textAnchor="end" fill="rgba(34,197,94,.85)" fontSize="6" fontFamily="monospace">{savings}</text>
-        <line x1={px+4} y1={row(4)+4} x2={px+pw-4} y2={row(4)+4} stroke={G2+'.07)'} strokeWidth="0.5"/>
+        <text x={px+6} y={row(5)} fill={G2+'.4)'} fontSize="5.5" fontFamily="monospace">VS FED. MIN</text>
+        <text x={px+pw-6} y={row(5)} textAnchor="end" fill="rgba(34,197,94,.85)" fontSize="5.5" fontFamily="monospace">{savings}</text>
+        <line x1={px+4} y1={row(5)+4} x2={px+pw-4} y2={row(5)+4} stroke={G2+'.08)'} strokeWidth="0.5"/>
       </>}
-
       {rebate&&<>
-        <rect x={px+4} y={row(5)-9} width={pw-8} height={16} rx="2" fill="rgba(35,137,224,.1)" stroke={B2+'.25)'} strokeWidth="0.7"/>
-        <text x={px+pw/2} y={row(5)-1} textAnchor="middle" fill={B2+'.7)'} fontSize="5.5" fontFamily="monospace" letterSpacing=".05em">AE REBATE {rebate}</text>
+        <rect x={px+4} y={row(6)-9} width={pw-8} height={16} rx="2" fill="rgba(35,137,224,.1)" stroke={B2+'.25)'} strokeWidth="0.7"/>
+        <text x={px+pw/2} y={row(6)+3} textAnchor="middle" fill={B2+'.7)'} fontSize="5.5" fontFamily="monospace">AE REBATE {rebate}</text>
       </>}
-
-      {/* Status */}
-      <circle cx={px+9} cy={py+ph-8} r={3} fill={active?"rgba(34,197,94,.6)":"rgba(50,50,80,.5)"} stroke={active?"#22c55e":(G2+'.15)')} strokeWidth="0.7"/>
+      <circle cx={px+9} cy={py+ph-8} r={3}
+        fill={active?"rgba(34,197,94,.6)":"rgba(50,50,80,.5)"}
+        stroke={active?"#22c55e":(G2+'.15)')} strokeWidth="0.7"/>
       {active&&<circle cx={px+9} cy={py+ph-8} r={1.5} fill="#22c55e" className="glow-pulse"/>}
       <text x={px+16} y={py+ph-4} fill={active?"rgba(34,197,94,.65)":(G2+'.3)')} fontSize="5.5" fontFamily="monospace">
-        {active?(heatMode?"HEATING":"COOLING"):"STANDBY"}
+        {active?season:"STANDBY"}
       </text>
     </g>;
   }
+
 
   // Condensate pump — small box below evap coil
   function CondensatePump({x,y,w}){
@@ -1103,11 +1128,24 @@ function Canvas({a, stepIdx, activeSteps}){
   const ToggleUI=({style})=>(
     <div style={{display:'flex',background:'#0c0c0c',border:'1px solid rgba(215,183,64,.22)',overflow:'hidden',...style}}>
       <button onClick={()=>setHeatMode(false)} style={{
-        padding:'5px 13px',border:'none',cursor:'pointer',fontFamily:'monospace',fontSize:'9px',letterSpacing:'.1em',
-        background:!heatMode?'rgba(35,137,224,.18)':'transparent',color:!heatMode?'#5ba8f5':'rgba(255,255,255,.26)',outline:'none',transition:'all .2s'}}>❄ COOL</button>
+        padding:'8px 18px',border:'none',cursor:'pointer',fontFamily:'monospace',fontSize:'11px',letterSpacing:'.08em',
+        background:!heatMode?'rgba(35,137,224,.18)':'transparent',
+        color:!heatMode?'#5ba8f5':'rgba(255,255,255,.26)',outline:'none',transition:'all .2s',
+        display:'flex',alignItems:'center',gap:6}}>
+        <span>❄</span>
+        <span>COOL MODE</span>
+        <span style={{fontSize:'13px',fontWeight:700,opacity:!heatMode?1:0.3}}>96°</span>
+      </button>
+      <div style={{width:'1px',background:'rgba(215,183,64,.22)'}}/>
       <button onClick={()=>setHeatMode(true)} style={{
-        padding:'5px 13px',border:'none',cursor:'pointer',fontFamily:'monospace',fontSize:'9px',letterSpacing:'.1em',
-        background:heatMode?'rgba(249,115,22,.18)':'transparent',color:heatMode?'#f97316':'rgba(255,255,255,.26)',outline:'none',transition:'all .2s'}}>🔥 HEAT</button>
+        padding:'8px 18px',border:'none',cursor:'pointer',fontFamily:'monospace',fontSize:'11px',letterSpacing:'.08em',
+        background:heatMode?'rgba(249,115,22,.18)':'transparent',
+        color:heatMode?'#f97316':'rgba(255,255,255,.26)',outline:'none',transition:'all .2s',
+        display:'flex',alignItems:'center',gap:6}}>
+        <span>🔥</span>
+        <span>HEAT MODE</span>
+        <span style={{fontSize:'13px',fontWeight:700,opacity:heatMode?1:0.3}}>28°</span>
+      </button>
     </div>
   );
 
@@ -1118,7 +1156,7 @@ function Canvas({a, stepIdx, activeSteps}){
   // Condenser: true side-wall view, lineset exits wall at condenser bottom.
   // ══════════════════════════════════════════════════════════
   if(isAttic){
-    const VW=960, VH=580;
+    const VW=1280, VH=580;
 
     // 2/3 house when condenser selected, full width otherwise
     const HOUSE_W=hasCond ? Math.round(VW*(2/3)) : VW-12;
@@ -1661,19 +1699,6 @@ function Canvas({a, stepIdx, activeSteps}){
           {/* LIVE SYSTEM PREVIEW label */}
           {loc&&<text x={12} y={EAVE_Y-4} fill={G+'.22)'} fontSize="7" fontFamily="monospace" letterSpacing=".18em">LIVE SYSTEM PREVIEW</text>}
 
-          {/* Info panel — right of unit in closet space */}
-          {hasTstat&&hasCond&&(()=>{
-            const panelX=UNIT_X+UNIT_W+42;
-            const panelW=HOUSE_W-panelX-8;
-            const panelY=ACOIL_Y;
-            const panelH=VH-ACOIL_Y-16;
-            if(panelW<80) return null;
-            return <SystemInfoPanel
-              px={panelX} py={panelY} pw={panelW} ph={panelH}
-              tierKey={a.cond_tier||'fedmin'} heatMode={heatMode} active={condenserActive}
-              isHP={!hasFurnace} is90={is90}/>;
-          })()}
-
           {/* Empty state */}
           {!loc&&<g>
             <text x={HOUSE_W/2} y={VH/2-10} textAnchor="middle" fill={G+'.12)'} fontSize="11" fontFamily="monospace">Choose your location to begin building</text>
@@ -2115,10 +2140,10 @@ function Canvas({a, stepIdx, activeSteps}){
             })}
           </g>}
 
-          {/* Info panel — right of thermostat in living space */}
-          {hasTstat&&hasCond&&<SystemInfoPanel
-            px={130} py={DECK_Y+8} pw={Math.min(220, HOUSE_W-140)}
-            ph={VH-DECK_Y-16}
+          {/* Info panel — above condenser in outside zone */}
+          {hasCond&&<SystemInfoPanel
+            px={COND_X} py={12} pw={VW-COND_X-8}
+            ph={COND_Y-22}
             tierKey={a.cond_tier||'fedmin'} heatMode={heatMode} active={condenserActive}
             isHP={!hasFurnace} is90={is90}/>}
 
@@ -2285,125 +2310,182 @@ function App(){
   };
   const infoText=cur&&INFO_TEXT[cur.id];
 
-  return(
-    <div ref={topRef}>
-      <header className="hdr">
-        <a href="https://GoldEagleServices.com" target="_blank" rel="noopener" style={{textDecoration:"none"}}><div className="hdr-logo">GOLD EAGLE SERVICES™</div></a>
-        <div className="hdr-step">{done?'COMPLETE':`${stepIdx+1} / ${activeSteps.length}`}</div>
-        <div style={{fontFamily:'var(--fm)',fontSize:'9px',color:'rgba(215,183,64,.4)',letterSpacing:'.15em'}}>BUILD YOUR SYSTEM</div>
-      </header>
-      <div className="prog"><div className="prog-fill" style={{width:done?'100%':`${pct}%`}}/></div>
 
-      <div className="main">
-        <div className="canvas-wrap">
-          <div className="canvas-grid"/>
-          <div className="canvas-tag">Live System Preview</div>
-          <Canvas a={answers} stepIdx={stepIdx} activeSteps={activeSteps}/>
+  const loc = answers.location;
+  const isAtticMode = loc === 'attic';
+  const isClosetMode = loc === 'closet';
+
+  // Render option button (attic small or sidebar full)
+  const makeOpt = (opt, isSmall) => {
+    if(!cur) return null;
+    const isMulti = cur.multi;
+    const isOn = isMulti ? msel(cur.id).includes(opt.v) : sel(cur.id) === opt.v;
+    const isDisabled = !!opt.disabled;
+    const click = isDisabled ? null : isMulti ? ()=>toggle(cur.id,opt.v) : ()=>setA(cur.id,opt.v);
+    if(isSmall){
+      return <button key={opt.v} className={"attic-opt"+(isOn?" sel":"")+(isDisabled?" disabled":"")} onClick={click}>
+        <span className="attic-opt-label">{opt.label}</span>
+        <span className="attic-opt-desc">{opt.desc||""}</span>
+        <div className="attic-opt-foot">
+          <div className={"attic-chk"+(isMulti?"":" radio")}>{isMulti&&isOn?"checkmark":""}{!isMulti&&isOn?<div style={{width:7,height:7,borderRadius:"50%",background:"var(--gh)"}}/>:""}</div>
         </div>
-
-        <div className="sidebar">
-          {!done?(
-            <>
-              <div className="step-hdr">
-                <div className="step-eyebrow">
-                  <span>Step {stepIdx+1} of {activeSteps.length}</span>
-                  {infoText&&<button className="info-btn" onClick={()=>setShowInfo(v=>!v)} title="Learn more">{showInfo?'x':'i'}</button>}
-                </div>
-                <div className="step-q">{cur.q}</div>
-                {cur.hint&&<div className="step-hint">{cur.hint}</div>}
-              </div>
-              {showInfo&&infoText&&<div className="info-expand"><div className="info-body">{infoText}</div></div>}
-
-              <div className="opts">
-                {opts.map(opt=>{
-                  const isMulti=cur?.multi;
-                  const isOn=isMulti?msel(cur.id).includes(opt.v):sel(cur?.id)===opt.v;
-                  const isDisabled=!!opt.disabled;
-                  const click=isDisabled?null:isMulti?()=>toggle(cur.id,opt.v):()=>setA(cur.id,opt.v);
-                  return(
-                    <button key={opt.v} className={`opt${isOn?' sel':''}${isDisabled?' disabled':''}`} onClick={click}>
-                      <div className="opt-inner">
-                        <div className="opt-body">
-                          <span className="opt-label">
-                            {opt.label}
-                            {opt.badge&&<span className="opt-badge">★ GES</span>}
-                            {opt.recommended&&<span className="opt-badge" style={{marginLeft:6}}>Recommended</span>}
-                          </span>
-                          {opt.desc&&<span className="opt-desc">{opt.desc}</span>}
-                          {opt.note&&<span className="opt-note">{opt.note}</span>}
-                          {opt.disabledNote&&<span className="opt-note" style={{color:'rgba(249,115,22,.6)'}}>{opt.disabledNote}</span>}
-                        </div>
-                        <div className={isMulti?"opt-check":"opt-check radio"} style={isOn&&!isMulti?{borderColor:'var(--gl)',background:'transparent',display:'flex',alignItems:'center',justifyContent:'center'}:{}}>
-                          {isMulti?isOn?'✓':'':isOn?<div style={{width:8,height:8,borderRadius:'50%',background:'var(--gh)'}}/>:''}</div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="nav-row">
-                {stepIdx>0&&<button className="btn-back" onClick={goBack}><span style={{fontSize:'15px',lineHeight:1}}>‹</span> Back</button>}
-                {(cur?.optional||cur?.multi)&&<button className="btn-skip" onClick={skip}>Skip</button>}
-                <button className="btn-next" onClick={goNext} disabled={!canNext}>
-                  {stepIdx===activeSteps.length-1?'See Full Build →':'Next →'}
-                </button>
-              </div>
-            </>
-          ):(
-            <div className="done-wrap" style={{justifyContent:'flex-start',padding:'14px 14px 8px',overflowY:'auto'}}>
-              <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10,width:'100%'}}>
-                <div className="done-icon" style={{margin:0,width:36,height:36,fontSize:16,flexShrink:0}}>✓</div>
-                <div>
-                  <div className="done-title" style={{fontSize:15,marginBottom:1}}>Your System is Built</div>
-                  <div style={{fontSize:10,color:'var(--mut)'}}>Review and edit selections below</div>
-                </div>
-              </div>
-
-              {/* Itemized editable list */}
-              <div style={{width:'100%',marginBottom:10}}>
-                {[
-                  {step:'location', label:'Location', val:answers.location==='attic'?'Attic horizontal':answers.location==='closet'?'Upflow closet':null},
-                  {step:'indoor_type', label:'Indoor unit', val:answers.indoor_type==='furnace'?'Gas furnace':answers.indoor_type==='ah'?'Air handler':null},
-                  answers.furnace_eff?{step:'insulation', label:'Insulation', val:answers.furnace_eff==='e90'?'Spray foam (90% AFUE)':'Fiberglass (80% AFUE)'}:null,
-                  {step:'plenum', label:'Plenum', val:answers.plenum==='ductboard'?'New ductboard':answers.plenum==='metal'?'New sheet metal':answers.plenum==='none'?'Keep existing':null},
-                  {step:'thermostat', label:'Thermostat', val:answers.thermostat==='wifi'?'Wi-Fi smart':answers.thermostat==='basic'?'Basic programmable':null},
-                  Array.isArray(answers.purif)&&answers.purif.length>0?{step:'purif', label:'Purification', val:answers.purif.map(v=>v==='aprilaire'?'Aprilaire 5"':v==='uv'?'UV Light':v==='ionizer'?'Ionizer':v).join(', ')}:null,
-                  {step:'cond_tier', label:'Efficiency', val:answers.cond_tier==='fedmin'?'Federal min (14 SEER2)':answers.cond_tier==='mid_ge15'?'Mid efficiency (18 SEER2)':answers.cond_tier==='high_ge18'?'High efficiency (21 SEER2)':null},
-                  answers.system_for?{step:'system_for', label:'Heat source', val:answers.system_for==='hp'?'Dual Fuel (HP + furnace)':'Straight cool'}:null,
-                  {step:'dehu', label:'Dehumidifier', val:answers.dehu==='yes'?'Yes — included':answers.dehu==='no'?'No':''},
-                  Array.isArray(answers.extras)&&answers.extras.length>0?{step:'extras', label:'Add-ons', val:answers.extras.map(v=>v==='surge'?'Surge protector':v==='condensate'?'Condensate pump':v==='erv'?'ERV':v).join(', ')}:null,
-                ].filter(Boolean).map((item,i)=>item&&item.val?(
-                  <div key={i} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'5px 8px',borderBottom:'1px solid rgba(255,255,255,.06)',background:i%2===0?'rgba(255,255,255,.02)':'transparent'}}>
-                    <span style={{color:'rgba(215,183,64,.55)',fontFamily:'monospace',fontSize:'9.5px',letterSpacing:'.05em',flexShrink:0}}>{item.label}</span>
-                    <div style={{display:'flex',alignItems:'center',gap:6,minWidth:0}}>
-                      <span style={{color:'rgba(255,255,255,.75)',fontFamily:'monospace',fontSize:'9.5px',textAlign:'right',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:'110px'}}>{item.val}</span>
-                      <button onClick={()=>{
-                        const stepI=activeSteps.findIndex(s=>s.id===item.step);
-                        if(stepI>=0){setDone(false);setStepIdx(stepI);}
-                      }} style={{background:'rgba(215,183,64,.12)',border:'1px solid rgba(215,183,64,.25)',color:'rgba(215,183,64,.7)',fontFamily:'monospace',fontSize:'8px',padding:'2px 6px',cursor:'pointer',flexShrink:0,letterSpacing:'.05em'}}>EDIT</button>
-                    </div>
-                  </div>
-                ):null)}
-              </div>
-
-              {/* CTA */}
-              <a href="tel:5124894653" className="done-cta" style={{marginBottom:8}}>📞 Schedule Your Free Visit — 512-489-4653</a>
-              <a href="https://wisetack.us/apply/goldEagleServices" target="_blank" rel="noopener" style={{display:'block',width:'100%',background:'rgba(99,102,241,.12)',border:'1px solid rgba(99,102,241,.4)',color:'rgba(180,180,255,.85)',fontFamily:'monospace',fontSize:'10px',padding:'8px',cursor:'pointer',letterSpacing:'.06em',marginBottom:8,textDecoration:'none',textAlign:'center',boxSizing:'border-box'}}>💳 FINANCING AVAILABLE — CHECK YOUR RATE</a>
-              <div style={{background:"rgba(215,183,64,.06)",border:"1px solid rgba(215,183,64,.18)",padding:"8px 12px",fontSize:"11px",color:"rgba(215,183,64,.7)",lineHeight:"1.55",borderRadius:"2px",marginBottom:10,textAlign:"left",width:"100%"}}>Ask about current manufacturer discounts — can save you hundreds.</div>
-
-              {/* Save / Print */}
-              <button onClick={()=>window.print()} style={{width:'100%',background:'rgba(255,255,255,.05)',border:'1px solid rgba(255,255,255,.12)',color:'rgba(255,255,255,.55)',fontFamily:'monospace',fontSize:'10px',padding:'8px',cursor:'pointer',letterSpacing:'.08em',marginBottom:6}}>⬇ SAVE / PRINT BUILD SUMMARY</button>
-              <button className="done-restart" onClick={restart}>Start over</button>
-            </div>
-          )}
+      </button>;
+    }
+    return <button key={opt.v} className={"opt"+(isOn?" sel":"")+(isDisabled?" disabled":"")} onClick={click}>
+      <div className="opt-inner">
+        <div className="opt-body">
+          <span className="opt-label">{opt.label}{opt.badge&&<span className="opt-badge">GES</span>}</span>
+          {opt.desc&&<span className="opt-desc">{opt.desc}</span>}
+        </div>
+        <div className={isMulti?"opt-check":"opt-check radio"} style={isOn&&!isMulti?{borderColor:"var(--gl)",background:"transparent",display:"flex",alignItems:"center",justifyContent:"center"}:{}}>
+          {isMulti&&isOn?"checkmark":""}{!isMulti&&isOn?<div style={{width:8,height:8,borderRadius:"50%",background:"var(--gh)"}}/>:""}
         </div>
       </div>
+    </button>;
+  };
+
+    return(
+    <div ref={topRef} className="app-root">
+      {/* ── PROGRESS BAR ── */}
+      <div className="prog" style={{position:"absolute",top:0,left:0,right:0,zIndex:30}}><div className="prog-fill" style={{width:done?"100%":`${pct}%`}}/></div>
+
+      {/* ── SPLASH — step 1 location picker ── */}
+      <div className={"splash-screen"+(loc||done?" out":"")}>
+        <div className="splash-logo">GOLD EAGLE SERVICES</div>
+        <div className="splash-sub">AUSTIN TX  |  512-489-4653  |  GOLDeagleservices.COM</div>
+        <p style={{fontFamily:"var(--fb)",fontSize:"17px",color:"rgba(255,255,255,.65)",textAlign:"center",maxWidth:560,lineHeight:1.7,margin:"8px 0 4px"}}>
+          Tell us where your indoor unit lives and we will build a <strong style={{color:"rgba(255,255,255,.8)"}}>live, real-time diagram</strong> of your complete HVAC system — every component, every connection, sized and labeled.
+        </p>
+        <p style={{fontFamily:"var(--fm)",fontSize:"13px",color:"rgba(215,183,64,.55)",textAlign:"center",letterSpacing:".1em",margin:"0 0 6px"}}>SELECT YOUR SYSTEM LOCATION TO BEGIN</p>
+        <div className="splash-cards">
+          <div className="splash-card" onClick={()=>{setA("location","attic");setStepIdx(1);}}>
+            <div style={{fontSize:36,lineHeight:1,flexShrink:0}}>A</div>
+            <div style={{display:"flex",flexDirection:"column",gap:4}}>
+              <div className="splash-card-title">Attic Horizontal</div>
+              <div className="splash-card-desc">Unit lays on its side above the ceiling — most common in Austin. Air flows horizontally through ducts in the attic.</div>
+            </div>
+          </div>
+          <div className="splash-card" onClick={()=>{setA("location","closet");setStepIdx(1);}}>
+            <div style={{fontSize:36,lineHeight:1,flexShrink:0}}>C</div>
+            <div style={{display:"flex",flexDirection:"column",gap:4}}>
+              <div className="splash-card-title">Closet Upflow</div>
+              <div className="splash-card-desc">Unit stands upright in a utility closet or hallway alcove. Air flows vertically up through the coil.</div>
+            </div>
+          </div>
+        </div>
+        <p style={{fontFamily:"var(--fb)",fontSize:"13px",color:"rgba(255,255,255,.28)",textAlign:"center",maxWidth:440,lineHeight:1.6,marginTop:8}}>
+          Takes about 2 minutes. No personal info required. Your build saves automatically as you go.
+        </p>
+      </div>
+
+      {/* ── ATTIC LAYOUT — canvas full width, step bar on bottom ── */}
+      <div className={"attic-layout"+(!isAtticMode||done?" out":"")}>
+        <div className="attic-canvas-area">
+          <Canvas a={answers} stepIdx={stepIdx} activeSteps={activeSteps}/>
+        </div>
+        <div className="attic-bar">
+          <div className="attic-bar-top">
+            <span style={{fontFamily:"var(--fm)",fontSize:"10px",color:"rgba(215,183,64,.45)",letterSpacing:".14em",flex:1}}>
+              {cur ? "STEP "+stepIdx+" OF "+(activeSteps.length-1)+" · "+cur.q.toUpperCase() : ""}
+            </span>
+            {infoText&&<button className="info-btn" style={{width:16,height:16,fontSize:"9px"}} onClick={()=>setShowInfo(v=>!v)}>{showInfo?"x":"i"}</button>}
+            {cur&&(cur.optional||cur.multi)&&<button className="btn-skip" style={{fontSize:"9px"}} onClick={skip}>Skip</button>}
+          </div>
+          {showInfo&&infoText&&<div style={{padding:"4px 12px",fontSize:"9.5px",color:"rgba(255,255,255,.38)",borderBottom:"1px solid var(--border)",lineHeight:1.5,flexShrink:0}}>{infoText}</div>}
+          <div className="attic-bar-body">
+            <div className="attic-info">
+              <div style={{fontFamily:"var(--ft)",fontSize:"16px",fontWeight:600,color:"var(--wh)",lineHeight:1.35}}>{cur?cur.q:""}</div>
+              {cur&&cur.hint&&<div style={{fontSize:"12px",color:"var(--mut)",lineHeight:1.5,marginTop:4}}>{cur.hint}</div>}
+              {stepIdx>0&&<button className="btn-back" style={{marginTop:"auto",padding:"5px 10px",fontSize:"10px"}} onClick={goBack}>back Back</button>}
+            </div>
+            <div className="attic-scroll">
+              {opts.map(opt=>makeOpt(opt,true))}
+            </div>
+            <div className="attic-next-col">
+              <button className="btn-next" style={{width:"100%",fontSize:"13px",padding:"11px 6px"}} onClick={goNext} disabled={!canNext}>
+                {stepIdx===activeSteps.length-1?"Finish":"Next"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── CLOSET LAYOUT — canvas left, sidebar right ── */}
+      <div className={"closet-layout"+(!isClosetMode||done?" out":"")}>
+        <div className="closet-canvas-area">
+          <Canvas a={answers} stepIdx={stepIdx} activeSteps={activeSteps}/>
+        </div>
+        <div className="sidebar">
+          <div className="step-hdr">
+            <div className="step-eyebrow">
+              <span>Step {stepIdx} of {activeSteps.length-1}</span>
+              {infoText&&<button className="info-btn" onClick={()=>setShowInfo(v=>!v)}>{showInfo?"x":"i"}</button>}
+            </div>
+            <div className="step-q">{cur?cur.q:""}</div>
+            {cur&&cur.hint&&<div className="step-hint">{cur.hint}</div>}
+          </div>
+          {showInfo&&infoText&&<div className="info-expand"><div className="info-body">{infoText}</div></div>}
+          <div className="opts">{opts.map(opt=>makeOpt(opt,false))}</div>
+          <div className="nav-row">
+            {stepIdx>0&&<button className="btn-back" onClick={goBack}>back Back</button>}
+            {cur&&(cur.optional||cur.multi)&&<button className="btn-skip" onClick={skip}>Skip</button>}
+            <button className="btn-next" onClick={goNext} disabled={!canNext}>
+              {stepIdx===activeSteps.length-1?"See Full Build":"Next"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── DONE SCREEN ── */}
+      {done&&<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"row",overflow:"hidden",zIndex:10}}>
+        <div style={{flex:1,minWidth:0,position:"relative",overflow:"hidden"}}>
+          <Canvas a={answers} stepIdx={stepIdx} activeSteps={activeSteps}/>
+        </div>
+        <div className="sidebar" style={{overflowY:"auto"}}>
+          <div className="done-wrap" style={{justifyContent:"flex-start",padding:"14px 14px 8px",overflowY:"auto"}}>
+            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10,width:"100%"}}>
+              <div className="done-icon" style={{margin:0,width:36,height:36,fontSize:16,flexShrink:0}}>done</div>
+              <div>
+                <div className="done-title" style={{fontSize:15,marginBottom:1}}>Your System is Built</div>
+                <div style={{fontSize:10,color:"var(--mut)"}}>Review and edit below</div>
+              </div>
+            </div>
+            <div style={{width:"100%",marginBottom:10}}>
+              {[
+                {step:"location",label:"Location",val:answers.location==="attic"?"Attic horizontal":answers.location==="closet"?"Upflow closet":null},
+                {step:"indoor_type",label:"Indoor unit",val:answers.indoor_type==="furnace"?"Gas furnace":answers.indoor_type==="ah"?"Air handler":null},
+                answers.furnace_eff?{step:"insulation",label:"Insulation",val:answers.furnace_eff==="e90"?"Spray foam (90%)":"Fiberglass (80%)"}:null,
+                {step:"plenum",label:"Plenum",val:answers.plenum==="ductboard"?"New ductboard":answers.plenum==="metal"?"New sheet metal":answers.plenum==="none"?"Keep existing":null},
+                {step:"thermostat",label:"Thermostat",val:answers.thermostat==="wifi"?"Wi-Fi smart":answers.thermostat==="basic"?"Basic programmable":null},
+                Array.isArray(answers.purif)&&answers.purif.length>0?{step:"purif",label:"Purification",val:answers.purif.join(", ")}:null,
+                {step:"cond_tier",label:"Efficiency",val:answers.cond_tier==="fedmin"?"14 SEER2":answers.cond_tier==="mid_ge15"?"18 SEER2":answers.cond_tier==="high_ge18"?"21 SEER2":null},
+                answers.system_for?{step:"system_for",label:"Heat source",val:answers.system_for==="hp"?"Dual Fuel":"Straight cool"}:null,
+                {step:"dehu",label:"Dehumidifier",val:answers.dehu==="yes"?"Yes":"No"},
+                Array.isArray(answers.extras)&&answers.extras.length>0?{step:"extras",label:"Add-ons",val:answers.extras.join(", ")}:null,
+              ].filter(Boolean).map((item,i)=>item&&item.val?(
+                <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"5px 8px",borderBottom:"1px solid rgba(255,255,255,.06)",background:i%2===0?"rgba(255,255,255,.02)":"transparent"}}>
+                  <span style={{color:"rgba(215,183,64,.55)",fontFamily:"monospace",fontSize:"9px",flexShrink:0}}>{item.label}</span>
+                  <div style={{display:"flex",alignItems:"center",gap:6}}>
+                    <span style={{color:"rgba(255,255,255,.75)",fontFamily:"monospace",fontSize:"9px",maxWidth:"110px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{item.val}</span>
+                    <button onClick={()=>{const i2=activeSteps.findIndex(s=>s.id===item.step);if(i2>=0){setDone(false);setStepIdx(i2);}}} style={{background:"rgba(215,183,64,.12)",border:"1px solid rgba(215,183,64,.25)",color:"rgba(215,183,64,.7)",fontFamily:"monospace",fontSize:"8px",padding:"2px 6px",cursor:"pointer"}}>EDIT</button>
+                  </div>
+                </div>
+              ):null)}
+            </div>
+            <a href="tel:5124894653" className="done-cta" style={{marginBottom:8}}>Schedule Your Free Visit 512-489-4653</a>
+            <a href="https://wisetack.us/apply/goldEagleServices" target="_blank" rel="noopener" style={{display:"block",width:"100%",background:"rgba(99,102,241,.12)",border:"1px solid rgba(99,102,241,.4)",color:"rgba(180,180,255,.85)",fontFamily:"monospace",fontSize:"10px",padding:"8px",cursor:"pointer",marginBottom:8,textDecoration:"none",textAlign:"center",boxSizing:"border-box"}}>FINANCING AVAILABLE - CHECK YOUR RATE</a>
+            <div style={{background:"rgba(215,183,64,.06)",border:"1px solid rgba(215,183,64,.18)",padding:"8px 12px",fontSize:"11px",color:"rgba(215,183,64,.7)",lineHeight:"1.55",marginBottom:10}}>Ask about current manufacturer discounts.</div>
+            <button onClick={()=>window.print()} style={{width:"100%",background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.12)",color:"rgba(255,255,255,.55)",fontFamily:"monospace",fontSize:"10px",padding:"8px",cursor:"pointer",marginBottom:6}}>SAVE / PRINT BUILD SUMMARY</button>
+            <button className="done-restart" onClick={restart}>Start over</button>
+          </div>
+        </div>
+      </div>}
     </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
