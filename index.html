@@ -301,8 +301,8 @@ function Canvas({a, stepIdx, activeSteps}){
   // Refrigerant colors — physically correct
   const evapC  = refReversed ? '#ef4444' : '#2389e0'; // evap: red=HP heat, blue=cool
   const evapC2 = refReversed ? '#fca5a5' : '#7dd3fc';
-  const condC  = (!heatMode||hasFurnace) ? '#ef4444' : '#2389e0';
-  const condC2 = (!heatMode||hasFurnace) ? '#fca5a5' : '#7dd3fc';
+  const condC  = (heatMode&&(!hasFurnace||(isDualFuel&&heatSubMode==='hp'))) ? '#2389e0' : '#ef4444';
+  const condC2 = (heatMode&&(!hasFurnace||(isDualFuel&&heatSubMode==='hp'))) ? '#7dd3fc' : '#fca5a5';
   const line1C = refReversed ? '#2389e0' : '#ef4444';
   const line2C = refReversed ? '#ef4444' : '#2389e0';
 
@@ -996,7 +996,7 @@ function Canvas({a, stepIdx, activeSteps}){
         active={active} tierKey={tierKey}/>
       <text x={condX+condW/2} y={condY-9} textAnchor="middle"
         fill={active?condC:(G+'.3)')} fontSize="8" fontFamily="monospace">
-        {active?(heatMode?"CONDENSER · ABSORBING HEAT":"CONDENSER · REJECTING HEAT"):"CONDENSER · STANDBY"}
+        {active?"CONDENSER · ACTIVE":"CONDENSER · STANDBY"}
       </text>
 
       {/* OUTSIDE label */}
@@ -2008,7 +2008,7 @@ function Canvas({a, stepIdx, activeSteps}){
                     <ACoilV x={UNIT_X+8} y={ACOIL_Y+ACOIL_H*0.52+8} w={UNIT_W-16} h={ACOIL_H*0.46-16} active={active}/>
                   </>
                 }
-                {hasCond&&<>
+                {hasCond&&!hasFurnace&&<>
                   <path d={`M${UNIT_X+UNIT_W} ${ACOIL_Y+ACOIL_H*0.84} L${UNIT_X+UNIT_W+28} ${ACOIL_Y+ACOIL_H*0.84}`}
                     fill="none" stroke={active?evapC:'rgba(32,32,52,.5)'} strokeWidth="2.8" strokeLinecap="round" className="draw"/>
                   <path d={`M${UNIT_X+UNIT_W} ${ACOIL_Y+ACOIL_H*0.91} L${UNIT_X+UNIT_W+28} ${ACOIL_Y+ACOIL_H*0.91}`}
@@ -2109,7 +2109,7 @@ function Canvas({a, stepIdx, activeSteps}){
               </>;
             })()}
             {isComm&&<><rect x={UNIT_X+4} y={FURN_Y+11} width={62} height="8" rx="2" fill="url(#blue)"/><text x={UNIT_X+7} y={FURN_Y+18} fill="#fff" fontSize="6.5" fontFamily="monospace">COMMUNICATING</text></>}
-            <text x={UNIT_X+UNIT_W/2} y={FURN_Y+FURN_H+12} textAnchor="middle"
+            <text x={UNIT_X+UNIT_W/2} y={FURN_Y-6} textAnchor="middle"
               fill={furnaceActive?'rgba(249,115,22,.62)':(G+'.36)')} fontSize="7" fontFamily="monospace">FURNACE</text>
           </g>}
 
