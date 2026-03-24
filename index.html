@@ -114,8 +114,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 /* NAV */
 .nav-row{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--panel);position:sticky;bottom:0}
-.btn-back{flex:0 0 auto;background:transparent;border:1px solid var(--border);color:var(--mut);padding:9px 16px;font-family:var(--fb);font-size:12px;cursor:pointer;transition:border-color .2s,color .2s;outline:none}
-.btn-back:hover{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.55)}
+.btn-back{flex:0 0 auto;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.55);padding:10px 18px;font-family:var(--fb);font-size:12px;cursor:pointer;transition:all .2s;outline:none;border-radius:0;display:flex;align-items:center;gap:6px}
+.btn-back:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3);color:#fff}
 .btn-next{flex:1;background:var(--gh);border:none;color:var(--bk);padding:10px 16px;font-family:var(--ft);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:opacity .2s,transform .12s;outline:none}
 .btn-next:hover:not(:disabled){opacity:.85;transform:translateY(-1px)}
 .btn-next:disabled{opacity:.22;cursor:not-allowed;transform:none}
@@ -914,7 +914,7 @@ function Canvas({a, stepIdx, activeSteps}){
       {/* ── DISCONNECT BOX — prominent, on outside wall face ── */}
       {(()=>{
         const DX=sidingX+wallThick+4;
-        const DY=Math.round(groundY*0.28); // upper portion of wall, stays fixed
+        const DY=Math.round(groundY*0.62)-34; // slightly lower than center
         const DW=44, DH=68;
         return <>
           {/* Box body */}
@@ -1082,7 +1082,7 @@ function Canvas({a, stepIdx, activeSteps}){
     };
     const CS=COND_SIZES[a.cond_tier]||COND_SIZES.fedmin;
     // Scale condenser up to fill ~70% of the outside zone width
-    const ZONE_COND_W=OUTSIDE_W>0?Math.round(OUTSIDE_W*0.72):1;
+    const ZONE_COND_W=OUTSIDE_W>0?Math.round(OUTSIDE_W*0.62):1;
     const COND_SCALE=ZONE_COND_W/(CS.w||1);
     const COND_W=Math.max(1,Math.round(CS.w*COND_SCALE));
     const COND_H=Math.max(1,Math.round(CS.h*COND_SCALE));
@@ -1303,24 +1303,24 @@ function Canvas({a, stepIdx, activeSteps}){
                 {/* Ionizer -- enters from bottom of plenum */}
                 {hasIonizer&&(()=>{
                   // Ionizer: bulb at bottom of coil housing, rod goes UP into airstream
-                  const coilX=hasFurnace?ACOIL_X:AH_X;
-                  const coilW=hasFurnace?ACOIL_W:AH_W;
-                  const bulbX=coilX+Math.round(coilW*0.45);
-                  const bulbY=UNIT_Y+UNIT_H+14; // just below coil bottom
-                  const rodLen=Math.round(UNIT_H*0.55); // rod goes up into airstream
+                  // Ionizer: bulb below supply plenum left-third, rod goes UP into plenum
+                  const ionX=SUP_X+Math.round(SUP_PLEN_W*0.28); // first 1/3 of plenum
+                  const plenBot=SUP_PLEN_Y+SUP_PLEN_H;
+                  const ionBulbY=plenBot+14;
+                  const ionRodLen=Math.round(SUP_PLEN_H*0.55);
                   return <g className="fadein">
-                    <circle cx={bulbX} cy={bulbY} r={12} fill="rgba(253,224,71,.07)" stroke="rgba(253,224,71,.18)" strokeWidth="0.5" filter="url(#glow-uv)"/>
-                    <ellipse cx={bulbX} cy={bulbY} rx={8} ry={10} fill="rgba(251,191,36,.18)" stroke="rgba(253,224,71,.75)" strokeWidth="1.4"/>
-                    <ellipse cx={bulbX} cy={bulbY} rx={5} ry={6.5} fill="rgba(253,224,71,.32)" stroke="none" className="glow-pulse"/>
-                    <line x1={bulbX-2} y1={bulbY-4} x2={bulbX+2} y2={bulbY+4} stroke="rgba(253,224,71,.9)" strokeWidth="1.2" strokeLinecap="round"/>
-                    <line x1={bulbX+2} y1={bulbY-4} x2={bulbX-2} y2={bulbY+4} stroke="rgba(253,224,71,.9)" strokeWidth="1.2" strokeLinecap="round"/>
-                    {/* Entry collar at coil bottom */}
-                    <rect x={bulbX-6} y={UNIT_Y+UNIT_H-2} width={12} height={8} rx="2" fill="rgba(180,130,20,.45)" stroke="rgba(253,224,71,.5)" strokeWidth="0.8"/>
-                    {/* Rod goes UP into coil */}
-                    <line x1={bulbX} y1={UNIT_Y+UNIT_H} x2={bulbX} y2={UNIT_Y+UNIT_H-rodLen} stroke="rgba(253,224,71,.22)" strokeWidth={6} strokeLinecap="round" filter="url(#glow-uv)"/>
-                    <line x1={bulbX} y1={UNIT_Y+UNIT_H} x2={bulbX} y2={UNIT_Y+UNIT_H-rodLen} stroke="rgba(253,224,71,.8)" strokeWidth={2} strokeLinecap="round"/>
-                    <circle cx={bulbX} cy={UNIT_Y+UNIT_H-rodLen} r={2.5} fill="rgba(253,224,71,.9)" className="glow-pulse"/>
-                    <text x={bulbX+14} y={bulbY+4} textAnchor="start" fill="rgba(253,224,71,.45)" fontSize="5" fontFamily="monospace">IONIZER</text>
+                    <circle cx={ionX} cy={ionBulbY} r={12} fill="rgba(253,224,71,.07)" stroke="rgba(253,224,71,.18)" strokeWidth="0.5" filter="url(#glow-uv)"/>
+                    <ellipse cx={ionX} cy={ionBulbY} rx={8} ry={10} fill="rgba(251,191,36,.18)" stroke="rgba(253,224,71,.75)" strokeWidth="1.4"/>
+                    <ellipse cx={ionX} cy={ionBulbY} rx={5} ry={6.5} fill="rgba(253,224,71,.32)" stroke="none" className="glow-pulse"/>
+                    <line x1={ionX-2} y1={ionBulbY-4} x2={ionX+2} y2={ionBulbY+4} stroke="rgba(253,224,71,.9)" strokeWidth="1.2" strokeLinecap="round"/>
+                    <line x1={ionX+2} y1={ionBulbY-4} x2={ionX-2} y2={ionBulbY+4} stroke="rgba(253,224,71,.9)" strokeWidth="1.2" strokeLinecap="round"/>
+                    {/* Entry collar at plenum bottom */}
+                    <rect x={ionX-6} y={plenBot-2} width={12} height={8} rx="2" fill="rgba(180,130,20,.45)" stroke="rgba(253,224,71,.5)" strokeWidth="0.8"/>
+                    {/* Rod goes UP into plenum */}
+                    <line x1={ionX} y1={plenBot} x2={ionX} y2={plenBot-ionRodLen} stroke="rgba(253,224,71,.22)" strokeWidth={6} strokeLinecap="round" filter="url(#glow-uv)"/>
+                    <line x1={ionX} y1={plenBot} x2={ionX} y2={plenBot-ionRodLen} stroke="rgba(253,224,71,.8)" strokeWidth={2} strokeLinecap="round"/>
+                    <circle cx={ionX} cy={plenBot-ionRodLen} r={2.5} fill="rgba(253,224,71,.9)" className="glow-pulse"/>
+                    <text x={ionX+14} y={ionBulbY+4} textAnchor="start" fill="rgba(253,224,71,.45)" fontSize="5" fontFamily="monospace">IONIZER</text>
                   </g>;
                 })()}
               </>;
@@ -1338,24 +1338,22 @@ function Canvas({a, stepIdx, activeSteps}){
               // Two rectangular duct runs: one left, one right
               // Each: vertical rise from plenum top, then 90° elbow, then horizontal run with boot cap
               const leftRunX=SUP_X-60;
-              const rightRunX=SUP_X+SUP_PLEN_W+60;
+              const rightRunX=Math.min(SUP_X+SUP_PLEN_W+60, HOUSE_W-20);
               const riseH=40; // how far up before turning
               const elbowR=DW;
+              const pBot=SUP_PLEN_Y+SUP_PLEN_H; // bottom of plenum
               return <>
-                {/* LEFT duct run */}
-                {/* Vertical rise */}
+                {/* TOP LEFT duct run — exits top of plenum */}
                 <rect x={pCX-DW*1.8-DW/2} y={pTop-riseH} width={DW} height={riseH} rx="0"
                   fill={DC} stroke={DS} strokeWidth="1"/>
-                {/* Elbow (90° turn) */}
                 <rect x={leftRunX} y={pTop-riseH-DW} width={pCX-DW*1.8-leftRunX+DW} height={DW} rx="0"
                   fill={DC} stroke={DS} strokeWidth="1"/>
-                {/* Boot cap at end */}
                 <rect x={leftRunX-4} y={pTop-riseH-DW-4} width={DW+8} height={DW+8} rx="2"
                   fill="#0a0a0a" stroke={DC} strokeWidth="1.2"/>
                 <text x={leftRunX+DW/2} y={pTop-riseH-DW-10} textAnchor="middle"
                   fill={G+'.38)'} fontSize="5" fontFamily="monospace">SUPPLY</text>
 
-                {/* RIGHT duct run */}
+                {/* TOP RIGHT duct run — exits top of plenum */}
                 <rect x={pCX+DW*0.8} y={pTop-riseH} width={DW} height={riseH} rx="0"
                   fill={DC} stroke={DS} strokeWidth="1"/>
                 <rect x={pCX+DW*0.8} y={pTop-riseH-DW} width={rightRunX-pCX-DW*0.8} height={DW} rx="0"
@@ -1363,6 +1361,26 @@ function Canvas({a, stepIdx, activeSteps}){
                 <rect x={rightRunX-4} y={pTop-riseH-DW-4} width={DW+8} height={DW+8} rx="2"
                   fill="#0a0a0a" stroke={DC} strokeWidth="1.2"/>
                 <text x={rightRunX+DW/2} y={pTop-riseH-DW-10} textAnchor="middle"
+                  fill={G+'.38)'} fontSize="5" fontFamily="monospace">SUPPLY</text>
+
+                {/* BOTTOM LEFT duct run — exits bottom of plenum, same X as top left */}
+                <rect x={pCX-DW*1.8-DW/2} y={pBot} width={DW} height={riseH} rx="0"
+                  fill={DC} stroke={DS} strokeWidth="1"/>
+                <rect x={leftRunX} y={pBot+riseH} width={pCX-DW*1.8-leftRunX+DW} height={DW} rx="0"
+                  fill={DC} stroke={DS} strokeWidth="1"/>
+                <rect x={leftRunX-4} y={pBot+riseH+4} width={DW+8} height={DW+8} rx="2"
+                  fill="#0a0a0a" stroke={DC} strokeWidth="1.2"/>
+                <text x={leftRunX+DW/2} y={pBot+riseH+DW+16} textAnchor="middle"
+                  fill={G+'.38)'} fontSize="5" fontFamily="monospace">SUPPLY</text>
+
+                {/* BOTTOM RIGHT duct run — exits bottom of plenum, same X as top right */}
+                <rect x={pCX+DW*0.8} y={pBot} width={DW} height={riseH} rx="0"
+                  fill={DC} stroke={DS} strokeWidth="1"/>
+                <rect x={pCX+DW*0.8} y={pBot+riseH} width={rightRunX-pCX-DW*0.8} height={DW} rx="0"
+                  fill={DC} stroke={DS} strokeWidth="1"/>
+                <rect x={rightRunX-4} y={pBot+riseH+4} width={DW+8} height={DW+8} rx="2"
+                  fill="#0a0a0a" stroke={DC} strokeWidth="1.2"/>
+                <text x={rightRunX+DW/2} y={pBot+riseH+DW+16} textAnchor="middle"
                   fill={G+'.38)'} fontSize="5" fontFamily="monospace">SUPPLY</text>
               </>;
             })()}
@@ -1458,15 +1476,17 @@ function Canvas({a, stepIdx, activeSteps}){
               const hasERV=Array.isArray(a.extras)&&a.extras.includes('erv');
               const both=hasDehu&&hasERV;
               const totalW=both?(BW*2+GAP):BW;
-              const startX=sysX+Math.round((sysW-totalW)/2);
+              // Dehu: left of furnace center (clear of flue which is on right side)
+              const dehuBX=sysX+8;
+              // ERV: far left of return plenum
+              const ervBX=Math.max(8, RET_X-BW+14);
               const BY=UNIT_Y-BH-14;
               const roofY=EAVE_Y+14;
-              // ERV left of dehu
               const boxes=[];
               if(hasERV) boxes.push('erv');
               if(hasDehu) boxes.push('dehu');
               return boxes.map((type,i)=>{
-                const BX=startX+i*(BW+GAP);
+                const BX=type==='dehu'?dehuBX:ervBX;
                 const r1X=BX+BW*0.28, r2X=BX+BW*0.72;
                 const isDehu=type==='dehu';
                 const pipe1X=BX+Math.round(BW*0.28), pipe2X=BX+Math.round(BW*0.68);
@@ -1557,15 +1577,15 @@ function Canvas({a, stepIdx, activeSteps}){
   // Ionizer enters horizontally from side of plenum with external bulb.
   // ══════════════════════════════════════════════════════════
   if(isCloset){
-    const VW=900, VH=800;
-    const SCALE=5.8;
-    const UNIT_W=Math.round(20*SCALE);   // 96px
-    const FURN_H=Math.round(33*SCALE);   // 158px
-    const COIL_H=Math.round(24*SCALE);   // 115px
-    const AH_H=Math.round(55*SCALE);     // 264px
+    const VW=1000, VH=820;
+    const SCALE=7.8;
+    const UNIT_W=Math.round(20*SCALE);   // ~156px
+    const FURN_H=Math.round(33*SCALE);
+    const COIL_H=Math.round(24*SCALE);
+    const AH_H=Math.round(48*SCALE);   // slightly shorter so it fits
 
     // 2/3 house when condenser, full width otherwise
-    const HOUSE_W=hasCond?Math.round(VW*0.60):VW-12;
+    const HOUSE_W=hasCond?Math.round(VW*(2/3)):VW-12;
     const OUTSIDE_ZONE_W=hasCond?VW-HOUSE_W:0;
 
     // Center unit in house zone before condenser, shift left after
@@ -1591,8 +1611,8 @@ function Canvas({a, stepIdx, activeSteps}){
     const APR_Y=hasFurnace?FURN_Y+FURN_H:ACOIL_Y+ACOIL_H;
     const CHASE_H=52;
     const CHASE_Y=APR_Y+APR_H+2;
-    const LS_Y1=hasFurnace?ACOIL_Y+Math.round(ACOIL_H*0.30):ACOIL_Y+Math.round(ACOIL_H*0.25);
-    const LS_Y2=hasFurnace?ACOIL_Y+Math.round(ACOIL_H*0.48):ACOIL_Y+Math.round(ACOIL_H*0.40);
+    const LS_Y1=hasFurnace?ACOIL_Y+Math.round(ACOIL_H*0.30):ACOIL_Y+Math.round(ACOIL_H*0.80);
+    const LS_Y2=hasFurnace?ACOIL_Y+Math.round(ACOIL_H*0.48):ACOIL_Y+Math.round(ACOIL_H*0.88);
 
     // Condenser — same real-world proportions, scaled to fill ~70% of outside zone
     const PX=3.2;
@@ -1704,18 +1724,7 @@ function Canvas({a, stepIdx, activeSteps}){
           ))}
           <text x="22" y={DECK_Y+20} fill={W+'.08)'} fontSize="5.5" fontFamily="monospace" letterSpacing="0.8">ATTIC</text>
 
-          {/* Supply ducts — arrows INSIDE the plenum showing airflow direction */}
-          {hasCoil&&hasPlenum&&a.plenum!=='none'&&<g>
-            {/* Two vertical trunk ducts above the plenum */}
-            {[UNIT_X+UNIT_W*0.28, UNIT_X+UNIT_W*0.68].map((dx,i)=>(
-              <g key={i}>
-                <rect x={dx-10} y={DUCT_TOP} width={20} height={PLEN_TOP-DUCT_TOP} rx="2"
-                  fill={G+'.04)'} stroke={G+'.20)'} strokeWidth="1"/>
-                <text x={dx} y={DUCT_TOP+7} textAnchor="middle"
-                  fill={G+'.26)'} fontSize="5" fontFamily="monospace">SUPPLY</text>
-              </g>
-            ))}
-          </g>}
+
 
           {/* ── SUPPLY PLENUM — crosses deck, extends into attic ── */}
           {hasPlenum&&hasCoil&&<g className="snap" key="spl">
@@ -1923,18 +1932,18 @@ function Canvas({a, stepIdx, activeSteps}){
 
           {/* 2×4 return chase */}
           {hasCoil&&<g className="snap" key="chase">
-            <rect x={UNIT_X-4} y={CHASE_Y} width={UNIT_W+8} height={CHASE_H} rx="3"
+            <rect x={UNIT_X-28} y={CHASE_Y} width={UNIT_W+56} height={VH-CHASE_Y} rx="3"
               fill="rgba(100,75,34,.07)" stroke="rgba(138,98,42,.42)" strokeWidth="1.5"/>
             {[0,1,2,3,4].map(i=>(
-              <rect key={i} x={UNIT_X-4+i*(UNIT_W+8)/5} y={CHASE_Y} width={9} height={CHASE_H}
+              <rect key={i} x={UNIT_X-28+i*(UNIT_W+56)/5} y={CHASE_Y} width={9} height={VH-CHASE_Y}
                 fill="rgba(118,82,32,.18)" stroke="rgba(148,104,40,.28)" strokeWidth="0.7"/>
             ))}
-            <rect x={UNIT_X+5} y={CHASE_Y+4} width={UNIT_W-10} height={CHASE_H-8}
+            <rect x={UNIT_X-24} y={CHASE_Y+4} width={UNIT_W+48} height={VH-CHASE_Y-8}
               fill="rgba(35,137,224,.03)" stroke={B+'.1)'} strokeWidth="0.5" strokeDasharray="4 3"/>
-            <path d={`M${UNIT_X+UNIT_W/2} ${CHASE_Y+CHASE_H-6} L${UNIT_X+UNIT_W/2} ${CHASE_Y+10}`}
+            <path d={`M${UNIT_X+UNIT_W/2} ${VH-20} L${UNIT_X+UNIT_W/2} ${CHASE_Y+10}`}
               fill="none" stroke={W+'.09)'} strokeWidth="1"
               strokeDasharray="5 3" className="airflow" style={{strokeDashoffset:0}} markerEnd="url(#arr)"/>
-            <text x={UNIT_X+UNIT_W/2} y={CHASE_Y+CHASE_H+12} textAnchor="middle"
+            <text x={UNIT_X+UNIT_W/2} y={VH-8} textAnchor="middle"
               fill="rgba(138,98,42,.62)" fontSize="6" fontFamily="monospace">2×4 RETURN AIR CHASE</text>
           </g>}
 
@@ -1944,22 +1953,24 @@ function Canvas({a, stepIdx, activeSteps}){
             const drainExitX=UNIT_X+UNIT_W+2; // right face of unit
             const drainExitY=ACOIL_Y+Math.round(ACOIL_H*0.7); // lower portion of coil
             const chaseRightX=UNIT_X+UNIT_W+28; // right wall of 2x4 chase
-            const pumpInsideY=CHASE_Y+Math.round(CHASE_H*0.22);
+            // Chase center X for pump placement
+            const chaseCX=UNIT_X+UNIT_W/2;
+            const pumpY=CHASE_Y+Math.round(CHASE_H*0.18);
             return <>
-              {/* Short stub right then down to drain level */}
-              <path d={'M'+drainExitX+' '+drainExitY+' L'+chaseRightX+' '+drainExitY+' L'+chaseRightX+' '+(CHASE_Y+CHASE_H*0.35)}
+              {/* Drain stub: exits right face of coil, runs to inside of chase */}
+              <path d={'M'+drainExitX+' '+drainExitY+' L'+(UNIT_X+UNIT_W+6)+' '+drainExitY+' L'+(UNIT_X+UNIT_W+6)+' '+(CHASE_Y+CHASE_H*0.35)}
                 fill="none" stroke={B+'.42)'} strokeWidth="1.8" strokeDasharray="4 3" strokeLinecap="round"/>
               {/* DRAIN label */}
               {!hasPump&&<text x={drainExitX+6} y={drainExitY-4} textAnchor="start"
                 fill={B+'.4)'} fontSize="5" fontFamily="monospace">DRAIN</text>}
               {hasPump&&<>
                 {/* Condensate pump box inside the 2x4 return chase */}
-                <rect x={chaseRightX-42} y={pumpInsideY} width={40} height={20} rx="3"
+                <rect x={chaseCX-26} y={pumpY} width={52} height={22} rx="3"
                   fill="rgba(35,137,224,.18)" stroke={B+'.6)'} strokeWidth="1.2"/>
-                <text x={chaseRightX-22} y={pumpInsideY+8} textAnchor="middle"
-                  fill={B+'.85)'} fontSize="5.5" fontFamily="monospace">COND.</text>
-                <text x={chaseRightX-22} y={pumpInsideY+16} textAnchor="middle"
-                  fill={B+'.85)'} fontSize="5.5" fontFamily="monospace">PUMP</text>
+                <text x={chaseCX} y={pumpY+9} textAnchor="middle"
+                  fill={B+'.85)'} fontSize="5.5" fontFamily="monospace">COND. PUMP</text>
+                <text x={chaseCX} y={pumpY+18} textAnchor="middle"
+                  fill={B+'.5)'} fontSize="5" fontFamily="monospace">condensate</text>
               </>}
             </>;
           })()}
@@ -2002,7 +2013,7 @@ function Canvas({a, stepIdx, activeSteps}){
           {/* Thermostat */}
           {hasTstat&&<g className="snap" key="tstat-c" style={{animationDelay:'.26s'}}>
             {(()=>{
-              const TX=10, TY=ACOIL_Y+20;
+              const TX=UNIT_X-UNIT_W-14, TY=ACOIL_Y+Math.round(ACOIL_H*0.75);
               return a.thermostat==='wifi'
                 ?<>
                   <circle cx={TX+38} cy={TY+38} r={36} fill="#0d0d0d" stroke={G+'.62)'} strokeWidth="1.8"/>
@@ -2039,13 +2050,13 @@ function Canvas({a, stepIdx, activeSteps}){
             const rW=hasCond?HOUSE_W:VW-8;
             const rRise=Math.round(Math.min(rW/2*(3/12),60));
             const rEave=rRise+12; // eave Y — bottom of roofline
-            const BW=82, BH=56, GAP=10;
+            const BW=80, BH=48, GAP=8;
             const hasERV=Array.isArray(a.extras)&&a.extras.includes('erv');
-            const BY=rEave+10;
+            const BY=rEave+42;
             const roofY=rEave+4;
-            // Dehu always anchored at right of attic, ERV slots in to its left
-            const dehuX=rW-BW-14;
-            const ervX=dehuX-BW-GAP;
+            // Dehu anchored far RIGHT of attic, ERV anchored far LEFT — opposite sides
+            const dehuX=rW-BW-34;
+            const ervX=24; // ERV slightly right
             const boxes=[];
             if(hasERV) boxes.push('erv');
             if(hasDehu) boxes.push('dehu');
@@ -2131,12 +2142,7 @@ function App(){
 
   const goNext=()=>{if(stepIdx<activeSteps.length-1){setStepIdx(s=>s+1);scrollTop();}else{setDone(true);scrollTop();}};
   const goBack=()=>{
-    if(stepIdx>0){
-      const curId=cur?.id;
-      if(curId){setAnswers(p=>{const n={...p};delete n[curId];return n;});}
-      setStepIdx(s=>s-1);
-      scrollTop();
-    }
+    if(stepIdx>0){setStepIdx(s=>s-1);scrollTop();}
   };
   const skip=()=>{if(cur.multi)setA(cur.id,[]);goNext();};
   const restart=()=>{setAnswers({});setStepIdx(0);setDone(false);};
@@ -2217,7 +2223,7 @@ function App(){
               </div>
 
               <div className="nav-row">
-                {stepIdx>0&&<button className="btn-back" onClick={goBack}>← Back</button>}
+                {stepIdx>0&&<button className="btn-back" onClick={goBack}><span style={{fontSize:'15px',lineHeight:1}}>‹</span> Back</button>}
                 {(cur?.optional||cur?.multi)&&<button className="btn-skip" onClick={skip}>Skip</button>}
                 <button className="btn-next" onClick={goNext} disabled={!canNext}>
                   {stepIdx===activeSteps.length-1?'See Full Build →':'Next →'}
