@@ -984,6 +984,89 @@ function Canvas({a, stepIdx, activeSteps}){
     </g>;
   }
 
+
+  function SystemInfoPanel({px,py,pw,ph,tierKey,heatMode,active,isHP,is90}){
+    if(ph<80) return null;
+    const G2='rgba(215,183,64,';
+    const W2='rgba(255,255,255,';
+    const B2='rgba(35,137,224,';
+    const seer=tierKey==='fedmin'?'14':tierKey==='mid_ge15'?'18':'21';
+    const brand=tierKey==='mid_ge15'||tierKey==='high_ge18'?'GE CONNECT™':'AMERISTAR™';
+    const isHigh=tierKey==='high_ge18';
+    const isMid=tierKey==='mid_ge15';
+    const savings=isMid?'~$28/mo':isHigh?'~$52/mo':null;
+    const rebate=isHigh?'$300–800':null;
+    const afue=is90?'90% AFUE':'80% AFUE';
+    // Weather
+    const season=heatMode?'WINTER':'SUMMER';
+    const condition=heatMode?'28°F':'96°F';
+    const tColor=heatMode?'rgba(147,197,253,.85)':'rgba(253,186,116,.85)';
+    const tBg=heatMode?'rgba(30,58,138,.18)':'rgba(124,45,18,.18)';
+    const tBorder=heatMode?'rgba(147,197,253,.2)':'rgba(253,186,116,.2)';
+    const row=(n)=>py+18+n*16;
+    const iX=px+12, iY=row(0)+2, iR=7;
+    return <g>
+      {/* Panel bg */}
+      <rect x={px} y={py} width={pw} height={ph} rx="4"
+        fill="rgba(8,10,20,.75)" stroke={G2+'.12)'} strokeWidth="0.8"/>
+      <rect x={px} y={py} width={pw} height={12} rx="4" fill={G2+'.07)'} stroke="none"/>
+      <text x={px+pw/2} y={py+9} textAnchor="middle"
+        fill={G2+'.5)'} fontSize="5" fontFamily="monospace" letterSpacing=".12em">SYSTEM DATA</text>
+
+      {/* Weather block */}
+      <rect x={px+4} y={row(0)-8} width={pw-8} height={32} rx="3" fill={tBg} stroke={tBorder} strokeWidth="0.8"/>
+      {/* Season icon */}
+      {heatMode
+        ?<>
+          <line x1={iX} y1={iY-iR} x2={iX} y2={iY+iR} stroke={tColor} strokeWidth="1.2"/>
+          <line x1={iX-iR} y1={iY} x2={iX+iR} y2={iY} stroke={tColor} strokeWidth="1.2"/>
+          <line x1={iX-iR*.7} y1={iY-iR*.7} x2={iX+iR*.7} y2={iY+iR*.7} stroke={tColor} strokeWidth="1.2"/>
+          <line x1={iX+iR*.7} y1={iY-iR*.7} x2={iX-iR*.7} y2={iY+iR*.7} stroke={tColor} strokeWidth="1.2"/>
+          {[0,1,2,3].map(i=>{const a=i*(Math.PI/2),bx=iX+Math.cos(a)*iR*.55,by=iY+Math.sin(a)*iR*.55;return <circle key={i} cx={bx} cy={by} r="1.2" fill={tColor}/>;})}
+        </>
+        :Array.from({length:8},(_,i)=>{
+          const a=i*(Math.PI/4);
+          return <line key={i} x1={iX+Math.cos(a)*iR*.65} y1={iY+Math.sin(a)*iR*.65} x2={iX+Math.cos(a)*iR} y2={iY+Math.sin(a)*iR} stroke={tColor} strokeWidth="1.4" strokeLinecap="round"/>;
+        })
+      }
+      {!heatMode&&<circle cx={iX} cy={iY} r={iR*.52} fill={tColor} opacity=".9"/>}
+      <text x={px+24} y={row(0)} fill={tColor} fontSize="11" fontFamily="monospace" fontWeight="700">{condition}</text>
+      <text x={px+24} y={row(0)+9} fill={tColor} opacity=".7" fontSize="4.5" fontFamily="monospace">{season}</text>
+      <text x={px+pw-6} y={row(0)+9} textAnchor="end" fill={tColor} opacity=".4" fontSize="4" fontFamily="monospace">AUSTIN TX</text>
+
+      {/* Spec rows */}
+      <line x1={px+4} y1={row(0)+24} x2={px+pw-4} y2={row(0)+24} stroke={G2+'.07)'} strokeWidth="0.5"/>
+
+      <text x={px+6} y={row(2)} fill={G2+'.4)'} fontSize="4.5" fontFamily="monospace">EFFICIENCY</text>
+      <text x={px+pw-6} y={row(2)} textAnchor="end" fill={isHigh?'#5ba8f5':isMid?(G2+'.9)'):W2+'.55)'} fontSize="5.5" fontFamily="monospace" fontWeight="700">{seer} SEER2</text>
+      <line x1={px+4} y1={row(2)+4} x2={px+pw-4} y2={row(2)+4} stroke={G2+'.07)'} strokeWidth="0.5"/>
+
+      {is90!==undefined&&<>
+        <text x={px+6} y={row(3)} fill={G2+'.4)'} fontSize="4.5" fontFamily="monospace">FURNACE</text>
+        <text x={px+pw-6} y={row(3)} textAnchor="end" fill={W2+'.55)'} fontSize="5" fontFamily="monospace">{afue}</text>
+        <line x1={px+4} y1={row(3)+4} x2={px+pw-4} y2={row(3)+4} stroke={G2+'.07)'} strokeWidth="0.5"/>
+      </>}
+
+      {savings&&<>
+        <text x={px+6} y={row(4)} fill={G2+'.4)'} fontSize="4.5" fontFamily="monospace">VS FED. MIN</text>
+        <text x={px+pw-6} y={row(4)} textAnchor="end" fill="rgba(34,197,94,.85)" fontSize="5" fontFamily="monospace">{savings}</text>
+        <line x1={px+4} y1={row(4)+4} x2={px+pw-4} y2={row(4)+4} stroke={G2+'.07)'} strokeWidth="0.5"/>
+      </>}
+
+      {rebate&&<>
+        <rect x={px+4} y={row(5)-9} width={pw-8} height={16} rx="2" fill="rgba(35,137,224,.1)" stroke={B2+'.25)'} strokeWidth="0.7"/>
+        <text x={px+pw/2} y={row(5)-1} textAnchor="middle" fill={B2+'.7)'} fontSize="4.5" fontFamily="monospace" letterSpacing=".05em">AE REBATE {rebate}</text>
+      </>}
+
+      {/* Status */}
+      <circle cx={px+9} cy={py+ph-8} r={3} fill={active?"rgba(34,197,94,.6)":"rgba(50,50,80,.5)"} stroke={active?"#22c55e":(G2+'.15)')} strokeWidth="0.7"/>
+      {active&&<circle cx={px+9} cy={py+ph-8} r={1.5} fill="#22c55e" className="glow-pulse"/>}
+      <text x={px+16} y={py+ph-4} fill={active?"rgba(34,197,94,.65)":(G2+'.3)')} fontSize="4.5" fontFamily="monospace">
+        {active?(heatMode?"HEATING":"COOLING"):"STANDBY"}
+      </text>
+    </g>;
+  }
+
   // Condensate pump — small box below evap coil
   function CondensatePump({x,y,w}){
     return <g className="fadein">
@@ -1423,6 +1506,13 @@ function Canvas({a, stepIdx, activeSteps}){
             })()}
           </g>}
 
+          {/* Info panel — right of thermostat in living space */}
+          {hasTstat&&hasCond&&<SystemInfoPanel
+            px={130} py={DECK_Y+8} pw={Math.min(220, HOUSE_W-140)}
+            ph={VH-DECK_Y-16}
+            tierKey={a.cond_tier||'fedmin'} heatMode={heatMode} active={condenserActive}
+            isHP={!hasFurnace} is90={is90}/>}
+
           {/* ── OUTSIDE ZONE — exterior wall + condenser ── */}
           {hasCond&&<OutsideZone
             wallX={EXT_WALL_X} zoneW={OUTSIDE_W} zoneH={VH}
@@ -1561,6 +1651,22 @@ function Canvas({a, stepIdx, activeSteps}){
             })()}
           </g>}
 
+          {/* LIVE SYSTEM PREVIEW label */}
+          {loc&&<text x={12} y={EAVE_Y-4} fill={G+'.22)'} fontSize="6" fontFamily="monospace" letterSpacing=".18em">LIVE SYSTEM PREVIEW</text>}
+
+          {/* Info panel — right of unit in closet space */}
+          {hasTstat&&hasCond&&(()=>{
+            const panelX=UNIT_X+UNIT_W+42;
+            const panelW=HOUSE_W-panelX-8;
+            const panelY=ACOIL_Y;
+            const panelH=VH-ACOIL_Y-16;
+            if(panelW<80) return null;
+            return <SystemInfoPanel
+              px={panelX} py={panelY} pw={panelW} ph={panelH}
+              tierKey={a.cond_tier||'fedmin'} heatMode={heatMode} active={condenserActive}
+              isHP={!hasFurnace} is90={is90}/>;
+          })()}
+
           {/* Empty state */}
           {!loc&&<g>
             <text x={HOUSE_W/2} y={VH/2-10} textAnchor="middle" fill={G+'.12)'} fontSize="10" fontFamily="monospace">Choose your location to begin building</text>
@@ -1624,7 +1730,7 @@ function Canvas({a, stepIdx, activeSteps}){
     };
     const CU=CU_SIZES[a.cond_tier]||CU_SIZES.fedmin;
     // Scale condenser to fill outside zone — ensure it fits
-    const ZONE_COND_W=Math.round(OUTSIDE_ZONE_W*0.62);
+    const ZONE_COND_W=Math.round(OUTSIDE_ZONE_W*0.80);
     const C_SCALE=hasCond&&OUTSIDE_ZONE_W>0?(ZONE_COND_W/(CU.w||1)):1;
     const COND_W=Math.round(CU.w*C_SCALE);
     const COND_H=Math.round(CU.h*C_SCALE);
@@ -2003,6 +2109,13 @@ function Canvas({a, stepIdx, activeSteps}){
             })}
           </g>}
 
+          {/* Info panel — right of thermostat in living space */}
+          {hasTstat&&hasCond&&<SystemInfoPanel
+            px={130} py={DECK_Y+8} pw={Math.min(220, HOUSE_W-140)}
+            ph={VH-DECK_Y-16}
+            tierKey={a.cond_tier||'fedmin'} heatMode={heatMode} active={condenserActive}
+            isHP={!hasFurnace} is90={is90}/>}
+
           {/* ── OUTSIDE ZONE — wall + condenser, condenser aligned with unit height ── */}
           {hasCond&&<OutsideZone
             wallX={EXT_WALL_X} zoneW={OUTSIDE_ZONE_W} zoneH={VH}
@@ -2169,7 +2282,7 @@ function App(){
   return(
     <div ref={topRef}>
       <header className="hdr">
-        <div className="hdr-logo">GOLD EAGLE SERVICES™</div>
+        <a href="https://GoldEagleServices.com" target="_blank" rel="noopener" style={{textDecoration:"none"}}><div className="hdr-logo">GOLD EAGLE SERVICES™</div></a>
         <div className="hdr-step">{done?'COMPLETE':`${stepIdx+1} / ${activeSteps.length}`}</div>
         <div style={{fontFamily:'var(--fm)',fontSize:'9px',color:'rgba(215,183,64,.4)',letterSpacing:'.15em'}}>BUILD YOUR SYSTEM</div>
       </header>
@@ -2269,6 +2382,7 @@ function App(){
 
               {/* CTA */}
               <a href="tel:5124894653" className="done-cta" style={{marginBottom:8}}>📞 Schedule Your Free Visit — 512-489-4653</a>
+              <a href="https://wisetack.us/apply/goldEagleServices" target="_blank" rel="noopener" style={{display:'block',width:'100%',background:'rgba(99,102,241,.12)',border:'1px solid rgba(99,102,241,.4)',color:'rgba(180,180,255,.85)',fontFamily:'monospace',fontSize:'10px',padding:'8px',cursor:'pointer',letterSpacing:'.06em',marginBottom:8,textDecoration:'none',textAlign:'center',boxSizing:'border-box'}}>💳 FINANCING AVAILABLE — CHECK YOUR RATE</a>
               <div style={{background:"rgba(215,183,64,.06)",border:"1px solid rgba(215,183,64,.18)",padding:"8px 12px",fontSize:"11px",color:"rgba(215,183,64,.7)",lineHeight:"1.55",borderRadius:"2px",marginBottom:10,textAlign:"left",width:"100%"}}>Ask about current manufacturer discounts — can save you hundreds.</div>
 
               {/* Save / Print */}
