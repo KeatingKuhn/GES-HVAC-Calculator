@@ -213,48 +213,48 @@ function getOpts(stepId, answers){
       {v:'closet',label:'Closet',desc:'Upflow unit — hallway or utility closet'},
     ];
     case 'indoor_type':return[
-      {v:'furnace',label:'Furnace',     desc:'Gas heat + AC — most popular in Austin. I have a gas line.'},
-      {v:'ah',     label:'Air handler', desc:'All-electric heat pump — no gas line needed.'},
+      {v:'furnace',label:'Furnace',     desc:'Gas heat + AC — most popular in Austin. Burns natural gas for heat, uses AC for cooling. Lowest operating cost when gas rates are low.'},
+      {v:'ah',     label:'Air handler', desc:'All-electric heat pump system. No gas line needed. Heats and cools using refrigerant — very efficient in Austin winters, higher electric bills in extreme cold.'},
     ];
     case 'insulation':return[
-      {v:'fiberglass',label:'Fiberglass batts / blown',desc:'Standard attic insulation — 80% AFUE furnace with standard B-vent flue'},
-      {v:'spray',     label:'Spray foam',               desc:'Sealed attic — 90% AFUE furnace required, PVC condensing flue through roof deck'},
+      {v:'fiberglass',label:'Fiberglass batts / blown',desc:'Standard vented attic. Works with an 80% AFUE furnace and a metal B-vent flue pipe through the roof. Most homes in Austin have this.'},
+      {v:'spray',     label:'Spray foam',               desc:'Sealed / conditioned attic. Requires a 90% AFUE condensing furnace — flue is a PVC pipe, not metal. Higher efficiency, cooler attic.'},
     ];
     case 'plenum':return[
-      {v:'ductboard',label:'Ductboard plenum',  desc:'Standard — fits most attic horizontal installs'},
-      {v:'metal',    label:'Sheet metal plenum',desc:'More durable — preferred for longevity'},
-      {v:'none',     label:'Not needed',        desc:'Existing plenum is in good shape — no replacement required'},
+      {v:'ductboard',label:'Ductboard plenum',  desc:'Fiberglass duct board — standard choice, good insulation value, fits most attic installs. Typical lifespan 10–15 years.'},
+      {v:'metal',    label:'Sheet metal plenum',desc:'Galvanized sheet metal — more durable, lasts 25+ years, better for high-humidity attics. Preferred when the system is expected to run hard.'},
+      {v:'none',     label:'Keep existing',     desc:'Your current plenum is in good condition. We will connect to it directly — saves on material and labor.'},
     ];
     case 'thermostat':return[
-      {v:'basic',label:'Basic',         desc:'Reliable programmable thermostat — simple, accurate, no subscription'},
-      {v:'wifi', label:'Wi-Fi Enabled', desc:'Smart thermostat — app control, scheduling, energy reports',badge:true},
+      {v:'basic',label:'Basic Programmable', desc:'Reliable, accurate, no app or subscription required. Set your schedule and it runs. Best choice if you prefer simple controls.'},
+      {v:'wifi', label:'Wi-Fi Smart',   desc:'Control from your phone, set schedules, get energy reports. Learns your habits over time. Saves 10–15% on energy bills on average.',badge:true},
     ];
     case 'purif':return[
-      {v:'aprilaire',label:'Aprilaire 5" Filter',desc:'Upgraded media filtration — captures dust, pollen, and allergens'},
-      {v:'uv',       label:'UV Light System',    desc:'Kills mold and bacteria growing inside the evaporator coil'},
-      {v:'ionizer',  label:'Ionizer / Plasma',   desc:'Reduces airborne particles, odors, and VOCs throughout the home'},
+      {v:'aprilaire',label:'Aprilaire 5" Filter',desc:'5-inch deep media filter — captures dust, pollen, pet dander, and allergens far better than a standard 1" filter. Replaces every 1–2 years.'},
+      {v:'uv',       label:'UV Light System',    desc:'UV-C bulb mounted inside the air handler kills mold, bacteria, and viruses on the evaporator coil. Eliminates musty odors at the source.'},
+      {v:'ionizer',  label:'Ionizer / Plasma',   desc:'Emits charged ions throughout your duct system that neutralize airborne particles, odors, VOCs, and smoke. Works while the system runs.'},
     ];
     case 'system_for':return[
-      {v:'hp', label:'Heat pump + furnace (Dual Fuel)', desc:'Heat pump handles cooling and mild-weather heating — gas furnace kicks in on the coldest days'},
-      {v:'sc', label:'Straight cool',       desc:'AC only — the gas furnace handles all heating, no heat pump involved'},
+      {v:'hp', label:'Dual Fuel (Heat pump + furnace)', desc:'Best of both: heat pump cools in summer and heats efficiently down to ~35°F. Below that the gas furnace takes over. Lowest combined energy bill.'},
+      {v:'sc', label:'Straight Cool',        desc:'AC cools only. Your gas furnace handles all heating year-round. Simpler system, lower upfront cost. Good if heating efficiency is not a priority.'},
     ];
     case 'cond_tier':{
       const isAH=answers.indoor_type==='ah';
       const isHP=isAH||(answers.system_for==='hp');
       return[
-        {v:'fedmin',   label:'Federal Minimum',desc:'Meets current energy code — solid, reliable, lowest upfront cost'},
-        {v:'mid_ge15', label:'Mid Efficiency',  desc:'Best overall value — GE Connect, meaningfully lower energy bills'},
-        {v:'high_ge18',label:'High Efficiency', desc:'Inverter-driven -- eligible for Austin Energy rebate, best humidity performance'},
+        {v:'fedmin',   label:'Federal Minimum — 14 SEER2', desc:'Meets 2023 federal energy code. Reliable single-stage system, lowest upfront cost. Good choice for rentals or budget installs.'},
+        {v:'mid_ge15', label:'Mid Efficiency — 18 SEER2',  desc:'GE Connect variable-speed system. Noticeably lower electric bills, better humidity control, quieter operation. Best overall value for most Austin homes.'},
+        {v:'high_ge18',label:'High Efficiency — 21 SEER2', desc:'GE Connect inverter-driven top tier. Eligible for Austin Energy rebates ($300–800). Best humidity control, whisper-quiet, lowest monthly bills.'},
       ];
     }
     case 'dehu':return[
-      {v:'yes',label:'Yes — add it',  desc:'Whole-home unit sized to your space, runs automatically with your system'},
-      {v:'no', label:'No thanks',     desc:'Skip for now'},
+      {v:'yes',label:'Yes — add it',  desc:'Whole-home dehumidifier sized to your square footage. Runs automatically with the HVAC system — no buckets, no maintenance. Makes your home feel 5–7°F cooler at the same thermostat setting.'},
+      {v:'no', label:'No thanks',     desc:'Skip for now. Can always be added later as a standalone unit if humidity becomes an issue.'},
     ];
     case 'extras':return[
-      {v:'surge',     label:'Surge Protector',       desc:'Protects condenser from voltage spikes — mounts directly on the disconnect'},
-      {v:'condensate',label:'Condensate Pump',        desc:"Required when gravity drain is not possible — mounts below the evaporator coil"},
-      {v:'erv',       label:'ERV (Energy Recovery)',  desc:'Brings fresh outdoor air in while recovering conditioned energy — attic mounted'},
+      {v:'surge',     label:'Surge Protector',       desc:'Mounts on the disconnect box. Protects the compressor from voltage spikes and lightning. One strike can destroy a $2,000+ compressor — this costs a fraction of that.'},
+      {v:'condensate',label:'Condensate Pump',        desc:"Needed when there is no gravity drain nearby. Pumps condensate water up and out to a drain or exterior wall. Required in many closet installs."},
+      {v:'erv',       label:'ERV (Energy Recovery)',  desc:'Brings fresh filtered outdoor air into the home while exhausting stale air. Recovers ~70% of the heating/cooling energy from the outgoing air. Attic mounted.'},
     ];
     default:return[];
   }
@@ -993,7 +993,7 @@ function Canvas({a, stepIdx, activeSteps}){
         active={active} tierKey={tierKey}/>
       <text x={condX+condW/2} y={condY-9} textAnchor="middle"
         fill={active?condC:(G+'.3)')} fontSize="8" fontFamily="monospace">
-        {active?(heatMode?"CONDENSER · ABSORBING HEAT":"CONDENSER · ACTIVE"):"CONDENSER · STANDBY"}
+        {active?(heatMode?"CONDENSER · ABSORBING HEAT":"CONDENSER · REJECTING HEAT"):"CONDENSER · STANDBY"}
       </text>
 
       {/* OUTSIDE label */}
@@ -1176,7 +1176,7 @@ function Canvas({a, stepIdx, activeSteps}){
     const UNIT_H=Math.round(15*SCALE_PX*1.13); // ~105px -- 15" unit at 6.2px/inch x1.13
     const UNIT_Y=EAVE_Y+Math.round((ATTIC_H-UNIT_H)/2)+4;
 
-    const RET_PLEN_W=72;
+    const RET_PLEN_W=108;
     const APR_W=hasAprilaire?32:0;
     const FURN_W=hasFurnace?Math.round(196*SCALE):0;
     const ACOIL_W=hasFurnace?Math.round(108*SCALE):0;
@@ -1383,7 +1383,7 @@ function Canvas({a, stepIdx, activeSteps}){
                   fill={active?evapC:(G+'.36)')} fontSize="7.5" fontFamily="monospace">A-COIL</text>
                 <text x={ACOIL_X+ACOIL_W/2} y={UNIT_Y+UNIT_H+22} textAnchor="middle"
                   fill={active?(refReversed?'rgba(239,68,68,.5)':'rgba(35,137,224,.46)'):'rgba(255,255,255,.14)'} fontSize="6.5" fontFamily="monospace">
-                  {active?(refReversed?"":"ABSORBING HEAT"):"STANDBY"}
+                  {active?(refReversed?"REJECTING HEAT":"ABSORBING HEAT"):"STANDBY"}
                 </text>
               </>;
             })()}
@@ -1396,7 +1396,7 @@ function Canvas({a, stepIdx, activeSteps}){
               fill={evapActive?evapC:(G+'.36)')} fontSize="7.5" fontFamily="monospace">AIR HANDLER</text>
             <text x={AH_X+AH_W/2} y={UNIT_Y+UNIT_H+22} textAnchor="middle"
               fill={evapActive?(refReversed?'rgba(239,68,68,.5)':'rgba(35,137,224,.46)'):'rgba(255,255,255,.14)'} fontSize="6.5" fontFamily="monospace">
-              {evapActive?(refReversed?"":"ABSORBING HEAT"):"STANDBY"}
+              {evapActive?(refReversed?"REJECTING HEAT":"ABSORBING HEAT"):"STANDBY"}
             </text>
           </g>}
 
