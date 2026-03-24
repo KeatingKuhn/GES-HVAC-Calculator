@@ -285,8 +285,8 @@ function getOpts(stepId, answers){
       {v:'wifi', label:'Wi-Fi Smart',   desc:'Control from your phone, set schedules, get energy reports. Learns your habits over time. Saves 10–15% on energy bills on average.',badge:true},
     ];
     case 'purif':return[
-      {v:'aprilaire',label:'Aprilaire 5" Filter',desc:'5-inch deep media filter — captures dust, pollen, pet dander, and allergens far better than a standard 1" filter. Replaces every 1–2 years.'},
-      {v:'uv',       label:'UV Light System',    desc:'UV-C bulb mounted inside the air handler kills mold, bacteria, and viruses on the evaporator coil. Eliminates musty odors at the source.'},
+      {v:'aprilaire',label:'5" Filter Cabinet',desc:'5-inch deep media filter — captures dust, pollen, pet dander, and allergens far better than a standard 1" filter. Replaces every 1–2 years.'},
+      {v:'uv',       label:'UV Light System',    desc:'UV-C bulb mounted inside the air handler keeps the evaporator coil clean for longevity and efficiency. Eliminates musty odors at the source.'},
       {v:'ionizer',  label:'Ionizer / Plasma',   desc:'Emits charged ions throughout your duct system that neutralize airborne particles, odors, VOCs, and smoke. Works while the system runs.'},
     ];
     case 'system_for':return[
@@ -298,8 +298,8 @@ function getOpts(stepId, answers){
       const isHP=isAH||(answers.system_for==='hp');
       return[
         {v:'fedmin',   label:'Federal Minimum — 14 SEER2', desc:'Meets 2023 federal energy code. Reliable single-stage system, lowest upfront cost. Good choice for rentals or budget installs.'},
-        {v:'mid_ge15', label:'Mid Efficiency — 18 SEER2',  desc:'GE Connect variable-speed system. Noticeably lower electric bills, better humidity control, quieter operation. Best overall value for most Austin homes.'},
-        {v:'high_ge18',label:'High Efficiency — 21 SEER2', desc:'GE Connect inverter-driven top tier. Eligible for Austin Energy rebates ($300–800). Best humidity control, whisper-quiet, lowest monthly bills.'},
+        {v:'mid_ge15', label:'Mid Efficiency — 18 SEER2',  desc:'Variable-speed system. Noticeably lower electric bills, better humidity control, quieter operation. Best overall value for most homes.'},
+        {v:'high_ge18',label:'High Efficiency — 21 SEER2', desc:'Inverter-driven top tier. Eligible for local energy rebates. Best humidity control, whisper-quiet, lowest monthly bills.'},
       ];
     }
     case 'dehu':return[
@@ -362,7 +362,7 @@ function Canvas({a, stepIdx, activeSteps}){
   const line2C = refReversed ? '#ef4444' : '#2389e0';
 
   const TL={fedmin:'14 SEER2',mid_ge15:'18 SEER2',high_ge18:'21 SEER2',premium:'21 SEER2'}[a.cond_tier]||'';
-  const BL={fedmin:'AMERISTAR',mid_ge15:'GE CONNECT',high_ge18:'GE CONNECT',premium:'AM.STD'}[a.cond_tier]||'';
+  const BL={fedmin:'',mid_ge15:'',high_ge18:'',premium:''}[a.cond_tier]||'';
 
   // ── SUB-COMPONENTS ──────────────────────────────────────────
 
@@ -1065,7 +1065,7 @@ function Canvas({a, stepIdx, activeSteps}){
     if(ph<80) return null;
     var G2='rgba(215,183,64,'; var W2='rgba(255,255,255,'; var B2='rgba(35,137,224,';
     var seer=tierKey==='high_ge18'?'21':tierKey==='mid_ge15'?'18':'14';
-    var brand=tierKey==='mid_ge15'||tierKey==='high_ge18'?'GE CONNECT™':'AMERISTAR™';
+    var brand='';
     var isHigh=tierKey==='high_ge18'; var isMid=tierKey==='mid_ge15';
     var savings=isMid?'~$28/mo':isHigh?'~$52/mo':null;
     var rebate=isHigh?'$300-800':null;
@@ -1430,7 +1430,7 @@ function Canvas({a, stepIdx, activeSteps}){
             ))}
             <text x={APR_X+APR_W/2} y={UNIT_Y+UNIT_H/2+3} textAnchor="middle"
               fill="#22c55e" fontSize="7" fontFamily="monospace"
-              transform={`rotate(-90,${APR_X+APR_W/2},${UNIT_Y+UNIT_H/2})`}>APRILAIRE 5"</text>
+              transform={`rotate(-90,${APR_X+APR_W/2},${UNIT_Y+UNIT_H/2})`}>5" FILTER</text>
           </g>}
 
           {/* Furnace */}
@@ -2178,7 +2178,7 @@ function Canvas({a, stepIdx, activeSteps}){
                 stroke="#22c55e" strokeWidth="0.6" opacity="0.52"/>
             ))}
             <text x={UNIT_X+UNIT_W/2} y={APR_Y+APR_H+12} textAnchor="middle"
-              fill="#22c55e" fontSize="6.5" fontFamily="monospace">APRILAIRE 5" FILTER RACK</text>
+              fill="#22c55e" fontSize="6.5" fontFamily="monospace">5" FILTER CABINET</text>
           </g>}
 
           {/* 2×4 return chase */}
@@ -2431,8 +2431,8 @@ function App(){
     insulation:"Attic insulation type determines which furnace you can install. Fiberglass or blown insulation means your attic is vented -- a standard 80% AFUE furnace with a metal B-vent flue works fine. Spray foam means your attic is sealed -- this requires a 90% AFUE condensing furnace with a PVC pipe through the roof deck.",
     plenum:"The supply plenum is the box that connects your indoor unit to all your ductwork. Think of it as the distribution hub -- conditioned air flows from the unit into the plenum, then out through the ducts to every room. If your existing plenum is damaged, leaking, or over 15 years old, replacing it improves efficiency and airflow.",
     thermostat:"A basic programmable thermostat is reliable and accurate -- set your schedule and forget it. A Wi-Fi smart thermostat connects to your phone, learns your habits, and can cut 10-15% off your energy bill. Both work with any system we install.",
-    purif:"Air purification add-ons are installed inside your indoor unit and treat every cubic foot of air your system moves. The Aprilaire 5 inch filter captures dust and pollen. A UV light kills mold and bacteria on the evaporator coil. An ionizer neutralizes airborne particles, odors, and VOCs throughout the home.",
-    cond_tier:"The condenser is the outdoor unit. Federal Minimum meets current energy code -- solid and reliable, lowest upfront cost. Mid Efficiency is our best-value tier -- variable speed, noticeably lower monthly bills, better humidity control. High Efficiency is our top inverter-driven tier -- eligible for Austin Energy rebates and the best humidity performance available.",
+    purif:"Air purification add-ons are installed inside your indoor unit and treat every cubic foot of air your system moves. The 5 inch filter cabinet captures dust, pollen, and allergens far better than a standard 1 inch filter. A UV light keeps the evaporator coil clean for longevity and efficiency. An ionizer neutralizes airborne particles, odors, and VOCs throughout the home.",
+    cond_tier:"The condenser is the outdoor unit. Federal Minimum meets current energy code -- solid and reliable, lowest upfront cost. Mid Efficiency is our best-value tier -- variable speed, noticeably lower monthly bills, better humidity control. High Efficiency is our top inverter-driven tier -- eligible for local energy rebates and the best humidity performance available.",
     system_for:"With a gas furnace you have two options. Dual fuel (heat pump + furnace) means the heat pump handles cooling in summer and heating in mild weather -- the gas furnace only fires when it gets genuinely cold below about 35 degrees. Most efficient combo. Straight cool means your AC only cools and the furnace handles all heating year-round.",
     dehu:"Austin humidity makes your home feel significantly warmer than the thermostat reads. A whole-home dehumidifier connects directly to your HVAC system and runs automatically -- no buckets, no maintenance. Recommended for any home that feels muggy even when the AC is running.",
     extras:"A surge protector mounts on the disconnect box and shields your condenser from voltage spikes -- one lightning strike can destroy a compressor. A condensate pump is needed when gravity drainage is not available. An ERV brings fresh filtered outdoor air in while recovering the energy from outgoing stale air.",
@@ -2586,7 +2586,7 @@ function App(){
                 answers.furnace_eff?{step:"insulation",label:"Insulation",val:answers.furnace_eff==="e90"?"Spray foam — 90% AFUE":"Fiberglass — 80% AFUE"}:null,
                 {step:"plenum",label:"Plenum",val:answers.plenum==="ductboard"?"New ductboard plenum":answers.plenum==="metal"?"New sheet metal plenum":answers.plenum==="none"?"Keep existing plenum":null},
                 {step:"thermostat",label:"Thermostat",val:answers.thermostat==="wifi"?"Wi-Fi smart thermostat":answers.thermostat==="basic"?"Basic programmable":null},
-                Array.isArray(answers.purif)&&answers.purif.length>0?{step:"purif",label:"Air quality",val:answers.purif.map(v=>v==="aprilaire"?"Aprilaire 5\"":v==="uv"?"UV Light":v==="ionizer"?"Ionizer":v).join(" + ")}:null,
+                Array.isArray(answers.purif)&&answers.purif.length>0?{step:"purif",label:"Air quality",val:answers.purif.map(v=>v==="aprilaire"?"5\" Filter Cabinet":v==="uv"?"UV Light":v==="ionizer"?"Ionizer":v).join(" + ")}:null,
                 {step:"cond_tier",label:"Efficiency",val:answers.cond_tier==="fedmin"?"Federal Minimum — 14 SEER2":answers.cond_tier==="mid_ge15"?"Mid Efficiency — 18 SEER2":answers.cond_tier==="high_ge18"?"High Efficiency — 21 SEER2":null},
                 answers.system_for?{step:"system_for",label:"Heat source",val:answers.system_for==="hp"?"Dual Fuel — heat pump + furnace":"Straight cool — furnace only"}:null,
                 {step:"dehu",label:"Dehumidifier",val:answers.dehu==="yes"?"Yes — whole-home unit":answers.dehu==="no"?"No":null},
@@ -2600,7 +2600,7 @@ function App(){
               ):null)}
             </div>
             <a href="tel:5124894653" className="done-cta" style={{marginBottom:8}}>📞 Schedule Your Free Visit — 512-489-4653</a>
-            <a href="https://wisetack.us/apply/goldEagleServices" target="_blank" rel="noopener" style={{display:"block",width:"100%",background:"rgba(99,102,241,.12)",border:"1px solid rgba(99,102,241,.4)",color:"rgba(180,180,255,.85)",fontFamily:"monospace",fontSize:"10px",padding:"8px",cursor:"pointer",marginBottom:8,textDecoration:"none",textAlign:"center",boxSizing:"border-box"}}>💳 FINANCING AVAILABLE — CHECK YOUR RATE</a>
+            <a href="https://wisetack.us/#/hyhu11w/prequalify" target="_blank" rel="noopener" style={{display:"block",width:"100%",background:"rgba(99,102,241,.12)",border:"1px solid rgba(99,102,241,.4)",color:"rgba(180,180,255,.85)",fontFamily:"monospace",fontSize:"10px",padding:"8px",cursor:"pointer",marginBottom:8,textDecoration:"none",textAlign:"center",boxSizing:"border-box"}}>💳 FINANCING AVAILABLE — CHECK YOUR RATE</a>
             <div style={{background:"rgba(215,183,64,.06)",border:"1px solid rgba(215,183,64,.18)",padding:"8px 12px",fontSize:"11px",color:"rgba(215,183,64,.7)",lineHeight:"1.55",marginBottom:10}}>Ask about current manufacturer discounts — can save you hundreds.</div>
             <button onClick={()=>window.print()} style={{width:"100%",background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.12)",color:"rgba(255,255,255,.55)",fontFamily:"monospace",fontSize:"10px",padding:"8px",cursor:"pointer",letterSpacing:".08em",marginBottom:8}}>⬇ SAVE / PRINT BUILD SUMMARY</button>
             <div style={{display:"flex",gap:8,width:"100%"}}>
