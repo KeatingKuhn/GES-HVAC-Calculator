@@ -141,19 +141,19 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .attic-layout{position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .35s,transform .35s}
 .attic-layout.out{opacity:0;pointer-events:none;transform:translateY(8px)}
 .attic-canvas-area{flex:1;min-height:0;position:relative;overflow:hidden}
-.attic-bar{height:210px;flex-shrink:0;background:var(--panel);border-top:1px solid var(--border);display:flex;flex-direction:column}
-.attic-bar-top{height:28px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:10px}
+.attic-bar{height:148px;flex-shrink:0;background:var(--panel);border-top:1px solid var(--border);display:flex;flex-direction:column}
+.attic-bar-top{height:22px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:10px}
 .attic-bar-body{flex:1;display:flex;min-height:0;overflow:hidden}
-.attic-info{width:260px;flex-shrink:0;border-right:1px solid var(--border);padding:12px 16px;display:flex;flex-direction:column;gap:5px;overflow:hidden}
+.attic-info{width:300px;flex-shrink:0;border-right:1px solid var(--border);padding:13px 18px;display:flex;flex-direction:column;gap:4px;overflow:hidden}
 .attic-scroll{flex:1;overflow-x:auto;overflow-y:hidden;display:flex;align-items:stretch;gap:8px;padding:8px 12px;scrollbar-width:none}
 .attic-scroll::-webkit-scrollbar{display:none}
-.attic-opt{flex:1;min-width:140px;max-width:280px;background:var(--surf);border:1px solid var(--border);cursor:pointer;padding:10px 14px;text-align:left;display:flex;flex-direction:column;gap:2px;transition:all .14s;outline:none;-webkit-appearance:none;position:relative;overflow:hidden}
+.attic-opt{flex:1;min-width:130px;max-width:280px;background:var(--surf);border:1px solid var(--border);cursor:pointer;padding:9px 12px;text-align:left;display:flex;flex-direction:column;gap:2px;transition:all .14s;outline:none;-webkit-appearance:none;position:relative;overflow:hidden}
 .attic-opt:hover{border-color:rgba(215,183,64,.3);background:#1a1a1a}
 .attic-opt.sel{border-color:var(--gl);background:rgba(240,214,78,.05)}
 .attic-opt.sel::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gh)}
-.attic-opt-label{font-family:var(--ft);font-size:14px;font-weight:600;color:var(--wh);line-height:1.3}
+.attic-opt-label{font-family:var(--ft);font-size:13px;font-weight:600;color:var(--wh);line-height:1.25}
 .attic-opt.sel .attic-opt-label{color:var(--gl)}
-.attic-opt-desc{font-size:11.5px;color:var(--dim);line-height:1.45;flex:1}
+.attic-opt-desc{font-size:11px;color:var(--dim);line-height:1.4;flex:1}
 .attic-opt-foot{display:flex;align-items:center;justify-content:flex-end;margin-top:2px}
 .attic-chk{width:15px;height:15px;border:1.5px solid rgba(215,183,64,.35);display:flex;align-items:center;justify-content:center;font-size:8px;color:transparent}
 .attic-opt.sel .attic-chk{border-color:var(--gl);background:var(--gm);color:var(--bk)}
@@ -1551,13 +1551,6 @@ function Canvas({a, stepIdx, activeSteps}){
             })()}
           </g>}
 
-          {/* Info panel — right of thermostat in living space */}
-          {hasTstat&&hasCond&&<SystemInfoPanel
-            px={130} py={DECK_Y+8} pw={Math.min(220, HOUSE_W-140)}
-            ph={VH-DECK_Y-16}
-            tierKey={a.cond_tier||'fedmin'} heatMode={heatMode} active={condenserActive}
-            isHP={!hasFurnace} is90={is90}/>}
-
           {/* ── OUTSIDE ZONE — exterior wall + condenser ── */}
           {hasCond&&<OutsideZone
             wallX={EXT_WALL_X} zoneW={OUTSIDE_W} zoneH={VH}
@@ -2140,13 +2133,6 @@ function Canvas({a, stepIdx, activeSteps}){
             })}
           </g>}
 
-          {/* Info panel — above condenser in outside zone */}
-          {hasCond&&<SystemInfoPanel
-            px={COND_X} py={12} pw={VW-COND_X-8}
-            ph={COND_Y-22}
-            tierKey={a.cond_tier||'fedmin'} heatMode={heatMode} active={condenserActive}
-            isHP={!hasFurnace} is90={is90}/>}
-
           {/* ── OUTSIDE ZONE — wall + condenser, condenser aligned with unit height ── */}
           {hasCond&&<OutsideZone
             wallX={EXT_WALL_X} zoneW={OUTSIDE_ZONE_W} zoneH={VH}
@@ -2394,16 +2380,16 @@ function App(){
           {showInfo&&infoText&&<div style={{padding:"4px 12px",fontSize:"9.5px",color:"rgba(255,255,255,.38)",borderBottom:"1px solid var(--border)",lineHeight:1.5,flexShrink:0}}>{infoText}</div>}
           <div className="attic-bar-body">
             <div className="attic-info">
-              <div style={{fontFamily:"var(--ft)",fontSize:"16px",fontWeight:600,color:"var(--wh)",lineHeight:1.35}}>{cur?cur.q:""}</div>
-              {cur&&cur.hint&&<div style={{fontSize:"12px",color:"var(--mut)",lineHeight:1.5,marginTop:4}}>{cur.hint}</div>}
-              {stepIdx>0&&<button className="btn-back" style={{marginTop:"auto",padding:"5px 10px",fontSize:"10px"}} onClick={goBack}>back Back</button>}
+              <div style={{fontFamily:"var(--ft)",fontSize:"15.5px",fontWeight:600,color:"var(--wh)",lineHeight:1.3,marginBottom:2}}>{cur?cur.q:""}</div>
+              {cur&&cur.hint&&<div style={{fontSize:"11px",color:"var(--mut)",lineHeight:1.5}}>{cur.hint}</div>}
+              {stepIdx>0&&<button className="btn-back" style={{marginTop:"auto",padding:"4px 10px",fontSize:"10px"}} onClick={goBack}>‹ Back</button>}
             </div>
             <div className="attic-scroll">
               {opts.map(opt=>makeOpt(opt,true))}
             </div>
             <div className="attic-next-col">
               <button className="btn-next" style={{width:"100%",fontSize:"13px",padding:"11px 6px"}} onClick={goNext} disabled={!canNext}>
-                {stepIdx===activeSteps.length-1?"Finish":"Next"}
+                {stepIdx===activeSteps.length-1?"Finish →":"Next →"}
               </button>
             </div>
           </div>
