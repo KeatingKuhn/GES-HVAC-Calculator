@@ -262,6 +262,7 @@ function getOpts(stepId, answers){
 // ─── CANVAS ─────────────────────────────────────────────────────
 function Canvas({a, stepIdx, activeSteps}){
   const [heatMode,setHeatMode]=React.useState(false);
+  const [heatSubMode,setHeatSubMode]=React.useState('hp'); // 'hp' or 'furnace' for dual fuel
   const G='rgba(215,183,64,';
   const B='rgba(35,137,224,';
   const W='rgba(255,255,255,';
@@ -289,11 +290,13 @@ function Canvas({a, stepIdx, activeSteps}){
   const systemFor=a.indoor_type==='ah'?'hp':(a.system_for||'sc');
   const isHP=systemFor==='hp'; // heat pump involved (AH always, furnace if hp selected)
 
-  const furnaceActive=heatMode&&hasFurnace;
   const isDualFuel=hasFurnace&&(a.system_for==='hp');
-  const evapActive=!heatMode||(isDualFuel?true:!hasFurnace);
-  const condenserActive=hasCond&&(!heatMode||(isDualFuel?true:!hasFurnace));
-  const refReversed=heatMode&&!hasFurnace;
+  const hpHeatActive=heatMode&&isDualFuel&&heatSubMode==='hp';
+  const furnaceHeatActive=heatMode&&hasFurnace&&(!isDualFuel||heatSubMode==='furnace');
+  const furnaceActive=furnaceHeatActive;
+  const evapActive=!heatMode||(isDualFuel?(heatSubMode==='hp'):!hasFurnace);
+  const condenserActive=hasCond&&(!heatMode||(isDualFuel?(heatSubMode==='hp'):!hasFurnace));
+  const refReversed=heatMode&&(!hasFurnace||(isDualFuel&&heatSubMode==='hp'));
 
   // Refrigerant colors — physically correct
   const evapC  = refReversed ? '#ef4444' : '#2389e0'; // evap: red=HP heat, blue=cool
@@ -609,7 +612,7 @@ function Canvas({a, stepIdx, activeSteps}){
     const isMini=tierKey==='mid_ge15';
     const isBig=tierKey==='high_ge18'||tierKey==='premium';
     const isFed=tierKey==='fedmin';
-    const cc=active?condC:'rgba(55,18,18,.5)';
+    const cc=active?condC:(refReversed?'rgba(18,18,55,.5)':'rgba(55,18,18,.5)');
 
     return <g>
       {isFed&&<>
@@ -624,7 +627,7 @@ function Canvas({a, stepIdx, activeSteps}){
             <rect x={x} y={y} width={w} height={capH} rx={3}
               fill={active?"#3a3d42":"#2e3035"} stroke="rgba(20,22,26,.8)" strokeWidth="1"/>
             <CapFan x={x+2} y={y+1} w={w-4} h={capH-2} active={active}
-              bladeColor={active?"rgba(90,95,105,.8)":"rgba(45,48,55,.6)"}
+              bladeColor={active?(refReversed?"rgba(100,160,220,.8)":"rgba(220,90,90,.7)"):"rgba(45,48,55,.6)"}
               slatFill={active?"rgba(44,47,54,.88)":"rgba(36,39,46,.92)"}
               slatCount={Math.floor((capH-2)*0.7/4.5)}/>
             {[[x+5,y+4],[x+w-5,y+4],[x+5,y+capH-4],[x+w-5,y+capH-4]].map(([sx,sy],i)=>(
@@ -698,7 +701,7 @@ function Canvas({a, stepIdx, activeSteps}){
       {isMini&&<>
         {/* MID: GE compact mini-split style */}
         <rect x={x} y={y} width={w} height={h} rx={6}
-          fill={active?"#1c1e22":"#181a1e"}
+          fill={active?(refReversed?"#131828":"#1c1e22"):"#181a1e"}
           stroke={active?cc:"rgba(80,85,95,.7)"} strokeWidth={active?1.8:1.4}/>
         {/* Discharge grille top */}
         <rect x={x+4} y={y+2} width={w-8} height={Math.round(h*0.1)} rx="2"
@@ -767,7 +770,7 @@ function Canvas({a, stepIdx, activeSteps}){
       {isBig&&<>
         {/* HIGH EFF: tall dark unit, vertical louvers, rounded top cap */}
         <rect x={x} y={y} width={w} height={h} rx={5}
-          fill={active?"#3a3d42":"#343740"}
+          fill={active?(refReversed?"#1a1e2e":"#3a3d42"):"#343740"}
           stroke={active?cc:"rgba(55,60,68,.8)"} strokeWidth={active?1.8:1.4}/>
         {/* Chamfered corner strips */}
         <rect x={x} y={y+4} width={8} height={h-8} rx="2"
@@ -1013,7 +1016,7 @@ function Canvas({a, stepIdx, activeSteps}){
     var rebate=isHigh?'$300-800':null;
     var afue=is90?'90% AFUE':'80% AFUE';
     var season=heatMode?'WINTER':'SUMMER';
-    var condition=heatMode?'28°F':'96°F';
+    var condition=heatMode?'28\xb0F':'96\xb0F';
     var tColor=heatMode?'rgba(147,197,253,.85)':'rgba(253,186,116,.85)';
     var tBg=heatMode?'rgba(30,58,138,.18)':'rgba(124,45,18,.18)';
     var tBorder=heatMode?'rgba(147,197,253,.2)':'rgba(253,186,116,.2)';
@@ -1137,15 +1140,36 @@ function Canvas({a, stepIdx, activeSteps}){
         <span style={{fontSize:'13px',fontWeight:700,opacity:!heatMode?1:0.3}}>96°</span>
       </button>
       <div style={{width:'1px',background:'rgba(215,183,64,.22)'}}/>
-      <button onClick={()=>setHeatMode(true)} style={{
-        padding:'8px 18px',border:'none',cursor:'pointer',fontFamily:'monospace',fontSize:'11px',letterSpacing:'.08em',
-        background:heatMode?'rgba(249,115,22,.18)':'transparent',
-        color:heatMode?'#f97316':'rgba(255,255,255,.26)',outline:'none',transition:'all .2s',
-        display:'flex',alignItems:'center',gap:6}}>
-        <span>🔥</span>
-        <span>HEAT MODE</span>
-        <span style={{fontSize:'13px',fontWeight:700,opacity:heatMode?1:0.3}}>28°</span>
-      </button>
+      {isDualFuel
+        ?<>
+          <button onClick={()=>{setHeatMode(true);setHeatSubMode('hp');}} style={{
+            padding:'8px 14px',border:'none',cursor:'pointer',fontFamily:'monospace',fontSize:'11px',letterSpacing:'.08em',
+            background:heatMode&&heatSubMode==='hp'?'rgba(35,137,224,.18)':'transparent',
+            color:heatMode&&heatSubMode==='hp'?'#5ba8f5':'rgba(255,255,255,.26)',outline:'none',transition:'all .2s',
+            display:'flex',alignItems:'center',gap:5,borderRight:'1px solid rgba(215,183,64,.12)'}}>
+            <span>🔥</span>
+            <span>HEAT PUMP</span>
+            <span style={{fontSize:'13px',fontWeight:700,opacity:heatMode&&heatSubMode==='hp'?1:0.3}}>52°</span>
+          </button>
+          <button onClick={()=>{setHeatMode(true);setHeatSubMode('furnace');}} style={{
+            padding:'8px 14px',border:'none',cursor:'pointer',fontFamily:'monospace',fontSize:'11px',letterSpacing:'.08em',
+            background:heatMode&&heatSubMode==='furnace'?'rgba(249,115,22,.18)':'transparent',
+            color:heatMode&&heatSubMode==='furnace'?'#f97316':'rgba(255,255,255,.26)',outline:'none',transition:'all .2s',
+            display:'flex',alignItems:'center',gap:5}}>
+            <span>🔥</span>
+            <span>FURNACE</span>
+            <span style={{fontSize:'13px',fontWeight:700,opacity:heatMode&&heatSubMode==='furnace'?1:0.3}}>28°</span>
+          </button>
+        </>
+        :<button onClick={()=>setHeatMode(true)} style={{
+          padding:'8px 18px',border:'none',cursor:'pointer',fontFamily:'monospace',fontSize:'11px',letterSpacing:'.08em',
+          background:heatMode?'rgba(249,115,22,.18)':'transparent',
+          color:heatMode?'#f97316':'rgba(255,255,255,.26)',outline:'none',transition:'all .2s',
+          display:'flex',alignItems:'center',gap:6}}>
+          <span>🔥</span>
+          <span>HEAT MODE</span>
+          <span style={{fontSize:'13px',fontWeight:700,opacity:heatMode?1:0.3}}>28°</span>
+        </button>}
     </div>
   );
 
@@ -1982,23 +2006,25 @@ function Canvas({a, stepIdx, activeSteps}){
                     <text x={UNIT_X+UNIT_W/2} y={ACOIL_Y+ACOIL_H*0.24+UNIT_W*0.32+12} textAnchor="middle"
                       fill={G+'.26)'} fontSize="6.5" fontFamily="monospace">BLOWER</text>
                     <ACoilV x={UNIT_X+8} y={ACOIL_Y+ACOIL_H*0.52+8} w={UNIT_W-16} h={ACOIL_H*0.46-16} active={active}/>
-                    <text x={UNIT_X+UNIT_W/2} y={ACOIL_Y+ACOIL_H-7} textAnchor="middle"
-                      fill={active?evapC:(G+'.24)')} fontSize="6.5" fontFamily="monospace">A-COIL</text>
                   </>
                 }
                 {hasCond&&<>
-                  <path d={`M${UNIT_X+UNIT_W} ${ACOIL_Y+ACOIL_H*0.28} L${UNIT_X+UNIT_W+28} ${ACOIL_Y+ACOIL_H*0.28}`}
+                  <path d={`M${UNIT_X+UNIT_W} ${ACOIL_Y+ACOIL_H*0.84} L${UNIT_X+UNIT_W+28} ${ACOIL_Y+ACOIL_H*0.84}`}
                     fill="none" stroke={active?evapC:'rgba(32,32,52,.5)'} strokeWidth="2.8" strokeLinecap="round" className="draw"/>
-                  <path d={`M${UNIT_X+UNIT_W} ${ACOIL_Y+ACOIL_H*0.52} L${UNIT_X+UNIT_W+28} ${ACOIL_Y+ACOIL_H*0.52}`}
+                  <path d={`M${UNIT_X+UNIT_W} ${ACOIL_Y+ACOIL_H*0.91} L${UNIT_X+UNIT_W+28} ${ACOIL_Y+ACOIL_H*0.91}`}
                     fill="none" stroke={active?evapC2:'rgba(32,32,52,.4)'} strokeWidth="2.8" strokeLinecap="round" className="draw" style={{animationDelay:'.08s'}}/>
-                  {active&&<text x={UNIT_X+UNIT_W+14} y={ACOIL_Y+ACOIL_H*0.24}
+                  {active&&<text x={UNIT_X+UNIT_W+14} y={ACOIL_Y+ACOIL_H*0.84-8}
                     textAnchor="middle" fill={evapC} fontSize="8" fontFamily="monospace">
                     {refReversed?'←':'→'}
                   </text>}
                 </>}
-                <text x={UNIT_X+UNIT_W/2} y={ACOIL_Y+ACOIL_H+12} textAnchor="middle"
+                <text x={UNIT_X+UNIT_W/2} y={ACOIL_Y+ACOIL_H+13} textAnchor="middle"
                   fill={active?evapC:(G+'.35)')} fontSize="7" fontFamily="monospace">
                   {hasFurnace?"A-COIL":"AIR HANDLER"}
+                </text>
+                <text x={UNIT_X+UNIT_W/2} y={ACOIL_Y+ACOIL_H+24} textAnchor="middle"
+                  fill={active?(refReversed?'rgba(239,68,68,.5)':'rgba(35,137,224,.46)'):'rgba(255,255,255,.14)'} fontSize="6.5" fontFamily="monospace">
+                  {active?(refReversed?"REJECTING HEAT":"ABSORBING HEAT"):"STANDBY"}
                 </text>
               </>;
             })()}
