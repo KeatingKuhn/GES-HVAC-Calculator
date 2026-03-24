@@ -1197,7 +1197,7 @@ function Canvas({a, stepIdx, activeSteps}){
     const SUP_X=unitRightEdge+4;
     const SUP_PLEN_Y=UNIT_Y;
 
-    const RL_START_X=hasFurnace?ACOIL_X-4:AH_X-4;
+    const RL_START_X=hasFurnace?ACOIL_X-4:AH_X+Math.round(AH_W*0.72);
     const RL_ROOF_Y=EAVE_Y+14;
 
     // Real-world condenser sizes @ 3.2px/inch
@@ -1605,9 +1605,9 @@ function Canvas({a, stepIdx, activeSteps}){
               const both=hasDehu&&hasERV;
               const totalW=both?(BW*2+GAP):BW;
               // Dehu: left of furnace center (clear of flue which is on right side)
-              const dehuBX=sysX+8;
+              const dehuBX=sysX+44;
               // ERV: far left of return plenum
-              const ervBX=Math.max(8, RET_X-BW+14);
+              const ervBX=Math.max(8, RET_X-BW+40);
               const BY=UNIT_Y-BH-14;
               const roofY=EAVE_Y+14;
               const boxes=[];
@@ -2413,7 +2413,7 @@ function App(){
           {showInfo&&infoText&&<div className="info-expand"><div className="info-body">{infoText}</div></div>}
           <div className="opts">{opts.map(opt=>makeOpt(opt,false))}</div>
           <div className="nav-row">
-            {stepIdx>0&&<button className="btn-back" onClick={goBack}>back Back</button>}
+            {stepIdx>0&&<button className="btn-back" onClick={goBack}>‹ Back</button>}
             {cur&&(cur.optional||cur.multi)&&<button className="btn-skip" onClick={skip}>Skip</button>}
             <button className="btn-next" onClick={goNext} disabled={!canNext}>
               {stepIdx===activeSteps.length-1?"See Full Build":"Next"}
